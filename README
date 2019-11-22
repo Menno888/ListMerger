@@ -1,0 +1,55 @@
+Personal project to merge all sorts of hit lists (e.g. big lists such as NPO Radio 2 Top 2000, Radio 10 Top 4000, Veronica Top 1000)
+
+For instance merging
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<record>
+    <Artiest>AC/DC</Artiest>
+    <Nummer>Highway To Hell</Nummer>
+    <R2NLA2019>20</R2NLA2019>
+</record>
+<record>
+    <Artiest>Rolling Stones</Artiest>
+    <Nummer>Angie</Nummer>
+    <R2NLA2019>10</R2NLA2019>
+</record>
+</top2000database2014>
+
+with
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<record>
+    <Artiest>Rolling Stones</Artiest>
+    <Nummer>Angie</Nummer>
+    <VA2019>50</VA2019>
+</record>
+<record>
+    <Artiest>ZZ Top</Artiest>
+    <Nummer>Sharp Dressed Man</Nummer>
+    <VA2019>60</VA2019>
+</record>
+</top2000database2014>
+
+would yield:
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<record>
+    <Artiest>AC/DC</Artiest>
+    <Nummer>Highway To Hell</Nummer>
+    <R2NLA2019>20</R2NLA2019>
+</record>
+<record>
+    <Artiest>Rolling Stones</Artiest>
+    <Nummer>Angie</Nummer>
+    <R2NLA2019>10</R2NLA2019>
+    <VA2019>50</VA2019>
+</record>
+<record>
+    <Artiest>ZZ Top</Artiest>
+    <Nummer>Sharp Dressed Man</Nummer>
+    <VA2019>60</VA2019>
+</record>
+</top2000database2014>
