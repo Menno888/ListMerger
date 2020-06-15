@@ -1,3 +1,6 @@
-*.xml
-*.csv
+out/
+.idea/
+resources/
+target/
+*.class
 *.iml

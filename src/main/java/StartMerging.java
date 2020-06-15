@@ -5,8 +5,8 @@ public class StartMerging {
 
     private static boolean takeInput = true;
     private static ArrayList<Record> songList = new ArrayList<>(50000);
-    private static BreakXMLFile breaker = new BreakXMLFile();
-    private static Scanner sc = new Scanner(System.in);
+    private static final BreakXMLFile breaker = new BreakXMLFile();
+    private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (takeInput) {
@@ -50,18 +50,13 @@ public class StartMerging {
                     String optionsString = sc.nextLine();
                     String[] optionsArray = optionsString.split(",");
                     if ("".equals(optionsArray[0])) {
-                        output(outFile, "y", "n", "n");
+                        Writer.output(songList, outFile, "y", "n", "n");
                     } else {
-                        output(outFile, optionsArray[0], optionsArray[1], optionsArray[2]);
+                        Writer.output(songList, outFile, optionsArray[0], optionsArray[1], optionsArray[2]);
                     }
                     break;
                 case "t":
-                    for (Record song : songList) {
-                        if (!"Beatles".equals(song.getArtiest())) {
-                            song.cleanPositionMap();
-                        }
-                    }
-                    normalize();
+                    System.out.println("Tools will be added soon (TM)");
                     break;
                 case "q":
                     System.out.println("Goodbye");
@@ -84,46 +79,6 @@ public class StartMerging {
         System.out.println("There are currently " + songList.size() + " records");
     }
 
-    private static void output(String outFile, String positions, String pp, String countPositions) {
-        File file = new File(outFile);
-
-        if(!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        FileOutputStream fw = null;
-        BufferedWriter bw = null;
-        try {
-            fw = new FileOutputStream(file.getAbsoluteFile());
-            bw = new BufferedWriter(new OutputStreamWriter(fw, "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            bw.newLine();
-            bw.write("<top2000database2014 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
-            bw.newLine();
-            for (Record song : songList) {
-                String output = convertRecord(song, positions, pp, countPositions);
-                bw.write(output);
-                bw.newLine();
-                System.out.println("Wrote: " + song.showSong());
-            }
-            bw.write("</top2000database2014>");
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Output to " + outFile);
-    }
-
     private static void outputToScreen() {
         for(Record r : songList) {
             System.out.println(r.showSong());
@@ -144,68 +99,19 @@ public class StartMerging {
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 
-        for(File file : listOfFiles) {
-            if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
-                fileList.add(file.getName());
+        if (listOfFiles != null) {
+            for(File file : listOfFiles) {
+                if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
+                    fileList.add(file.getName());
+                }
             }
         }
 
         for (String file : fileList) {
             merge(file);
         }
-        output(outFile, "y", "n", "n");
+        Writer.output(songList, outFile, "y", "n", "n");
         System.out.println("ALL LISTS CONVERTED!");
-    }
-
-    private static String convertRecord(Record r, String positions, String pp, String countPositions) {
-        StringBuilder testString = new StringBuilder("");
-        if("n".equals(pp)) {
-            testString.append("<record>" + "<Artiest>" + r.getArtiest() + "</Artiest>" + "<Nummer>" + r.getNummer() + "</Nummer>");
-            if("y".equals(countPositions)) {
-                LinkedHashMap<String, Object> copySongList = r.getPositionMap();
-                long numberOfPositions;
-                if(!"n".equals(positions) && !"y".equals(positions)) {
-                    numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
-                }
-                else {
-                    numberOfPositions = copySongList.entrySet().size();
-                }
-                testString.append("<appearances>" + numberOfPositions + "</appearances>");
-            }
-            if(!"n".equals(positions)) {
-                for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
-                    if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions))
-                    {
-                        testString.append("<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
-                    }
-                }
-            }
-            testString.append("</record>");
-        }
-        if("y".equals(pp)) {
-            testString.append("    <record>" + '\n' + "        <Artiest>" + r.getArtiest() + "</Artiest>" + '\n' + "        <Nummer>" + r.getNummer() + "</Nummer>");
-            if("y".equals(countPositions)) {
-                LinkedHashMap<String, Object> copySongList = r.getPositionMap();
-                long numberOfPositions;
-                if(!"n".equals(positions) && !"y".equals(positions)) {
-                    numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
-                }
-                else {
-                    numberOfPositions = copySongList.entrySet().size();
-                }
-                testString.append('\n' + "        <appearances>" + numberOfPositions + "</appearances>");
-            }
-            if(!"n".equals(positions))
-            {
-                for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
-                    if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                        testString.append('\n' + "        <" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
-                    }
-                }
-            }
-            testString.append('\n' + "    </record>");
-        }
-        return testString.toString();
     }
 
     private static void filter(String lists) {
