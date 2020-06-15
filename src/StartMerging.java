@@ -5,9 +5,8 @@ public class StartMerging {
 
     private static boolean takeInput = true;
     private static ArrayList<Record> songList = new ArrayList<>(50000);
-    private static BreakXMLFile breaker = new BreakXMLFile();
-    private static Scanner sc = new Scanner(System.in);
-    private static Writer writer = new Writer();
+    private static final BreakXMLFile breaker = new BreakXMLFile();
+    private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (takeInput) {
@@ -57,12 +56,7 @@ public class StartMerging {
                     }
                     break;
                 case "t":
-                    for (Record song : songList) {
-                        if (!"Beatles".equals(song.getArtiest())) {
-                            song.cleanPositionMap();
-                        }
-                    }
-                    normalize();
+                    System.out.println("Tools will be added soon (TM)");
                     break;
                 case "q":
                     System.out.println("Goodbye");
@@ -105,9 +99,11 @@ public class StartMerging {
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 
-        for(File file : listOfFiles) {
-            if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
-                fileList.add(file.getName());
+        if (listOfFiles != null) {
+            for(File file : listOfFiles) {
+                if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
+                    fileList.add(file.getName());
+                }
             }
         }
 

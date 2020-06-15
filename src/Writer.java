@@ -45,45 +45,8 @@ public class Writer {
         System.out.println("Output to " + outFile);
     }
 
-    private static String convertRecord2(Record r, String positions, String pp, String countPositions) {
-        StringBuilder testString = new StringBuilder("");
-        if("n".equals(pp)) {
-            testString.append("<record>" + "<Artiest>" + r.getArtiest() + "</Artiest>" + "<Nummer>" + r.getNummer() + "</Nummer>");
-            if("y".equals(countPositions)) {
-                long numberOfPositions = getPositionsCount(r, positions);
-                testString.append("<appearances>" + numberOfPositions + "</appearances>");
-            }
-            if(!"n".equals(positions)) {
-                for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
-                    if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions))
-                    {
-                        testString.append("<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
-                    }
-                }
-            }
-            testString.append("</record>");
-        }
-        if("y".equals(pp)) {
-            testString.append("    <record>" + '\n' + "        <Artiest>" + r.getArtiest() + "</Artiest>" + '\n' + "        <Nummer>" + r.getNummer() + "</Nummer>");
-            if("y".equals(countPositions)) {
-                long numberOfPositions = getPositionsCount(r, positions);
-                testString.append('\n' + "        <appearances>" + numberOfPositions + "</appearances>");
-            }
-            if(!"n".equals(positions))
-            {
-                for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
-                    if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                        testString.append('\n' + "        <" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
-                    }
-                }
-            }
-            testString.append('\n' + "    </record>");
-        }
-        return testString.toString();
-    }
-
     private static String convertRecord(Record r, String positions, String pp, String countPositions) {
-        StringBuilder testString = new StringBuilder("");
+        StringBuilder testString = new StringBuilder();
         String indentation;
         String lineBreak;
 
