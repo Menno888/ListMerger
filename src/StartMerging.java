@@ -157,6 +157,7 @@ public class StartMerging {
         System.out.println("ALL LISTS CONVERTED!");
     }
 
+    //TODO Create writer class to avoid clutter
     private static String convertRecord(Record r, String positions, String pp, String countPositions) {
         StringBuilder testString = new StringBuilder("");
         if("n".equals(pp)) {
