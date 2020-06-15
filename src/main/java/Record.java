@@ -3,7 +3,16 @@ import java.util.LinkedHashMap;
 public class Record {
     private String Artiest;
     private String Nummer;
-    private LinkedHashMap<String, Object> positionMap = new LinkedHashMap<String, Object>();
+    private LinkedHashMap<String, Object> positionMap = new LinkedHashMap<>();
+
+    public Record() {
+
+    }
+
+    public Record(String artiest, String nummer) {
+        this.Artiest = artiest;
+        this.Nummer = nummer;
+    }
 
     public String showSong() {
         String result = this.Artiest + " - " + this.Nummer;
