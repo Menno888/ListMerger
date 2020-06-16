@@ -16,7 +16,7 @@ class BreakXMLFile {
     private boolean building = false;
     private ArrayList<Record> songList = new ArrayList<>();
     private int songValue;
-    private String elementTag = "test";
+    private String elementTag;
 
     BreakXMLFile()
     {
