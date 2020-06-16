@@ -1,8 +1,8 @@
 import java.util.LinkedHashMap;
 
 public class Record {
-    private String Artiest;
-    private String Nummer;
+    private String artiest;
+    private String nummer;
     private LinkedHashMap<String, Object> positionMap = new LinkedHashMap<>();
 
     public Record() {
@@ -10,29 +10,28 @@ public class Record {
     }
 
     public Record(String artiest, String nummer) {
-        this.Artiest = artiest;
-        this.Nummer = nummer;
+        this.artiest = artiest;
+        this.nummer = nummer;
     }
 
     public String showSong() {
-        String result = this.Artiest + " - " + this.Nummer;
-        return result;
+        return this.artiest + " - " + this.nummer;
     }
 
     public void setArtiest(String a) {
-        this.Artiest = a;
+        this.artiest = a;
     }
 
     public String getArtiest() {
-        return this.Artiest;
+        return this.artiest;
     }
 
     public void setNummer(String n) {
-        this.Nummer = n;
+        this.nummer = n;
     }
 
     public String getNummer() {
-        return this.Nummer;
+        return this.nummer;
     }
 
     public void setPositionMap(LinkedHashMap<String, Object> m) {
@@ -40,16 +39,20 @@ public class Record {
     }
 
     public LinkedHashMap<String, Object> getPositionMap() {
-        return positionMap;
+        return this.positionMap;
     }
 
     public void cleanRecord() {
-        Artiest = null;
-        Nummer = null;
-        positionMap.clear();
+        this.artiest = null;
+        this.nummer = null;
+        this.positionMap.clear();
     }
 
     public void cleanPositionMap() {
-        positionMap.clear();
+        this.positionMap.clear();
+    }
+
+    public void addPositionToMap(String key, Object value) {
+        this.positionMap.put(key, value);
     }
 }

@@ -12,12 +12,11 @@ import java.util.LinkedHashMap;
 
 class BreakXMLFile {
 
-    private String elementName;
-    private StringBuilder xml = new StringBuilder();
+    private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private ArrayList<Record> songList = new ArrayList<>();
     private int songValue;
-    private String test1 = "test";
+    private String elementTag = "test";
 
     BreakXMLFile()
     {
@@ -26,7 +25,6 @@ class BreakXMLFile {
 
     ArrayList<Record> startBreak(String file, ArrayList<Record> list) {
 
-        elementName = "record";
         songList = list;
 
         try {
@@ -34,58 +32,55 @@ class BreakXMLFile {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
 
-            //Bouw custom Json
+            //Build custom JSON
             DefaultHandler handler = new DefaultHandler() {
 
-                private Record record2 = new Record();
+                private Record record = new Record();
 
                 public void startElement(String uri, String localName,
-                                         String qName, Attributes attributes) throws SAXException {
+                                         String qName, Attributes attributes) {
 
-                    test1 = qName;
+                    elementTag = qName;
 
-                    if (elementName.equals(qName)) {
+                    if ("record".equals(qName)) {
 
                         building = true;
                     }
                 }
 
                 public void endElement(String uri, String localName,
-                                       String qName) throws SAXException {
+                                       String qName) {
 
-                    if (elementName.equals(qName)) {
+                    if ("record".equals(qName)) {
                         building = false;
-                        addToArrayList(record2);
-                        record2 = new Record();
+                        addToArrayList(record);
+                        record = new Record();
                     }
 
                     xml.setLength(0);
 
                 }
 
-                public void characters(char ch[], int start, int length)
-                        throws SAXException {
+                public void characters(char[] ch, int start, int length) {
                     if (building) {
                         String value = new String(ch, start, length).trim();
                         if (value.length() == 0) return; // ignore white space
 
-                        if("Artiest".equals(test1) || "Nummer".equals(test1)) {
-                            if("Artiest".equals(test1)) {
+                        if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
+                            if("Artiest".equals(elementTag)) {
                                 xml.append("<![CDATA[").append(value).append("]]>");
                                 value = cleanName(xml);
-                                record2.setArtiest(value);
+                                record.setArtiest(value);
                             }
-                            if("Nummer".equals(test1)) {
+                            if("Nummer".equals(elementTag)) {
                                 xml.append("<![CDATA[").append(value).append("]]>");
                                 value = cleanName(xml);
-                                record2.setNummer(value);
+                                record.setNummer(value);
                             }
                         }
                         else {
                             songValue = Integer.parseInt(value);
-                            LinkedHashMap<String, Object> temp = record2.getPositionMap();
-                            temp.put(test1, songValue);
-                            record2.setPositionMap(temp);
+                            record.addPositionToMap(elementTag, songValue);
                         }
                     }
                 }
