@@ -17,6 +17,8 @@ class BreakXMLFile {
     private ArrayList<Record> songList = new ArrayList<>();
     private int songValue;
     private String elementTag;
+    private String artistName;
+    private String songName;
 
     BreakXMLFile()
     {
@@ -53,6 +55,10 @@ class BreakXMLFile {
 
                     if ("record".equals(qName)) {
                         building = false;
+                        artistName = RecordCleaner.cleanName(artistName);
+                        songName = RecordCleaner.cleanName(songName);
+                        record.setArtiest(artistName);
+                        record.setNummer(songName);
                         addToArrayList(record);
                         record = new Record();
                     }
@@ -70,14 +76,16 @@ class BreakXMLFile {
                             if("Artiest".equals(elementTag)) {
                                 RecordCleaner.addCData(xml, value);
                                 String xmlResult = xml.toString();
-                                value = RecordCleaner.cleanName(xmlResult);
-                                record.setArtiest(value);
+                                value = RecordCleaner.removeCData(xmlResult);
+                                value = RecordCleaner.resolveAmpersands(value);
+                                artistName = value;
                             }
                             if("Nummer".equals(elementTag)) {
                                 RecordCleaner.addCData(xml, value);
                                 String xmlResult = xml.toString();
-                                value = RecordCleaner.cleanName(xmlResult);
-                                record.setNummer(value);
+                                value = RecordCleaner.removeCData(xmlResult);
+                                value = RecordCleaner.resolveAmpersands(value);
+                                songName = value;
                             }
                         }
                         else {

@@ -57,16 +57,16 @@ public class Writer {
         testString.append(repeat(indentation, 2) + "<Nummer>" + r.getNummer() + "</Nummer>" + lineBreak);
         if("y".equals(countPositions)) {
             long numberOfPositions = getPositionsCount(r, positions);
-            testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>");
+            testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
         }
         if(!"n".equals(positions)) {
             for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
                 if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                    testString.append(lineBreak + repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
+                    testString.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
                 }
             }
         }
-        testString.append(lineBreak + indentation + "</record>");
+        testString.append(indentation + "</record>");
 
         return testString.toString();
     }

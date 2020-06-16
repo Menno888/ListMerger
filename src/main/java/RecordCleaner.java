@@ -4,20 +4,18 @@ public class RecordCleaner {
         builder.append("<![CDATA[").append(value).append("]]>");
     }
 
-    private static String removeCData(String data) {
+    public static String removeCData(String data) {
         data = data.replace("]]>", "");
         data = data.replace("<![CDATA[", "");
         return data;
     }
 
-    private static String resolveAmpersands(String data) {
+    public static String resolveAmpersands(String data) {
         data = data.replace("&", " &amp; ");
         return data;
     }
 
     public static String cleanName(String data) {
-        data = removeCData(data);
-        data = resolveAmpersands(data);
         if(data.contains("&amp;")) {
             data = data.replace("( &amp", "(&amp");
             data = data.replace("On The L &amp; N", "On The L&amp;N");
