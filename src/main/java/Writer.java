@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class Writer {
         BufferedWriter bw = null;
         try {
             fw = new FileOutputStream(file.getAbsoluteFile());
-            bw = new BufferedWriter(new OutputStreamWriter(fw, "UTF-8"));
+            bw = new BufferedWriter(new OutputStreamWriter(fw, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
