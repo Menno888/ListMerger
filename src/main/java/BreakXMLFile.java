@@ -68,13 +68,15 @@ class BreakXMLFile {
 
                         if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
                             if("Artiest".equals(elementTag)) {
-                                xml.append("<![CDATA[").append(value).append("]]>");
-                                value = cleanName(xml);
+                                RecordCleaner.addCData(xml, value);
+                                String xmlResult = xml.toString();
+                                value = RecordCleaner.cleanName(xmlResult);
                                 record.setArtiest(value);
                             }
                             if("Nummer".equals(elementTag)) {
-                                xml.append("<![CDATA[").append(value).append("]]>");
-                                value = cleanName(xml);
+                                RecordCleaner.addCData(xml, value);
+                                String xmlResult = xml.toString();
+                                value = RecordCleaner.cleanName(xmlResult);
                                 record.setNummer(value);
                             }
                         }
@@ -116,32 +118,5 @@ class BreakXMLFile {
             songList.add(r);
             System.out.println("Copied over: " + r.showSong());
         }
-    }
-
-    private String cleanName(StringBuilder b) {
-        String result = b.toString();
-        result = result.replace("]]>", "");
-        result = result.replace("<![CDATA[", "");
-        result = result.replace("&", " &amp; ");
-        if(result.contains("&amp;")) {
-            result = result.replace("( &amp", "(&amp");
-            result = result.replace("On The L &amp; N", "On The L&amp;N");
-            result = result.replace("Up &amp; Up", "Up&amp;Up");
-            if("M &amp; F".equals(result)) {
-                result = result.replace("M &amp; F", "M&amp;F");
-            }
-            result = result.replace("R &amp; J Stone", "R&amp;J Stone");
-            if("S &amp; M".equals(result)) {
-                result = result.replace("S &amp; M", "S&amp;M");
-            }
-            result = result.replace("Product G &amp; B", "Product G&amp;B");
-            if("Y &amp; T".equals(result)) {
-                result = result.replace("Y &amp; T", "Y&amp;T");
-            }
-            if("W &amp; W".equals(result)) {
-                result = result.replace("W &amp; W", "W&amp;W");
-            }
-        }
-        return result;
     }
 }
