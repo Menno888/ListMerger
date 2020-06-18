@@ -28,8 +28,8 @@ public final class SongExceptions {
         return exceptions;
     }
 
-    public static String songExceptionConverter(String s) {
-        return s + "THISWASADDED!!!";
+    public static Record songExceptionConverter(Record record) {
+        return record;
         //TODO Add implementation
     }
 }
