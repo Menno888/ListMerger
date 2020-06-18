@@ -56,7 +56,7 @@ public class StartMerging {
                     }
                     break;
                 case "t":
-                    System.out.println("Tools will be added soon (TM)");
+                    System.out.println("Soon (TM)");
                     break;
                 case "q":
                     System.out.println("Goodbye");
