@@ -16,7 +16,7 @@ class BreakXMLFile {
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private ArrayList<Record> songList = new ArrayList<>();
-    private final Map songExceptions = SongExceptions.loadExceptions();
+    private SongExceptions songExceptionHandler = new SongExceptions();
     private int songValue;
     private String elementTag;
     private String artistName;
@@ -24,7 +24,7 @@ class BreakXMLFile {
 
     BreakXMLFile()
     {
-
+        songExceptionHandler.loadExceptions();
     }
 
     ArrayList<Record> startBreak(String file, ArrayList<Record> list) {
@@ -61,6 +61,7 @@ class BreakXMLFile {
                         songName = RecordCleaner.cleanName(songName);
                         record.setArtiest(artistName);
                         record.setNummer(songName);
+                        songExceptionHandler.songExceptionConverter(record);
                         addToArrayList(record);
                         record = new Record();
                     }

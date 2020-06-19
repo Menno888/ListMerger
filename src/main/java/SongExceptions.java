@@ -5,11 +5,13 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class SongExceptions {
+public class SongExceptions {
 
     private static final Map<String, String> exceptions = new HashMap<>();
 
-    public static Map loadExceptions() {
+    public SongExceptions() {}
+
+    public static void loadExceptions() {
         final InputStream inputStream = SongExceptions.class.getClassLoader().getResourceAsStream("song.exceptions");
         try {
             final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -25,11 +27,11 @@ public final class SongExceptions {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return exceptions;
     }
 
-    public static Record songExceptionConverter(Record record) {
-        return record;
-        //TODO Add implementation
+    public static void songExceptionConverter(Record record) {
+        record.setArtiest(record.getArtiest() + "Custom");
+        record.setNummer(record.getNummer() + "Custom");
+        //TODO Change implementation
     }
 }
