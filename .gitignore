@@ -4,3 +4,4 @@ target/
 *.class
 *.iml
 *.xml
+!src/test/resources/
