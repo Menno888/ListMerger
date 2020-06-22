@@ -30,8 +30,13 @@ public class SongExceptions {
     }
 
     public static void songExceptionConverter(Record record) {
-        record.setArtiest(record.getArtiest() + "Custom");
-        record.setNummer(record.getNummer() + "Custom");
-        //TODO Change implementation
+        final String songToChange = record.getArtiest() + "|" + record.getNummer();
+        if (exceptions.containsKey(songToChange)) {
+            String oldSong = record.getArtiest() + " - " + record.getNummer();
+            final String[] newSongValues = exceptions.get(songToChange).split("\\|");
+            record.setArtiest(newSongValues[0]);
+            record.setNummer(newSongValues[1]);
+            System.out.println("Changed " + oldSong + " to " + newSongValues[0] + " - " + newSongValues[1]);
+        }
     }
 }

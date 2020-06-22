@@ -1,6 +1,6 @@
 out/
 .idea/
-resources/
 target/
 *.class
 *.iml
+*.xml
