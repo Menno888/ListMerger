@@ -3,5 +3,5 @@ out/
 target/
 *.class
 *.iml
-*.xml
-!src/test/resources/
+src/main/java/*.xml
+src/main/resources/*.xml
