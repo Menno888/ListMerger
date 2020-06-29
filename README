@@ -59,3 +59,4 @@ would yield:
 ------------------------------
 1.0     STABLE ORIGINAL VERSION
     1.1     MOVED WRITER.JAVA, ADDED RUDIMENTARY TEST
+    1.2     ADDED RECORDCLEANER.JAVA, BUGFIXES
