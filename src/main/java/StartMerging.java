@@ -29,9 +29,6 @@ public class StartMerging {
                 case "m":
                     System.out.println("Enter a file to initialize/merge:");
                     String mergeFile = sc.nextLine();
-                    if (!mergeFile.endsWith(".xml")) {
-                        mergeFile = mergeFile + ".xml";
-                    }
                     merge(mergeFile);
                     break;
                 case "n":
@@ -40,12 +37,6 @@ public class StartMerging {
                 case "o":
                     System.out.println("Output to which filename?:");
                     String outFile = sc.nextLine();
-                    if ("".equals(outFile)) {
-                        outFile = System.currentTimeMillis() + ".xml";
-                    }
-                    if (!outFile.endsWith(".xml")) {
-                        outFile = outFile + ".xml";
-                    }
                     System.out.println("Give options [positions, pretty-print, count]");
                     String optionsString = sc.nextLine();
                     String[] optionsArray = optionsString.split(",");
@@ -56,7 +47,7 @@ public class StartMerging {
                     }
                     break;
                 case "t":
-                    System.out.println("Tools will be added soon (TM)");
+                    System.out.println("Soon (TM)");
                     break;
                 case "q":
                     System.out.println("Goodbye");
@@ -90,12 +81,6 @@ public class StartMerging {
         ArrayList<String> fileList = new ArrayList<>(100);
         System.out.println("Enter a file name to output to:");
         String outFile = sc.nextLine();
-        if ("".equals(outFile)) {
-            outFile = System.currentTimeMillis() + ".xml";
-        }
-        if (!outFile.endsWith(".xml")) {
-            outFile = outFile + ".xml";
-        }
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 
@@ -139,7 +124,7 @@ public class StartMerging {
         if("y".equals(shouldAppear) && "n".equals(shouldAppearInAll)) {
             for(Record currentRecord : songList) {
                 boolean containsEntries = false;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
                     }
@@ -161,7 +146,7 @@ public class StartMerging {
         else if("y".equals(shouldAppear) && "y".equals(shouldAppearInAll)) {
             for(Record currentRecord : songList) {
                 int containsEntries = 0;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries++;
                     }
@@ -183,7 +168,7 @@ public class StartMerging {
         else {
             for(Record currentRecord : songList) {
                 boolean containsEntries = false;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
                     }
@@ -211,7 +196,7 @@ public class StartMerging {
     private static ArrayList<String> tagCheckup() {
         ArrayList<String> tagList = new ArrayList<>();
         for(Record currentRecord : songList) {
-            for(Map.Entry<String, Object> entry : currentRecord.getPositionMap().entrySet()) {
+            for(Map.Entry<String, Integer> entry : currentRecord.getPositionMap().entrySet()) {
                 if(!tagList.contains(entry.getKey())) {
                     tagList.add(entry.getKey());
                 }

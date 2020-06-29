@@ -1,6 +1,7 @@
 out/
 .idea/
-resources/
 target/
 *.class
 *.iml
+src/main/java/*.xml
+src/main/resources/*.xml

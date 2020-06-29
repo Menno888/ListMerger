@@ -9,18 +9,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 class BreakXMLFile {
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private ArrayList<Record> songList = new ArrayList<>();
+    private SongExceptions songExceptionHandler = new SongExceptions();
     private int songValue;
     private String elementTag;
+    private String artistName;
+    private String songName;
 
     BreakXMLFile()
     {
-
+        songExceptionHandler.loadExceptions();
     }
 
     ArrayList<Record> startBreak(String file, ArrayList<Record> list) {
@@ -53,6 +57,11 @@ class BreakXMLFile {
 
                     if ("record".equals(qName)) {
                         building = false;
+                        artistName = RecordCleaner.cleanName(artistName);
+                        songName = RecordCleaner.cleanName(songName);
+                        record.setArtiest(artistName);
+                        record.setNummer(songName);
+                        songExceptionHandler.songExceptionConverter(record);
                         addToArrayList(record);
                         record = new Record();
                     }
@@ -68,14 +77,18 @@ class BreakXMLFile {
 
                         if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
                             if("Artiest".equals(elementTag)) {
-                                xml.append("<![CDATA[").append(value).append("]]>");
-                                value = cleanName(xml);
-                                record.setArtiest(value);
+                                RecordCleaner.addCData(xml, value);
+                                String xmlResult = xml.toString();
+                                value = RecordCleaner.removeCData(xmlResult);
+                                value = RecordCleaner.resolveAmpersands(value);
+                                artistName = value;
                             }
                             if("Nummer".equals(elementTag)) {
-                                xml.append("<![CDATA[").append(value).append("]]>");
-                                value = cleanName(xml);
-                                record.setNummer(value);
+                                RecordCleaner.addCData(xml, value);
+                                String xmlResult = xml.toString();
+                                value = RecordCleaner.removeCData(xmlResult);
+                                value = RecordCleaner.resolveAmpersands(value);
+                                songName = value;
                             }
                         }
                         else {
@@ -87,6 +100,9 @@ class BreakXMLFile {
 
             };
 
+            if (!file.endsWith(".xml")) {
+                file = file + ".xml";
+            }
             saxParser.parse(file, handler);
 
             System.out.println("Succesfully merged/initialized " + file);
@@ -105,7 +121,7 @@ class BreakXMLFile {
         boolean merged = false;
         for (Record song : songList) {
             if (r.getArtiest().equals(song.getArtiest()) && r.getNummer().equals(song.getNummer())) {
-                LinkedHashMap<String, Object> temp = song.getPositionMap();
+                LinkedHashMap<String, Integer> temp = song.getPositionMap();
                 temp.putAll(r.getPositionMap());
                 song.setPositionMap(temp);
                 System.out.println("Merged: " + r.showSong());
@@ -116,32 +132,5 @@ class BreakXMLFile {
             songList.add(r);
             System.out.println("Copied over: " + r.showSong());
         }
-    }
-
-    private String cleanName(StringBuilder b) {
-        String result = b.toString();
-        result = result.replace("]]>", "");
-        result = result.replace("<![CDATA[", "");
-        result = result.replace("&", " &amp; ");
-        if(result.contains("&amp;")) {
-            result = result.replace("( &amp", "(&amp");
-            result = result.replace("On The L &amp; N", "On The L&amp;N");
-            result = result.replace("Up &amp; Up", "Up&amp;Up");
-            if("M &amp; F".equals(result)) {
-                result = result.replace("M &amp; F", "M&amp;F");
-            }
-            result = result.replace("R &amp; J Stone", "R&amp;J Stone");
-            if("S &amp; M".equals(result)) {
-                result = result.replace("S &amp; M", "S&amp;M");
-            }
-            result = result.replace("Product G &amp; B", "Product G&amp;B");
-            if("Y &amp; T".equals(result)) {
-                result = result.replace("Y &amp; T", "Y&amp;T");
-            }
-            if("W &amp; W".equals(result)) {
-                result = result.replace("W &amp; W", "W&amp;W");
-            }
-        }
-        return result;
     }
 }

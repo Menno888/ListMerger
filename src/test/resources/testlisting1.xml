@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <record>
+        <Artiest>AC/DC</Artiest>
+        <Nummer>Highway To Hell</Nummer>
+        <R2NLA2019>20</R2NLA2019>
+    </record>
+    <record>
+        <Artiest>Rolling Stones</Artiest>
+        <Nummer>Angie</Nummer>
+        <R2NLA2019>10</R2NLA2019>
+    </record>
+</top2000database2014>

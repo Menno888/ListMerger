@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -6,6 +7,12 @@ import java.util.Map;
 public class Writer {
 
     public static void output(ArrayList<Record> songList, String outFile, String positions, String pp, String countPositions) {
+        if (!outFile.endsWith(".xml")) {
+            outFile = outFile + ".xml";
+        }
+        if (".xml".equals(outFile)) {
+            outFile = System.currentTimeMillis() + ".xml";
+        }
         File file = new File(outFile);
 
         if(!file.exists()) {
@@ -20,7 +27,7 @@ public class Writer {
         BufferedWriter bw = null;
         try {
             fw = new FileOutputStream(file.getAbsoluteFile());
-            bw = new BufferedWriter(new OutputStreamWriter(fw, "UTF-8"));
+            bw = new BufferedWriter(new OutputStreamWriter(fw, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,22 +64,22 @@ public class Writer {
         testString.append(repeat(indentation, 2) + "<Nummer>" + r.getNummer() + "</Nummer>" + lineBreak);
         if("y".equals(countPositions)) {
             long numberOfPositions = getPositionsCount(r, positions);
-            testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>");
+            testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
         }
         if(!"n".equals(positions)) {
-            for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
+            for(Map.Entry<String, Integer> pair : r.getPositionMap().entrySet()) {
                 if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                    testString.append(lineBreak + repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">");
+                    testString.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
                 }
             }
         }
-        testString.append(lineBreak + indentation + "</record>");
+        testString.append(indentation + "</record>");
 
         return testString.toString();
     }
 
     private static long getPositionsCount(Record r, String positions) {
-        LinkedHashMap<String, Object> copySongList = r.getPositionMap();
+        LinkedHashMap<String, Integer> copySongList = r.getPositionMap();
         long numberOfPositions;
         if(!"n".equals(positions) && !"y".equals(positions)) {
             numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
