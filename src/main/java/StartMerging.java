@@ -127,6 +127,7 @@ public class StartMerging {
                 for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
+                        break;
                     }
                 }
                 if(!containsEntries) {
@@ -171,6 +172,7 @@ public class StartMerging {
                 for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
+                        break;
                     }
                 }
                 if(containsEntries) {

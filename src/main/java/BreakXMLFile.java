@@ -9,14 +9,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 class BreakXMLFile {
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private ArrayList<Record> songList = new ArrayList<>();
-    private SongExceptions songExceptionHandler = new SongExceptions();
+    private final SongExceptions songExceptionHandler = new SongExceptions();
     private int songValue;
     private String elementTag;
     private String artistName;
