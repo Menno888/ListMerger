@@ -3,7 +3,7 @@ import java.util.LinkedHashMap;
 public class Record {
     private String artiest;
     private String nummer;
-    private LinkedHashMap<String, Object> positionMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> positionMap = new LinkedHashMap<>();
 
     public Record() {
 
@@ -34,11 +34,11 @@ public class Record {
         return this.nummer;
     }
 
-    public void setPositionMap(LinkedHashMap<String, Object> m) {
+    public void setPositionMap(LinkedHashMap<String, Integer> m) {
         this.positionMap = m;
     }
 
-    public LinkedHashMap<String, Object> getPositionMap() {
+    public LinkedHashMap<String, Integer> getPositionMap() {
         return this.positionMap;
     }
 
@@ -52,7 +52,7 @@ public class Record {
         this.positionMap.clear();
     }
 
-    public void addPositionToMap(String key, Object value) {
+    public void addPositionToMap(String key, int value) {
         this.positionMap.put(key, value);
     }
 }

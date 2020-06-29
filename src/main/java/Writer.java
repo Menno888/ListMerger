@@ -61,7 +61,7 @@ public class Writer {
             testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
         }
         if(!"n".equals(positions)) {
-            for(Map.Entry<String, Object> pair : r.getPositionMap().entrySet()) {
+            for(Map.Entry<String, Integer> pair : r.getPositionMap().entrySet()) {
                 if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
                     testString.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
                 }
@@ -73,7 +73,7 @@ public class Writer {
     }
 
     private static long getPositionsCount(Record r, String positions) {
-        LinkedHashMap<String, Object> copySongList = r.getPositionMap();
+        LinkedHashMap<String, Integer> copySongList = r.getPositionMap();
         long numberOfPositions;
         if(!"n".equals(positions) && !"y".equals(positions)) {
             numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();

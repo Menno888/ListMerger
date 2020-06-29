@@ -118,7 +118,7 @@ class BreakXMLFile {
         boolean merged = false;
         for (Record song : songList) {
             if (r.getArtiest().equals(song.getArtiest()) && r.getNummer().equals(song.getNummer())) {
-                LinkedHashMap<String, Object> temp = song.getPositionMap();
+                LinkedHashMap<String, Integer> temp = song.getPositionMap();
                 temp.putAll(r.getPositionMap());
                 song.setPositionMap(temp);
                 System.out.println("Merged: " + r.showSong());

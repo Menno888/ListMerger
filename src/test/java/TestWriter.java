@@ -11,7 +11,7 @@ class TestWriter {
     void testDiacritics() throws IOException {
         ArrayList<Record> songList = new ArrayList<>(50000);
         Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
-        LinkedHashMap<String, Object> recordMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> recordMap = new LinkedHashMap<>();
         recordMap.put("List1", 1);
         recordMap.put("List2", 2000);
         record.setPositionMap(recordMap);

@@ -139,7 +139,7 @@ public class StartMerging {
         if("y".equals(shouldAppear) && "n".equals(shouldAppearInAll)) {
             for(Record currentRecord : songList) {
                 boolean containsEntries = false;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
                     }
@@ -161,7 +161,7 @@ public class StartMerging {
         else if("y".equals(shouldAppear) && "y".equals(shouldAppearInAll)) {
             for(Record currentRecord : songList) {
                 int containsEntries = 0;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries++;
                     }
@@ -183,7 +183,7 @@ public class StartMerging {
         else {
             for(Record currentRecord : songList) {
                 boolean containsEntries = false;
-                for (Map.Entry<String, Object> entry2 : currentRecord.getPositionMap().entrySet()) {
+                for (Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
                     if (newList.contains(entry2.getKey())) {
                         containsEntries = true;
                     }
@@ -211,7 +211,7 @@ public class StartMerging {
     private static ArrayList<String> tagCheckup() {
         ArrayList<String> tagList = new ArrayList<>();
         for(Record currentRecord : songList) {
-            for(Map.Entry<String, Object> entry : currentRecord.getPositionMap().entrySet()) {
+            for(Map.Entry<String, Integer> entry : currentRecord.getPositionMap().entrySet()) {
                 if(!tagList.contains(entry.getKey())) {
                     tagList.add(entry.getKey());
                 }
