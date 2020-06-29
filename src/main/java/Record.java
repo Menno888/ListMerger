@@ -42,12 +42,6 @@ public class Record {
         return this.positionMap;
     }
 
-    public void cleanRecord() {
-        this.artiest = null;
-        this.nummer = null;
-        this.positionMap.clear();
-    }
-
     public void cleanPositionMap() {
         this.positionMap.clear();
     }
