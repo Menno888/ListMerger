@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-class BreakXMLFile {
+class XMLParser {
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
@@ -20,7 +20,7 @@ class BreakXMLFile {
     private String artistName;
     private String songName;
 
-    BreakXMLFile()
+    XMLParser()
     {
         SongExceptions.loadExceptions();
     }

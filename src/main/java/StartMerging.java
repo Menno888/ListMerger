@@ -5,7 +5,7 @@ public class StartMerging {
 
     private static boolean takeInput = true;
     private static ArrayList<Record> songList = new ArrayList<>(50000);
-    private static final BreakXMLFile breaker = new BreakXMLFile();
+    private static final XMLParser breaker = new XMLParser();
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
