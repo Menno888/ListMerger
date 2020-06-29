@@ -29,9 +29,6 @@ public class StartMerging {
                 case "m":
                     System.out.println("Enter a file to initialize/merge:");
                     String mergeFile = sc.nextLine();
-                    if (!mergeFile.endsWith(".xml")) {
-                        mergeFile = mergeFile + ".xml";
-                    }
                     merge(mergeFile);
                     break;
                 case "n":
@@ -40,12 +37,6 @@ public class StartMerging {
                 case "o":
                     System.out.println("Output to which filename?:");
                     String outFile = sc.nextLine();
-                    if ("".equals(outFile)) {
-                        outFile = System.currentTimeMillis() + ".xml";
-                    }
-                    if (!outFile.endsWith(".xml")) {
-                        outFile = outFile + ".xml";
-                    }
                     System.out.println("Give options [positions, pretty-print, count]");
                     String optionsString = sc.nextLine();
                     String[] optionsArray = optionsString.split(",");
@@ -90,12 +81,6 @@ public class StartMerging {
         ArrayList<String> fileList = new ArrayList<>(100);
         System.out.println("Enter a file name to output to:");
         String outFile = sc.nextLine();
-        if ("".equals(outFile)) {
-            outFile = System.currentTimeMillis() + ".xml";
-        }
-        if (!outFile.endsWith(".xml")) {
-            outFile = outFile + ".xml";
-        }
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 

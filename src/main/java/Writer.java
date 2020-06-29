@@ -7,6 +7,12 @@ import java.util.Map;
 public class Writer {
 
     public static void output(ArrayList<Record> songList, String outFile, String positions, String pp, String countPositions) {
+        if (!outFile.endsWith(".xml")) {
+            outFile = outFile + ".xml";
+        }
+        if (".xml".equals(outFile)) {
+            outFile = System.currentTimeMillis() + ".xml";
+        }
         File file = new File(outFile);
 
         if(!file.exists()) {

@@ -100,6 +100,9 @@ class BreakXMLFile {
 
             };
 
+            if (!file.endsWith(".xml")) {
+                file = file + ".xml";
+            }
             saxParser.parse(file, handler);
 
             System.out.println("Succesfully merged/initialized " + file);
