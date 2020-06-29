@@ -11,7 +11,7 @@ public class StartMerging {
     private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException, InvalidFormatException {
+    public static void main(String[] args) {
         while (takeInput) {
             System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
             String control = sc.nextLine();
