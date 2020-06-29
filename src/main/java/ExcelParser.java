@@ -1,3 +1,5 @@
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -5,19 +7,22 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class ExcelParser {
 
-    private static ArrayList<Record> songList = new ArrayList<>(50000);
+    private ArrayList<Record> songList = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public void parseExcel(String inFile, String outFile) throws IOException, InvalidFormatException {
         String[] listAbbreviations = new String[1000];
-        File myFile = new File("top2000database2015.xlsx");
-        FileInputStream fis = new FileInputStream(myFile);
-        XSSFWorkbook myWorkBook = new XSSFWorkbook(fis);
+
+        if (!inFile.endsWith(".xlsx")) {
+            inFile = inFile + ".xlsx";
+        }
+        File myFile = new File(inFile);
+        OPCPackage opcPackage = OPCPackage.open(myFile.getAbsolutePath());
+        XSSFWorkbook myWorkBook = new XSSFWorkbook(opcPackage);
         XSSFSheet sheet = myWorkBook.getSheetAt(0);
         DataFormatter formatter = new DataFormatter();
         for (int r = 0; r < sheet.getPhysicalNumberOfRows(); r++) {
@@ -53,8 +58,9 @@ public class ExcelParser {
             }
             if (r != 0) {
                 songList.add(record);
+                System.out.println(record.showSong());
             }
         }
-        Writer.output(songList, "output.xml", "y", "n", "n");
+        Writer.output(songList, outFile, "y", "y", "n");
     }
 }

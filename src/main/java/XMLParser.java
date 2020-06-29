@@ -25,7 +25,7 @@ class XMLParser {
         SongExceptions.loadExceptions();
     }
 
-    ArrayList<Record> startBreak(String file, ArrayList<Record> list) {
+    ArrayList<Record> parseXML(String file, ArrayList<Record> list) {
 
         songList = list;
 

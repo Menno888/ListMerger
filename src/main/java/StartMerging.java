@@ -1,3 +1,5 @@
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import java.io.*;
 import java.util.*;
 
@@ -5,12 +7,13 @@ public class StartMerging {
 
     private static boolean takeInput = true;
     private static ArrayList<Record> songList = new ArrayList<>(50000);
-    private static final XMLParser breaker = new XMLParser();
+    private static final XMLParser xmlParser = new XMLParser();
+    private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InvalidFormatException {
         while (takeInput) {
-            System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools):");
+            System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
             String control = sc.nextLine();
             switch (control) {
                 case "c":
@@ -46,15 +49,22 @@ public class StartMerging {
                         Writer.output(songList, outFile, optionsArray[0], optionsArray[1], optionsArray[2]);
                     }
                     break;
-                case "t":
-                    System.out.println("Soon (TM)");
-                    break;
                 case "q":
                     System.out.println("Goodbye");
                     takeInput = false;
                     break;
                 case "s":
                     outputToScreen();
+                    break;
+                case "t":
+                    System.out.println("Soon (TM)");
+                    break;
+                case "x":
+                    System.out.println("Enter an excel file to merge:");
+                    String inExcel = sc.nextLine();
+                    System.out.println("Enter a file name to output xml to:");
+                    String outXml = sc.nextLine();
+                    excelParser.parseExcel(inExcel, outXml);
                     break;
                 default:
                     System.out.println("Invalid input, try again");
@@ -66,7 +76,7 @@ public class StartMerging {
     private static void merge(String mergeFile) {
         File inFile = new File(mergeFile);
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = xmlParser.parseXML(fileToFeed, songList);
         System.out.println("There are currently " + songList.size() + " records");
     }
 
