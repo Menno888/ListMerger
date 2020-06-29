@@ -5,3 +5,4 @@ target/
 *.iml
 src/main/java/*.xml
 src/main/resources/*.xml
+*.xlsx
