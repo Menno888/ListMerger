@@ -17,8 +17,6 @@ class BreakXMLFile {
     private ArrayList<Record> songList = new ArrayList<>();
     private int songValue;
     private String elementTag;
-    private String artistName;
-    private String songName;
 
     BreakXMLFile()
     {
