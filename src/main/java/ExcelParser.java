@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class ExcelParser {
 
     private ArrayList<Record> songList = new ArrayList<>();
+    private final int MAX_EXPECTED_COLUMNS = 1000;
+    private final int HEADER_ROW_NUM = 0;
 
     public void parseExcel(String inFile, String outFile) {
-        String[] listAbbreviations = new String[1000];
+        String[] listAbbreviations = new String[MAX_EXPECTED_COLUMNS];
 
         try {
             if (!inFile.endsWith(".xlsx")) {
@@ -32,7 +34,7 @@ public class ExcelParser {
                 Record record = new Record();
                 for (int cellNum = 0; cellNum < sheet.getRow(0).getPhysicalNumberOfCells(); cellNum++) {
                     Cell cell = row.getCell(cellNum);
-                    if (rowNum == 0) {
+                    if (rowNum == HEADER_ROW_NUM) {
                         String headerValue = cell.getStringCellValue();
                         if (cellNum > 1) {
                             String[] headerValues = headerValue.split("\\(");
@@ -58,7 +60,7 @@ public class ExcelParser {
                         }
                     }
                 }
-                if (rowNum != 0) {
+                if (rowNum != HEADER_ROW_NUM) {
                     songList.add(record);
                     System.out.println(record.showSong());
                 }

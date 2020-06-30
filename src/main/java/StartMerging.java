@@ -4,7 +4,8 @@ import java.util.*;
 public class StartMerging {
 
     private static boolean takeInput = true;
-    private static ArrayList<Record> songList = new ArrayList<>(50000);
+    private static final int MAX_EXPECTED_SONGS = 50000;
+    private static ArrayList<Record> songList = new ArrayList<>(MAX_EXPECTED_SONGS);
     private static final XMLParser xmlParser = new XMLParser();
     private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
