@@ -32,7 +32,6 @@ class XMLParser {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
 
-            //Build custom JSON
             DefaultHandler handler = new DefaultHandler() {
 
                 private Record record = new Record();
@@ -109,20 +108,20 @@ class XMLParser {
 
     }
 
-    private void addToArrayList(Record r) {
+    private void addToArrayList(Record record) {
         boolean merged = false;
         for (Record song : songList) {
-            if (r.getArtiest().equals(song.getArtiest()) && r.getNummer().equals(song.getNummer())) {
+            if (record.getArtiest().equals(song.getArtiest()) && record.getNummer().equals(song.getNummer())) {
                 LinkedHashMap<String, Integer> temp = song.getPositionMap();
-                temp.putAll(r.getPositionMap());
+                temp.putAll(record.getPositionMap());
                 song.setPositionMap(temp);
-                System.out.println("Merged: " + r.showSong());
+                System.out.println("Merged: " + record.showSong());
                 merged = true;
             }
         }
         if(!merged) {
-            songList.add(r);
-            System.out.println("Copied over: " + r.showSong());
+            songList.add(record);
+            System.out.println("Copied over: " + record.showSong());
         }
     }
 }

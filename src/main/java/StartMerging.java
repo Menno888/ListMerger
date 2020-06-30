@@ -1,5 +1,3 @@
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import java.io.*;
 import java.util.*;
 
@@ -81,8 +79,8 @@ public class StartMerging {
     }
 
     private static void outputToScreen() {
-        for(Record r : songList) {
-            System.out.println(r.showSong());
+        for(Record record : songList) {
+            System.out.println(record.showSong());
         }
         System.out.println("There's " + songList.size() + " records left");
     }

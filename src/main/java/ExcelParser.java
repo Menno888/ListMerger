@@ -27,22 +27,22 @@ public class ExcelParser {
             XSSFWorkbook myWorkBook = new XSSFWorkbook(opcPackage);
             XSSFSheet sheet = myWorkBook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
-            for (int r = 0; r < sheet.getPhysicalNumberOfRows(); r++) {
-                Row row = sheet.getRow(r);
+            for (int rowNum = 0; rowNum < sheet.getPhysicalNumberOfRows(); rowNum++) {
+                Row row = sheet.getRow(rowNum);
                 Record record = new Record();
-                for (int c = 0; c < sheet.getRow(0).getPhysicalNumberOfCells(); c++) {
-                    Cell cell = row.getCell(c);
-                    if (r == 0) {
+                for (int cellNum = 0; cellNum < sheet.getRow(0).getPhysicalNumberOfCells(); cellNum++) {
+                    Cell cell = row.getCell(cellNum);
+                    if (rowNum == 0) {
                         String headerValue = cell.getStringCellValue();
-                        if (c > 1) {
+                        if (cellNum > 1) {
                             String[] headerValues = headerValue.split("\\(");
                             headerValue = headerValues[headerValues.length - 1];
                             headerValue = headerValue.substring(0, headerValue.length() - 1);
                         }
-                        listAbbreviations[c] = headerValue;
+                        listAbbreviations[cellNum] = headerValue;
                     }
                     else {
-                        String column = listAbbreviations[c];
+                        String column = listAbbreviations[cellNum];
                         if ("Artiest".equals(column)) {
                             record.setArtiest(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
@@ -52,13 +52,13 @@ public class ExcelParser {
                         else {
                             if (cell.getCellTypeEnum() == CellType.NUMERIC) {
                                 if ((int) cell.getNumericCellValue() != 0) {
-                                    record.addPositionToMap(listAbbreviations[c], (int) cell.getNumericCellValue());
+                                    record.addPositionToMap(listAbbreviations[cellNum], (int) cell.getNumericCellValue());
                                 }
                             }
                         }
                     }
                 }
-                if (r != 0) {
+                if (rowNum != 0) {
                     songList.add(record);
                     System.out.println(record.showSong());
                 }
