@@ -17,8 +17,6 @@ class XMLParser {
     private ArrayList<Record> songList = new ArrayList<>();
     private int songValue;
     private String elementTag;
-    private String artistName;
-    private String songName;
 
     XMLParser()
     {
@@ -55,10 +53,6 @@ class XMLParser {
 
                     if ("record".equals(qName)) {
                         building = false;
-                        artistName = RecordCleaner.cleanName(artistName);
-                        songName = RecordCleaner.cleanName(songName);
-                        record.setArtiest(artistName);
-                        record.setNummer(songName);
                         SongExceptions.songExceptionConverter(record);
                         addToArrayList(record);
                         record = new Record();
@@ -79,14 +73,14 @@ class XMLParser {
                                 String xmlResult = xml.toString();
                                 value = RecordCleaner.removeCData(xmlResult);
                                 value = RecordCleaner.resolveAmpersands(value);
-                                artistName = value;
+                                record.setArtiest(value);
                             }
                             if("Nummer".equals(elementTag)) {
                                 RecordCleaner.addCData(xml, value);
                                 String xmlResult = xml.toString();
                                 value = RecordCleaner.removeCData(xmlResult);
                                 value = RecordCleaner.resolveAmpersands(value);
-                                songName = value;
+                                record.setNummer(value);
                             }
                         }
                         else {

@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TestWriter {
 
     @Test
-    void testDiacritics() throws IOException {
+    void testWriteDiacritics() throws IOException {
         ArrayList<Record> songList = new ArrayList<>(50000);
         Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
         LinkedHashMap<String, Integer> recordMap = new LinkedHashMap<>();
@@ -17,9 +17,9 @@ class TestWriter {
         record.setPositionMap(recordMap);
         songList.add(record);
 
-        Writer.output(songList, "testDiacritics.xml", "y", "y", "y");
+        Writer.output(songList, "testwritediacritics.xml", "y", "y", "y");
 
-        BufferedReader reader = new BufferedReader(new FileReader("testDiacritics.xml"));
+        BufferedReader reader = new BufferedReader(new FileReader("testwritediacritics.xml"));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         String ls = System.getProperty("line.separator");
@@ -39,7 +39,7 @@ class TestWriter {
         assertThat(content).contains("<appearances>2</appearances>");
         assertThat(content).contains("    ");
 
-        File toRemove = new File("testDiacritics.xml");
+        File toRemove = new File("testwritediacritics.xml");
         toRemove.delete();
     }
 }
