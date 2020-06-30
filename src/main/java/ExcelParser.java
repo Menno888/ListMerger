@@ -52,9 +52,11 @@ public class ExcelParser {
                             record.setNummer(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
                         else {
-                            if (cell.getCellTypeEnum() == CellType.NUMERIC) {
-                                if ((int) cell.getNumericCellValue() != 0) {
-                                    record.addPositionToMap(listAbbreviations[cellNum], (int) cell.getNumericCellValue());
+                            if (cell != null) {
+                                if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+                                    if ((int) cell.getNumericCellValue() != 0) {
+                                        record.addPositionToMap(listAbbreviations[cellNum], (int) cell.getNumericCellValue());
+                                    }
                                 }
                             }
                         }
