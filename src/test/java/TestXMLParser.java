@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestBreakXMLFile {
+class TestXMLParser {
 
     @Test
     void testReadDiacritics() {
-        BreakXMLFile breaker = new BreakXMLFile();
+        XMLParser parser = new XMLParser();
         ArrayList<Record> songList = new ArrayList<>(5);
         File inFile = new File("testdiacritics.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
         assertThat(firstRecord.getArtiest()).contains("áéíäçèôñ");
@@ -21,11 +21,11 @@ class TestBreakXMLFile {
 
     @Test
     void testReadOverriding() {
-        BreakXMLFile breaker = new BreakXMLFile();
+        XMLParser parser = new XMLParser();
         ArrayList<Record> songList = new ArrayList<>(5);
         File inFile = new File("testoverriding.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);
@@ -38,11 +38,11 @@ class TestBreakXMLFile {
 
     @Test
     void testReadExceptions() {
-        BreakXMLFile breaker = new BreakXMLFile();
+        XMLParser parser = new XMLParser();
         ArrayList<Record> songList = new ArrayList<>(5);
         File inFile = new File("testsongexceptions.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);
