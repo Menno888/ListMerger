@@ -15,8 +15,8 @@ class TestXMLParser {
         songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
-        assertThat(firstRecord.getArtiest()).contains("áéíäçèôñ");
-        assertThat(firstRecord.getNummer()).contains(",.-=/+1234567890");
+        assertThat(firstRecord.getArtiest()).isEqualTo("áéíäçèôñ");
+        assertThat(firstRecord.getNummer()).isEqualTo(",.-=/+1234567890");
     }
 
     @Test
