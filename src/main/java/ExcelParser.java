@@ -17,7 +17,7 @@ public class ExcelParser {
     private final int MAX_EXPECTED_COLUMNS = 1000;
     private final int HEADER_ROW_NUM = 0;
 
-    public ArrayList<Record> parseExcel(String inFile, String outFile) {
+    public ArrayList<Record> parseExcel(String inFile) {
         String[] listAbbreviations = new String[MAX_EXPECTED_COLUMNS];
 
         try {
@@ -64,10 +64,9 @@ public class ExcelParser {
                 }
                 if (rowNum != HEADER_ROW_NUM) {
                     songList.add(record);
-                    System.out.println(record.showSong());
+                    System.out.println("Added: " + record.showSong());
                 }
             }
-            Writer.output(songList, outFile, "y", "y", "n");
 
         } catch (InvalidFormatException | IOException | IllegalStateException e) {
             System.out.println("File not found, try again");

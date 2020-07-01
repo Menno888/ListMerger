@@ -63,7 +63,8 @@ public class StartMerging {
                     String inExcel = sc.nextLine();
                     System.out.println("Enter a file name to output xml to:");
                     String outXml = sc.nextLine();
-                    excelParser.parseExcel(inExcel, outXml);
+                    songList = excelParser.parseExcel(inExcel);
+                    Writer.output(songList, outXml, "y", "y", "n");
                     break;
                 default:
                     System.out.println("Invalid input, try again");
