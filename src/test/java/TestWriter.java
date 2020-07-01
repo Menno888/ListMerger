@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,7 @@ class TestWriter {
 
     @Test
     void testWriteDiacritics() throws IOException {
-        ArrayList<Record> songList = new ArrayList<>(50000);
+        SongList songList = new SongList();
         Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
         LinkedHashMap<String, Integer> recordMap = new LinkedHashMap<>();
         recordMap.put("List1", 1);

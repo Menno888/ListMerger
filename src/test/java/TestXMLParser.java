@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +8,7 @@ class TestXMLParser {
     @Test
     void testReadDiacritics() {
         XMLParser parser = new XMLParser();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        SongList songList = new SongList();
         File inFile = new File("testdiacritics.xml");
         String fileToFeed = inFile.toString();
         songList = parser.parseXML(fileToFeed, songList);
@@ -22,7 +21,7 @@ class TestXMLParser {
     @Test
     void testReadOverriding() {
         XMLParser parser = new XMLParser();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        SongList songList = new SongList();
         File inFile = new File("testoverriding.xml");
         String fileToFeed = inFile.toString();
         songList = parser.parseXML(fileToFeed, songList);
@@ -39,7 +38,7 @@ class TestXMLParser {
     @Test
     void testReadExceptions() {
         XMLParser parser = new XMLParser();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        SongList songList = new SongList();
         File inFile = new File("testsongexceptions.xml");
         String fileToFeed = inFile.toString();
         songList = parser.parseXML(fileToFeed, songList);

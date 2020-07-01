@@ -4,8 +4,7 @@ import java.util.*;
 public class StartMerging {
 
     private static boolean takeInput = true;
-    private static final int MAX_EXPECTED_SONGS = 50000;
-    private static ArrayList<Record> songList = new ArrayList<>(MAX_EXPECTED_SONGS);
+    private static SongList songList = new SongList();
     private static final XMLParser xmlParser = new XMLParser();
     private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
@@ -34,7 +33,7 @@ public class StartMerging {
                     merge(mergeFile);
                     break;
                 case "n":
-                    normalize();
+                    songList.normalize();
                     break;
                 case "o":
                     System.out.println("Output to which filename?:");
@@ -112,7 +111,7 @@ public class StartMerging {
     private static void filter(String lists) {
         String[] toKeep = lists.split(",");
         List<String> toKeepList = Arrays.asList(toKeep);
-        ArrayList<String> allEditions = tagCheckup();
+        ArrayList<String> allEditions = songList.tagCheckup();
         List<String> newList = new ArrayList<>();
         for (String edition : allEditions) {
             if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {
@@ -144,7 +143,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
             allEditions.removeAll(newList);
             if("n".equals(retainUnused)) {
                 for(Record currentRecord : songList) {
@@ -166,7 +165,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
             allEditions.removeAll(newList);
             if("n".equals(retainUnused)) {
                 for(Record currentRecord : songList) {
@@ -189,31 +188,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
         }
-    }
-
-    private static void normalize() {
-        Iterator<Record> it = songList.iterator();
-        while(it.hasNext()) {
-            Record item = it.next();
-            if(item.getPositionMap().size() == 0) {
-                it.remove();
-                System.out.println("Removed " + item.showSong());
-            }
-        }
-        System.out.println("There's " + songList.size() + " records left");
-    }
-
-    private static ArrayList<String> tagCheckup() {
-        ArrayList<String> tagList = new ArrayList<>();
-        for(Record currentRecord : songList) {
-            for(Map.Entry<String, Integer> entry : currentRecord.getPositionMap().entrySet()) {
-                if(!tagList.contains(entry.getKey())) {
-                    tagList.add(entry.getKey());
-                }
-            }
-        }
-        return tagList;
     }
 }

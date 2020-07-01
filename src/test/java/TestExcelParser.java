@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +10,7 @@ class TestExcelParser {
         ExcelParser parser = new ExcelParser();
         File inFile = new File("testexcel.xlsx");
         String fileToFeed = inFile.toString();
-        ArrayList<Record> songList = parser.parseExcel(fileToFeed);
+        SongList songList = parser.parseExcel(fileToFeed);
 
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);

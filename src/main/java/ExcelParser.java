@@ -9,15 +9,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ExcelParser {
 
-    private ArrayList<Record> songList = new ArrayList<>();
+    private SongList songList = new SongList();
     private final int MAX_EXPECTED_COLUMNS = 1000;
     private final int HEADER_ROW_NUM = 0;
 
-    public ArrayList<Record> parseExcel(String inFile) {
+    public SongList parseExcel(String inFile) {
         String[] listAbbreviations = new String[MAX_EXPECTED_COLUMNS];
 
         try {

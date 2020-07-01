@@ -1,12 +1,11 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Writer {
 
-    public static void output(ArrayList<Record> songList, String outFile, String positions, String prettyPrint, String countPositions) {
+    public static void output(SongList songList, String outFile, String positions, String prettyPrint, String countPositions) {
         if (!outFile.endsWith(".xml")) {
             outFile = outFile + ".xml";
         }

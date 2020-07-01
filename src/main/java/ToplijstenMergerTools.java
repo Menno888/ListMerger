@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ToplijstenMergerTools {
@@ -6,7 +5,7 @@ public class ToplijstenMergerTools {
     private static boolean takeInput = true;
     private static Scanner sc = new Scanner(System.in);
 
-    public void getTools(ArrayList<Record> list) {
+    public void getTools(SongList list) {
         while(takeInput) {
             System.out.println("Stuff for tools");
             String control = sc.nextLine();

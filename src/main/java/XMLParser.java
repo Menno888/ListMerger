@@ -7,14 +7,13 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 class XMLParser {
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
-    private ArrayList<Record> songList = new ArrayList<>();
+    private SongList songList = new SongList();
     private int songValue;
     private String elementTag;
 
@@ -23,7 +22,7 @@ class XMLParser {
         SongExceptions.loadExceptions();
     }
 
-    ArrayList<Record> parseXML(String file, ArrayList<Record> list) {
+    SongList parseXML(String file, SongList list) {
 
         songList = list;
 
