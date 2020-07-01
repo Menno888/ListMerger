@@ -1,12 +1,11 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Writer {
 
-    public static void output(ArrayList<Record> songList, String outFile, String positions, String pp, String countPositions) {
+    public static void output(SongList songList, String outFile, String positions, String prettyPrint, String countPositions) {
         if (!outFile.endsWith(".xml")) {
             outFile = outFile + ".xml";
         }
@@ -23,28 +22,28 @@ public class Writer {
             }
         }
 
-        FileOutputStream fw;
-        BufferedWriter bw = null;
+        FileOutputStream fileStream;
+        BufferedWriter writer = null;
         try {
-            fw = new FileOutputStream(file.getAbsoluteFile());
-            bw = new BufferedWriter(new OutputStreamWriter(fw, StandardCharsets.UTF_8));
+            fileStream = new FileOutputStream(file.getAbsoluteFile());
+            writer = new BufferedWriter(new OutputStreamWriter(fileStream, StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            bw.newLine();
-            bw.write("<top2000database2014 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
-            bw.newLine();
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+            writer.newLine();
+            writer.write("<top2000database2014 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
+            writer.newLine();
             for (Record song : songList) {
-                String output = convertRecord(song, positions, pp, countPositions);
-                bw.write(output);
-                bw.newLine();
+                String output = convertRecord(song, positions, prettyPrint, countPositions);
+                writer.write(output);
+                writer.newLine();
                 System.out.println("Wrote: " + song.showSong());
             }
-            bw.write("</top2000database2014>");
-            bw.close();
+            writer.write("</top2000database2014>");
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,34 +51,34 @@ public class Writer {
         System.out.println("Output to " + outFile);
     }
 
-    private static String convertRecord(Record r, String positions, String pp, String countPositions) {
-        StringBuilder testString = new StringBuilder();
+    private static String convertRecord(Record record, String positions, String prettyPrint, String countPositions) {
+        StringBuilder stringBuilder = new StringBuilder();
         String indentation;
         String lineBreak;
 
-        if("y".equals(pp)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
+        if("y".equals(prettyPrint)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
 
-        testString.append(indentation + "<record>" + lineBreak);
-        testString.append(repeat(indentation, 2) + "<Artiest>" + r.getArtiest() + "</Artiest>" + lineBreak);
-        testString.append(repeat(indentation, 2) + "<Nummer>" + r.getNummer() + "</Nummer>" + lineBreak);
+        stringBuilder.append(indentation + "<record>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + record.getArtiest() + "</Artiest>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + record.getNummer() + "</Nummer>" + lineBreak);
         if("y".equals(countPositions)) {
-            long numberOfPositions = getPositionsCount(r, positions);
-            testString.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
+            long numberOfPositions = getPositionsCount(record, positions);
+            stringBuilder.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
         }
         if(!"n".equals(positions)) {
-            for(Map.Entry<String, Integer> pair : r.getPositionMap().entrySet()) {
+            for(Map.Entry<String, Integer> pair : record.getPositionMap().entrySet()) {
                 if("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                    testString.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
+                    stringBuilder.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
                 }
             }
         }
-        testString.append(indentation + "</record>");
+        stringBuilder.append(indentation + "</record>");
 
-        return testString.toString();
+        return stringBuilder.toString();
     }
 
-    private static long getPositionsCount(Record r, String positions) {
-        LinkedHashMap<String, Integer> copySongList = r.getPositionMap();
+    private static long getPositionsCount(Record record, String positions) {
+        LinkedHashMap<String, Integer> copySongList = record.getPositionMap();
         long numberOfPositions;
         if(!"n".equals(positions) && !"y".equals(positions)) {
             numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();

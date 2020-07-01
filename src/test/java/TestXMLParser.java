@@ -1,31 +1,30 @@
 import java.io.File;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestBreakXMLFile {
+class TestXMLParser {
 
     @Test
     void testReadDiacritics() {
-        BreakXMLFile breaker = new BreakXMLFile();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        XMLParser parser = new XMLParser();
+        SongList songList = new SongList();
         File inFile = new File("testdiacritics.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
-        assertThat(firstRecord.getArtiest()).contains("áéíäçèôñ");
-        assertThat(firstRecord.getNummer()).contains(",.-=/+1234567890");
+        assertThat(firstRecord.getArtiest()).isEqualTo("áéíäçèôñ");
+        assertThat(firstRecord.getNummer()).isEqualTo(",.-=/+1234567890");
     }
 
     @Test
     void testReadOverriding() {
-        BreakXMLFile breaker = new BreakXMLFile();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        XMLParser parser = new XMLParser();
+        SongList songList = new SongList();
         File inFile = new File("testoverriding.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);
@@ -38,11 +37,11 @@ class TestBreakXMLFile {
 
     @Test
     void testReadExceptions() {
-        BreakXMLFile breaker = new BreakXMLFile();
-        ArrayList<Record> songList = new ArrayList<>(5);
+        XMLParser parser = new XMLParser();
+        SongList songList = new SongList();
         File inFile = new File("testsongexceptions.xml");
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);

@@ -1,7 +1,10 @@
+### ListMerger
+
 Personal project to merge all sorts of hit lists (e.g. big lists such as NPO Radio 2 Top 2000, Radio 10 Top 4000, Veronica Top 1000)
 
 For instance merging
 
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <record>
@@ -15,9 +18,11 @@ For instance merging
     <R2NLA2019>10</R2NLA2019>
 </record>
 </top2000database2014>
+```
 
 with
 
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <record>
@@ -31,9 +36,11 @@ with
     <VA2019>60</VA2019>
 </record>
 </top2000database2014>
+```
 
 would yield:
 
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <record>
@@ -53,10 +60,11 @@ would yield:
     <VA2019>60</VA2019>
 </record>
 </top2000database2014>
+```
+<br></br><br></br>
+### Versions
 
-
-
-------------------------------
-1.0     STABLE ORIGINAL VERSION
-    1.1     MOVED WRITER.JAVA, ADDED RUDIMENTARY TEST
-    1.2     ADDED RECORDCLEANER.JAVA, BUGFIXES
+1.0     STABLE ORIGINAL VERSION  
+1.1     MOVED WRITER.JAVA, ADDED RUDIMENTARY TEST  
+1.2     ADDED RECORDCLEANER.JAVA, BUGFIXES  
+2.0     CAN NOW DIRECTLY PARSE EXCEL FILES

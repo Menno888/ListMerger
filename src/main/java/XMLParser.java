@@ -7,23 +7,22 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-class BreakXMLFile {
+class XMLParser {
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
-    private ArrayList<Record> songList = new ArrayList<>();
+    private SongList songList = new SongList();
     private int songValue;
     private String elementTag;
 
-    BreakXMLFile()
+    XMLParser()
     {
         SongExceptions.loadExceptions();
     }
 
-    ArrayList<Record> startBreak(String file, ArrayList<Record> list) {
+    SongList parseXML(String file, SongList list) {
 
         songList = list;
 
@@ -32,7 +31,6 @@ class BreakXMLFile {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
 
-            //Build custom JSON
             DefaultHandler handler = new DefaultHandler() {
 
                 private Record record = new Record();
@@ -109,20 +107,20 @@ class BreakXMLFile {
 
     }
 
-    private void addToArrayList(Record r) {
+    private void addToArrayList(Record record) {
         boolean merged = false;
         for (Record song : songList) {
-            if (r.getArtiest().equals(song.getArtiest()) && r.getNummer().equals(song.getNummer())) {
+            if (record.getArtiest().equals(song.getArtiest()) && record.getNummer().equals(song.getNummer())) {
                 LinkedHashMap<String, Integer> temp = song.getPositionMap();
-                temp.putAll(r.getPositionMap());
+                temp.putAll(record.getPositionMap());
                 song.setPositionMap(temp);
-                System.out.println("Merged: " + r.showSong());
+                System.out.println("Merged: " + record.showSong());
                 merged = true;
             }
         }
         if(!merged) {
-            songList.add(r);
-            System.out.println("Copied over: " + r.showSong());
+            songList.add(record);
+            System.out.println("Copied over: " + record.showSong());
         }
     }
 }

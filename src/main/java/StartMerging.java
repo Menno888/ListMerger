@@ -4,13 +4,14 @@ import java.util.*;
 public class StartMerging {
 
     private static boolean takeInput = true;
-    private static ArrayList<Record> songList = new ArrayList<>(50000);
-    private static final BreakXMLFile breaker = new BreakXMLFile();
+    private static SongList songList = new SongList();
+    private static final XMLParser xmlParser = new XMLParser();
+    private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (takeInput) {
-            System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools):");
+            System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
             String control = sc.nextLine();
             switch (control) {
                 case "c":
@@ -32,7 +33,7 @@ public class StartMerging {
                     merge(mergeFile);
                     break;
                 case "n":
-                    normalize();
+                    songList.normalize();
                     break;
                 case "o":
                     System.out.println("Output to which filename?:");
@@ -46,15 +47,23 @@ public class StartMerging {
                         Writer.output(songList, outFile, optionsArray[0], optionsArray[1], optionsArray[2]);
                     }
                     break;
-                case "t":
-                    System.out.println("Soon (TM)");
-                    break;
                 case "q":
                     System.out.println("Goodbye");
                     takeInput = false;
                     break;
                 case "s":
                     outputToScreen();
+                    break;
+                case "t":
+                    System.out.println("Soon (TM)");
+                    break;
+                case "x":
+                    System.out.println("Enter an excel file to merge:");
+                    String inExcel = sc.nextLine();
+                    System.out.println("Enter a file name to output xml to:");
+                    String outXml = sc.nextLine();
+                    songList = excelParser.parseExcel(inExcel);
+                    Writer.output(songList, outXml, "y", "y", "n");
                     break;
                 default:
                     System.out.println("Invalid input, try again");
@@ -66,13 +75,13 @@ public class StartMerging {
     private static void merge(String mergeFile) {
         File inFile = new File(mergeFile);
         String fileToFeed = inFile.toString();
-        songList = breaker.startBreak(fileToFeed, songList);
+        songList = xmlParser.parseXML(fileToFeed, songList);
         System.out.println("There are currently " + songList.size() + " records");
     }
 
     private static void outputToScreen() {
-        for(Record r : songList) {
-            System.out.println(r.showSong());
+        for(Record record : songList) {
+            System.out.println(record.showSong());
         }
         System.out.println("There's " + songList.size() + " records left");
     }
@@ -102,7 +111,7 @@ public class StartMerging {
     private static void filter(String lists) {
         String[] toKeep = lists.split(",");
         List<String> toKeepList = Arrays.asList(toKeep);
-        ArrayList<String> allEditions = tagCheckup();
+        ArrayList<String> allEditions = songList.tagCheckup();
         List<String> newList = new ArrayList<>();
         for (String edition : allEditions) {
             if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {
@@ -134,7 +143,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
             allEditions.removeAll(newList);
             if("n".equals(retainUnused)) {
                 for(Record currentRecord : songList) {
@@ -156,7 +165,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
             allEditions.removeAll(newList);
             if("n".equals(retainUnused)) {
                 for(Record currentRecord : songList) {
@@ -179,31 +188,7 @@ public class StartMerging {
                     currentRecord.cleanPositionMap();
                 }
             }
-            normalize();
+            songList.normalize();
         }
-    }
-
-    private static void normalize() {
-        Iterator<Record> it = songList.iterator();
-        while(it.hasNext()) {
-            Record item = it.next();
-            if(item.getPositionMap().size() == 0) {
-                it.remove();
-                System.out.println("Removed " + item.showSong());
-            }
-        }
-        System.out.println("There's " + songList.size() + " records left");
-    }
-
-    private static ArrayList<String> tagCheckup() {
-        ArrayList<String> tagList = new ArrayList<>();
-        for(Record currentRecord : songList) {
-            for(Map.Entry<String, Integer> entry : currentRecord.getPositionMap().entrySet()) {
-                if(!tagList.contains(entry.getKey())) {
-                    tagList.add(entry.getKey());
-                }
-            }
-        }
-        return tagList;
     }
 }
