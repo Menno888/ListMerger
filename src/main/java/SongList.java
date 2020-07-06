@@ -28,4 +28,11 @@ public class SongList extends ArrayList<Record> {
         }
         System.out.println("There's " + this.size() + " records left");
     }
+
+    public void outputToScreen() {
+        for(Record currentRecord : this) {
+            System.out.println(currentRecord.showSong());
+        }
+        System.out.println("There's " + this.size() + " records left");
+    }
 }

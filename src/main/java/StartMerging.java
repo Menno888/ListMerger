@@ -42,9 +42,9 @@ public class StartMerging {
                     String optionsString = sc.nextLine();
                     String[] optionsArray = optionsString.split(",");
                     if ("".equals(optionsArray[0])) {
-                        Writer.output(songList, outFile, "y", "n", "n");
+                        Writer.output(songList, outFile, new String[]{"y", "n", "n"});
                     } else {
-                        Writer.output(songList, outFile, optionsArray[0], optionsArray[1], optionsArray[2]);
+                        Writer.output(songList, outFile, new String[]{optionsArray[0], optionsArray[1], optionsArray[2]});
                     }
                     break;
                 case "q":
@@ -52,7 +52,7 @@ public class StartMerging {
                     takeInput = false;
                     break;
                 case "s":
-                    outputToScreen();
+                    songList.outputToScreen();
                     break;
                 case "t":
                     System.out.println("Soon (TM)");
@@ -63,7 +63,7 @@ public class StartMerging {
                     System.out.println("Enter a file name to output xml to:");
                     String outXml = sc.nextLine();
                     songList = excelParser.parseExcel(inExcel);
-                    Writer.output(songList, outXml, "y", "y", "n");
+                    Writer.output(songList, outXml, new String[]{"y", "y", "n"});
                     break;
                 default:
                     System.out.println("Invalid input, try again");
@@ -77,13 +77,6 @@ public class StartMerging {
         String fileToFeed = inFile.toString();
         songList = xmlParser.parseXML(fileToFeed, songList);
         System.out.println("There are currently " + songList.size() + " records");
-    }
-
-    private static void outputToScreen() {
-        for(Record record : songList) {
-            System.out.println(record.showSong());
-        }
-        System.out.println("There's " + songList.size() + " records left");
     }
 
     private static void initializeAndMerge() {
@@ -104,7 +97,7 @@ public class StartMerging {
         for (String file : fileList) {
             merge(file);
         }
-        Writer.output(songList, outFile, "y", "n", "n");
+        Writer.output(songList, outFile, new String[]{"y", "n", "n"});
         System.out.println("ALL LISTS CONVERTED!");
     }
 
