@@ -16,7 +16,7 @@ class TestWriter {
         record.setPositionMap(recordMap);
         songList.add(record);
 
-        Writer.output(songList, "testwritediacritics.xml", new String[]{"y", "y", "y"});
+        Writer.output(songList, "testwritediacritics.xml", "y,y,y");
 
         BufferedReader reader = new BufferedReader(new FileReader("testwritediacritics.xml"));
         StringBuilder stringBuilder = new StringBuilder();

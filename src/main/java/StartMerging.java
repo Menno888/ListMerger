@@ -5,13 +5,12 @@ public class StartMerging {
 
     private static boolean takeInput = true;
     private static SongList songList = new SongList();
-    private static final XMLParser xmlParser = new XMLParser();
     private static final ExcelParser excelParser = new ExcelParser();
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         while (takeInput) {
-            System.out.println("Enter your input ((c)lear, (f)ilter, (l)ist all in dir, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
+            System.out.println("Enter your input ((c)lear, (f)ilter, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
             String control = sc.nextLine();
             switch (control) {
                 case "c":
@@ -23,29 +22,28 @@ public class StartMerging {
                     String toKeep = sc.nextLine();
                     filter(toKeep);
                     break;
-                case "l":
-                    initializeAndMerge();
-                    takeInput = false;
-                    break;
                 case "m":
                     System.out.println("Enter a file to initialize/merge:");
                     String mergeFile = sc.nextLine();
-                    merge(mergeFile);
+                    if("".equals(mergeFile)) {
+                        System.out.println("Enter a file name to output to:");
+                        String outFileMerge = sc.nextLine();
+                        Merger.merge(songList, mergeFile);
+                        Writer.output(songList, outFileMerge, "y,n,n");
+                    }
+                    else {
+                        Merger.merge(songList, mergeFile);
+                    }
                     break;
                 case "n":
                     songList.normalize();
                     break;
                 case "o":
                     System.out.println("Output to which filename?:");
-                    String outFile = sc.nextLine();
+                    String outFileOutput = sc.nextLine();
                     System.out.println("Give options [positions, pretty-print, count]");
                     String optionsString = sc.nextLine();
-                    String[] optionsArray = optionsString.split(",");
-                    if ("".equals(optionsArray[0])) {
-                        Writer.output(songList, outFile, new String[]{"y", "n", "n"});
-                    } else {
-                        Writer.output(songList, outFile, new String[]{optionsArray[0], optionsArray[1], optionsArray[2]});
-                    }
+                    Writer.output(songList, outFileOutput, optionsString);
                     break;
                 case "q":
                     System.out.println("Goodbye");
@@ -63,42 +61,13 @@ public class StartMerging {
                     System.out.println("Enter a file name to output xml to:");
                     String outXml = sc.nextLine();
                     songList = excelParser.parseExcel(inExcel);
-                    Writer.output(songList, outXml, new String[]{"y", "y", "n"});
+                    Writer.output(songList, outXml, "y,y,n");
                     break;
                 default:
                     System.out.println("Invalid input, try again");
                     break;
             }
         }
-    }
-
-    private static void merge(String mergeFile) {
-        File inFile = new File(mergeFile);
-        String fileToFeed = inFile.toString();
-        songList = xmlParser.parseXML(fileToFeed, songList);
-        System.out.println("There are currently " + songList.size() + " records");
-    }
-
-    private static void initializeAndMerge() {
-        ArrayList<String> fileList = new ArrayList<>(100);
-        System.out.println("Enter a file name to output to:");
-        String outFile = sc.nextLine();
-        File folder = new File(System.getProperty("user.dir"));
-        File[] listOfFiles = folder.listFiles();
-
-        if (listOfFiles != null) {
-            for(File file : listOfFiles) {
-                if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
-                    fileList.add(file.getName());
-                }
-            }
-        }
-
-        for (String file : fileList) {
-            merge(file);
-        }
-        Writer.output(songList, outFile, new String[]{"y", "n", "n"});
-        System.out.println("ALL LISTS CONVERTED!");
     }
 
     private static void filter(String lists) {

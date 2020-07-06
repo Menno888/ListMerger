@@ -5,15 +5,17 @@ import java.util.Map;
 
 public class Writer {
 
-    public static void output(SongList songList, String outFile, String[] options) {
+    public static void output(SongList songList, String outFile, String options) {
+        String[] optionsArray = options.split(",");
+
         String positions = "y";
         String prettyPrint = "n";
         String countPositions = "n";
 
-        if (!"".equals(options[0])) {
-            positions = options[0];
-            prettyPrint = options[1];
-            countPositions = options[2];
+        if (!"".equals(optionsArray[0])) {
+            positions = optionsArray[0];
+            prettyPrint = optionsArray[1];
+            countPositions = optionsArray[2];
         }
 
         if (!outFile.endsWith(".xml")) {
