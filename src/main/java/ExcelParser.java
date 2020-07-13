@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExcelParser {
 
@@ -17,14 +18,13 @@ public class ExcelParser {
     private final int HEADER_ROW_NUM = 0;
 
     public SongList parseExcel(String inFile) {
-        String[] listAbbreviations = new String[MAX_EXPECTED_COLUMNS];
+        ArrayList<String> listAbbreviations = new ArrayList<>(MAX_EXPECTED_COLUMNS);
 
         try {
             if (!inFile.endsWith(".xlsx")) {
                 inFile = inFile + ".xlsx";
             }
-            File myFile = new File(inFile);
-            OPCPackage opcPackage = OPCPackage.open(myFile.getAbsolutePath());
+            OPCPackage opcPackage = OPCPackage.open(new File(inFile).getAbsolutePath());
             XSSFWorkbook myWorkBook = new XSSFWorkbook(opcPackage);
             XSSFSheet sheet = myWorkBook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
@@ -40,10 +40,10 @@ public class ExcelParser {
                             headerValue = headerValues[headerValues.length - 1];
                             headerValue = headerValue.substring(0, headerValue.length() - 1);
                         }
-                        listAbbreviations[cellNum] = headerValue;
+                        listAbbreviations.add(headerValue);
                     }
                     else {
-                        String column = listAbbreviations[cellNum];
+                        String column = listAbbreviations.get(cellNum);
                         if ("Artiest".equals(column)) {
                             record.setArtiest(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
@@ -54,7 +54,7 @@ public class ExcelParser {
                             if (cell != null) {
                                 if (cell.getCellTypeEnum() == CellType.NUMERIC) {
                                     if ((int) cell.getNumericCellValue() != 0) {
-                                        record.addPositionToMap(listAbbreviations[cellNum], (int) cell.getNumericCellValue());
+                                        record.addPositionToMap(listAbbreviations.get(cellNum), (int) cell.getNumericCellValue());
                                     }
                                 }
                             }
