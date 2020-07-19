@@ -52,7 +52,7 @@ public class ExcelParser {
                         }
                         else {
                             if (cell != null) {
-                                if (cell.getCellTypeEnum() == CellType.NUMERIC) {
+                                if (cell.getCellType() == CellType.NUMERIC) {
                                     if ((int) cell.getNumericCellValue() != 0) {
                                         record.addPositionToMap(listAbbreviations.get(cellNum), (int) cell.getNumericCellValue());
                                     }
