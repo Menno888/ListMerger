@@ -16,6 +16,7 @@ public class ExcelParser {
     private SongList songList = new SongList();
     private final int MAX_EXPECTED_COLUMNS = 1000;
     private final int HEADER_ROW_NUM = 0;
+    private final int COLUMN_START_NUM = 0;
 
     public SongList parseExcel(String inFile) {
         ArrayList<String> listAbbreviations = new ArrayList<>(MAX_EXPECTED_COLUMNS);
@@ -35,7 +36,7 @@ public class ExcelParser {
                     Cell cell = row.getCell(cellNum);
                     if (rowNum == HEADER_ROW_NUM) {
                         String headerValue = cell.getStringCellValue();
-                        if (cellNum > 1) {
+                        if (cellNum >= COLUMN_START_NUM + 2) {
                             String[] headerValues = headerValue.split("\\(");
                             headerValue = headerValues[headerValues.length - 1];
                             headerValue = headerValue.substring(0, headerValue.length() - 1);
