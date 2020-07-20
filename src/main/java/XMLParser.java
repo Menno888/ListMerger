@@ -65,18 +65,14 @@ class XMLParser {
                         if (value.length() == 0) return; // ignore white space
 
                         if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
+                            RecordCleaner.addCData(xml, value);
+                            String xmlResult = xml.toString();
+                            value = RecordCleaner.removeCData(xmlResult);
+                            value = RecordCleaner.resolveAmpersands(value);
                             if("Artiest".equals(elementTag)) {
-                                RecordCleaner.addCData(xml, value);
-                                String xmlResult = xml.toString();
-                                value = RecordCleaner.removeCData(xmlResult);
-                                value = RecordCleaner.resolveAmpersands(value);
                                 record.setArtiest(value);
                             }
                             if("Nummer".equals(elementTag)) {
-                                RecordCleaner.addCData(xml, value);
-                                String xmlResult = xml.toString();
-                                value = RecordCleaner.removeCData(xmlResult);
-                                value = RecordCleaner.resolveAmpersands(value);
                                 record.setNummer(value);
                             }
                         }
