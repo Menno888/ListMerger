@@ -32,7 +32,7 @@ class XMLParser {
 
             DefaultHandler handler = new DefaultHandler() {
 
-                private Record record = new Record();
+                private Record record;
 
                 public void startElement(String uri, String localName,
                                          String qName, Attributes attributes) {
@@ -42,6 +42,7 @@ class XMLParser {
                     if ("record".equals(qName)) {
 
                         building = true;
+                        record = new Record();
                     }
                 }
 
@@ -52,7 +53,6 @@ class XMLParser {
                         building = false;
                         SongExceptions.songExceptionConverter(record);
                         addToArrayList(record);
-                        record = new Record();
                     }
 
                     xml.setLength(0);
