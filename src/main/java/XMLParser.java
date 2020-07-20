@@ -14,7 +14,6 @@ class XMLParser {
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private SongList songList = new SongList();
-    private int songValue;
     private String elementTag;
 
     XMLParser()
@@ -82,8 +81,7 @@ class XMLParser {
                             }
                         }
                         else {
-                            songValue = Integer.parseInt(value);
-                            record.addPositionToMap(elementTag, songValue);
+                            record.addPositionToMap(elementTag, Integer.parseInt(value));
                         }
                     }
                 }
