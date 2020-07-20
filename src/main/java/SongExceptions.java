@@ -14,6 +14,7 @@ public class SongExceptions {
     public static void loadExceptions() {
         final InputStream inputStream = SongExceptions.class.getClassLoader().getResourceAsStream("song.exceptions");
         try {
+            assert inputStream != null;
             final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             final BufferedReader reader = new BufferedReader(inputStreamReader);
 
