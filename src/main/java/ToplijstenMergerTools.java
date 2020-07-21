@@ -1,3 +1,4 @@
+/*
 import java.util.Scanner;
 
 public class ToplijstenMergerTools {
@@ -24,6 +25,7 @@ public class ToplijstenMergerTools {
         }
     }
 }
+ */
 
 /*
 *****Strip songList from keys and values for extended Excel base*****

@@ -14,7 +14,6 @@ class XMLParser {
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private SongList songList = new SongList();
-    private int songValue;
     private String elementTag;
 
     XMLParser()
@@ -33,7 +32,7 @@ class XMLParser {
 
             DefaultHandler handler = new DefaultHandler() {
 
-                private Record record = new Record();
+                private Record record;
 
                 public void startElement(String uri, String localName,
                                          String qName, Attributes attributes) {
@@ -43,6 +42,7 @@ class XMLParser {
                     if ("record".equals(qName)) {
 
                         building = true;
+                        record = new Record();
                     }
                 }
 
@@ -53,7 +53,6 @@ class XMLParser {
                         building = false;
                         SongExceptions.songExceptionConverter(record);
                         addToArrayList(record);
-                        record = new Record();
                     }
 
                     xml.setLength(0);
@@ -66,24 +65,19 @@ class XMLParser {
                         if (value.length() == 0) return; // ignore white space
 
                         if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
+                            RecordCleaner.addCData(xml, value);
+                            String xmlResult = xml.toString();
+                            value = RecordCleaner.removeCData(xmlResult);
+                            value = RecordCleaner.resolveAmpersands(value);
                             if("Artiest".equals(elementTag)) {
-                                RecordCleaner.addCData(xml, value);
-                                String xmlResult = xml.toString();
-                                value = RecordCleaner.removeCData(xmlResult);
-                                value = RecordCleaner.resolveAmpersands(value);
                                 record.setArtiest(value);
                             }
                             if("Nummer".equals(elementTag)) {
-                                RecordCleaner.addCData(xml, value);
-                                String xmlResult = xml.toString();
-                                value = RecordCleaner.removeCData(xmlResult);
-                                value = RecordCleaner.resolveAmpersands(value);
                                 record.setNummer(value);
                             }
                         }
                         else {
-                            songValue = Integer.parseInt(value);
-                            record.addPositionToMap(elementTag, songValue);
+                            record.addPositionToMap(elementTag, Integer.parseInt(value));
                         }
                     }
                 }
