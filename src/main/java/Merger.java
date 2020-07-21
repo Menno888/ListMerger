@@ -13,7 +13,7 @@ public class Merger {
 
             if (listOfFiles != null) {
                 for(File file : listOfFiles) {
-                    if(file.isFile() && file.getName().endsWith(".xml") && !("themaother.xml".equals(file.getName()))) {
+                    if(file.isFile() && file.getName().endsWith(".xml") && !(ListExceptions.checkList(file.getName()))) {
                         fileList.add(file.getName());
                     }
                 }
