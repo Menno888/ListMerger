@@ -44,11 +44,10 @@ public class ExcelParser {
                         listAbbreviations.add(headerValue);
                     }
                     else {
-                        String column = listAbbreviations.get(cellNum);
-                        if ("Artiest".equals(column)) {
+                        if (cellNum == COLUMN_START_NUM) {
                             record.setArtiest(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
-                        else if ("Nummer".equals(column)) {
+                        else if (cellNum == COLUMN_START_NUM + 1) {
                             record.setNummer(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
                         else {
