@@ -61,6 +61,7 @@ public class StartMerging {
                     String outXml = sc.nextLine();
                     songList = excelParser.parseExcel(inExcel);
                     Writer.output(songList, outXml, "y,y,n");
+                    songList.clear();
                     break;
                 default:
                     System.out.println("Invalid input, try again");
