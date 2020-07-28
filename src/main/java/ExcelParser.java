@@ -17,6 +17,7 @@ public class ExcelParser {
     private final int MAX_EXPECTED_COLUMNS = 1000;
     private final int HEADER_ROW_NUM = 0;
     private final int COLUMN_START_NUM = 0;
+    private XSSFSheet sheet;
 
     public SongList parseExcel(String inFile) {
         ArrayList<String> listAbbreviations = new ArrayList<>(MAX_EXPECTED_COLUMNS);
@@ -27,12 +28,16 @@ public class ExcelParser {
             }
             OPCPackage opcPackage = OPCPackage.open(new File(inFile).getAbsolutePath());
             XSSFWorkbook myWorkBook = new XSSFWorkbook(opcPackage);
-            XSSFSheet sheet = myWorkBook.getSheetAt(0);
+            sheet = myWorkBook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
-            for (int rowNum = 0; rowNum < sheet.getPhysicalNumberOfRows(); rowNum++) {
+
+            int numOfRows = getActualNumberOfRows();
+            int numOfCols = getActualNumberOfColumns();
+
+            for (int rowNum = 0; rowNum < numOfCols; rowNum++) {
                 Row row = sheet.getRow(rowNum);
                 Record record = new Record();
-                for (int cellNum = 0; cellNum < sheet.getRow(0).getPhysicalNumberOfCells(); cellNum++) {
+                for (int cellNum = 0; cellNum < numOfRows; cellNum++) {
                     Cell cell = row.getCell(cellNum);
                     if (rowNum == HEADER_ROW_NUM) {
                         String headerValue = cell.getStringCellValue();
@@ -74,5 +79,30 @@ public class ExcelParser {
         }
 
         return songList;
+    }
+
+    public int getActualNumberOfRows() {
+        int cellNum = 0;
+        while (checkIfCellNonEmpty(0, cellNum)) {
+            cellNum++;
+        }
+        return cellNum;
+    }
+
+    public int getActualNumberOfColumns() {
+        int cellNum = 0;
+        while (checkIfCellNonEmpty(cellNum, 0)) {
+            cellNum++;
+        }
+        return cellNum;
+    }
+
+    public boolean checkIfCellNonEmpty(int row, int col) {
+        try {
+            Cell cell = sheet.getRow(row).getCell(col);
+            return cell != null && cell.getCellType() != CellType.BLANK;
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 }
