@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ExcelParser {
 
-    private SongList songList = new SongList();
+    private final SongList songList = new SongList();
     private final int HEADER_ROW_NUM = 0;
     private final int COLUMN_START_NUM = 0;
     private XSSFSheet sheet;
