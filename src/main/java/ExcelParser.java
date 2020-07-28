@@ -14,13 +14,12 @@ import java.util.ArrayList;
 public class ExcelParser {
 
     private SongList songList = new SongList();
-    private final int MAX_EXPECTED_COLUMNS = 1000;
     private final int HEADER_ROW_NUM = 0;
     private final int COLUMN_START_NUM = 0;
     private XSSFSheet sheet;
 
     public SongList parseExcel(String inFile) {
-        ArrayList<String> listAbbreviations = new ArrayList<>(MAX_EXPECTED_COLUMNS);
+        ArrayList<String> listAbbreviations = new ArrayList<>();
 
         try {
             if (!inFile.endsWith(".xlsx")) {
