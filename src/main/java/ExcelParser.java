@@ -49,10 +49,10 @@ public class ExcelParser {
                     }
                     else {
                         if (cellNum == COLUMN_START_NUM) {
-                            record.setArtiest(formatter.formatCellValue(cell).replace("&", "&amp;"));
+                            record.setArtist(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
                         else if (cellNum == COLUMN_START_NUM + 1) {
-                            record.setNummer(formatter.formatCellValue(cell).replace("&", "&amp;"));
+                            record.setTitle(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
                         else {
                             if (cell != null) {

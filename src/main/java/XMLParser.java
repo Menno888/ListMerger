@@ -70,10 +70,10 @@ class XMLParser {
                             value = RecordCleaner.removeCData(xmlResult);
                             value = RecordCleaner.resolveAmpersands(value);
                             if("Artiest".equals(elementTag)) {
-                                record.setArtiest(value);
+                                record.setArtist(value);
                             }
                             if("Nummer".equals(elementTag)) {
-                                record.setNummer(value);
+                                record.setTitle(value);
                             }
                         }
                         else {
@@ -104,7 +104,7 @@ class XMLParser {
     private void addToArrayList(Record record) {
         boolean merged = false;
         for (Record song : songList) {
-            if (record.getArtiest().equals(song.getArtiest()) && record.getNummer().equals(song.getNummer())) {
+            if (record.getArtist().equals(song.getArtist()) && record.getTitle().equals(song.getTitle())) {
                 LinkedHashMap<String, Integer> temp = song.getPositionMap();
                 temp.putAll(record.getPositionMap());
                 song.setPositionMap(temp);

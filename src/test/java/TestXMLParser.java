@@ -14,8 +14,8 @@ class TestXMLParser {
         songList = parser.parseXML(fileToFeed, songList);
 
         Record firstRecord = songList.get(0);
-        assertThat(firstRecord.getArtiest()).isEqualTo("áéíäçèôñ");
-        assertThat(firstRecord.getNummer()).isEqualTo(",.-=/+1234567890");
+        assertThat(firstRecord.getArtist()).isEqualTo("áéíäçèôñ");
+        assertThat(firstRecord.getTitle()).isEqualTo(",.-=/+1234567890");
     }
 
     @Test
@@ -46,7 +46,7 @@ class TestXMLParser {
         Record firstRecord = songList.get(0);
         Record secondRecord = songList.get(1);
         assertThat(songList.size()).isEqualTo(2);
-        assertThat(firstRecord.getArtiest()).isEqualTo("Y&amp;T");
-        assertThat(secondRecord.getArtiest()).isEqualTo("Y &amp; T");
+        assertThat(firstRecord.getArtist()).isEqualTo("Y&amp;T");
+        assertThat(secondRecord.getArtist()).isEqualTo("Y &amp; T");
     }
 }

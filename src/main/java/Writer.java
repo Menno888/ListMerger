@@ -71,8 +71,8 @@ public class Writer {
         if("y".equals(prettyPrint)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
 
         stringBuilder.append(indentation + "<record>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + record.getArtiest() + "</Artiest>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + record.getNummer() + "</Nummer>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + record.getArtist() + "</Artiest>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + record.getTitle() + "</Nummer>" + lineBreak);
         if("y".equals(countPositions)) {
             long numberOfPositions = getPositionsCount(record, positions);
             stringBuilder.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
