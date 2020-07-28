@@ -67,6 +67,8 @@ public class ExcelParser {
                 }
             }
 
+            opcPackage.close();
+
         } catch (InvalidFormatException | IOException | IllegalStateException e) {
             System.out.println("File not found, try again");
         }
