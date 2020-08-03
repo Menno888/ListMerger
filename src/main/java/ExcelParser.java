@@ -41,9 +41,7 @@ public class ExcelParser {
                     if (rowNum == HEADER_ROW_NUM) {
                         String headerValue = cell.getStringCellValue();
                         if (cellNum >= COLUMN_START_NUM + 2) {
-                            String[] headerValues = headerValue.split("\\(");
-                            headerValue = headerValues[headerValues.length - 1];
-                            headerValue = headerValue.substring(0, headerValue.length() - 1);
+                            headerValue = getListAbbreviation(headerValue);
                         }
                         listAbbreviations.add(headerValue);
                     }
@@ -80,7 +78,19 @@ public class ExcelParser {
         return songList;
     }
 
-    public int getActualNumberOfRows() {
+    private String getListAbbreviation(String headerValue) {
+        String originalValue = headerValue;
+        try {
+            String[] headerValues = headerValue.split("\\(");
+            headerValue = headerValues[headerValue.length() - 1];
+            headerValue = headerValue.substring(0, headerValue.length() - 1);
+            return headerValue;
+        } catch (Exception e) {
+            return originalValue;
+        }
+    }
+
+    private int getActualNumberOfRows() {
         int cellNum = 0;
         while (checkIfCellNonEmpty(0, cellNum)) {
             cellNum++;
@@ -88,7 +98,7 @@ public class ExcelParser {
         return cellNum;
     }
 
-    public int getActualNumberOfColumns() {
+    private int getActualNumberOfColumns() {
         int cellNum = 0;
         while (checkIfCellNonEmpty(cellNum, 0)) {
             cellNum++;
@@ -96,7 +106,7 @@ public class ExcelParser {
         return cellNum;
     }
 
-    public boolean checkIfCellNonEmpty(int row, int col) {
+    private boolean checkIfCellNonEmpty(int row, int col) {
         try {
             Cell cell = sheet.getRow(row).getCell(col);
             return cell != null && cell.getCellType() != CellType.BLANK;
