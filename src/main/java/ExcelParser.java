@@ -65,10 +65,10 @@ public class ExcelParser {
                 }
                 if (rowNum != HEADER_ROW_NUM) {
                     songList.add(record);
-                    System.out.println("Added: " + record.showSong());
                 }
             }
 
+            System.out.println("Successfully parsed " + inFile);
             opcPackage.close();
 
         } catch (InvalidFormatException | IOException | IllegalStateException e) {

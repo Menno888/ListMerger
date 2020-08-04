@@ -108,13 +108,11 @@ class XMLParser {
                 LinkedHashMap<String, Integer> temp = song.getPositionMap();
                 temp.putAll(record.getPositionMap());
                 song.setPositionMap(temp);
-                System.out.println("Merged: " + record.showSong());
                 merged = true;
             }
         }
         if(!merged) {
             songList.add(record);
-            System.out.println("Copied over: " + record.showSong());
         }
     }
 }
