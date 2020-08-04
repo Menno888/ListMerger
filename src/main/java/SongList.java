@@ -54,7 +54,6 @@ public class SongList extends ArrayList<Record> {
                 String output = convertRecord(song, positions, prettyPrint, countPositions);
                 writer.write(output);
                 writer.newLine();
-                System.out.println("Wrote: " + song.showSong());
             }
             writer.write("</top2000database2014>");
             writer.close();
