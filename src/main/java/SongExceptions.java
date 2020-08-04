@@ -37,7 +37,7 @@ public class SongExceptions {
             final String[] newSongValues = exceptions.get(songToChange).split("\\|");
             record.setArtist(newSongValues[0]);
             record.setTitle(newSongValues[1]);
-            System.out.println("Changed " + oldSong + " to " + newSongValues[0] + " - " + newSongValues[1]);
+            //System.out.println("Changed " + oldSong + " to " + newSongValues[0] + " - " + newSongValues[1]);
         }
     }
 }
