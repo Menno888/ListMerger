@@ -20,5 +20,7 @@ class TestExcelParser {
         assertThat(secondRecord.getArtist()).isEqualTo("áéíäçèôñ");
         assertThat(secondRecord.getTitle()).isEqualTo(",.-=/+1234567890");
         assertThat(thirdRecord.getPositionMap().size()).isEqualTo(2);
+        assertThat(firstRecord.getPositionMap().containsKey("R2NLA2019")).isTrue();
+        assertThat(secondRecord.getPositionMap().containsKey("VA2019")).isTrue();
     }
 }

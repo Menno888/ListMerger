@@ -82,7 +82,7 @@ public class ExcelParser {
         String originalValue = headerValue;
         try {
             String[] headerValues = headerValue.split("\\(");
-            headerValue = headerValues[headerValue.length() - 1];
+            headerValue = headerValues[headerValues.length - 1];
             headerValue = headerValue.substring(0, headerValue.length() - 1);
             return headerValue;
         } catch (Exception e) {
