@@ -1,5 +1,3 @@
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -8,7 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ExcelParser {
@@ -25,8 +25,9 @@ public class ExcelParser {
             if (!inFile.endsWith(".xlsx")) {
                 inFile = inFile + ".xlsx";
             }
-            OPCPackage opcPackage = OPCPackage.open(new File(inFile).getAbsolutePath());
-            XSSFWorkbook myWorkBook = new XSSFWorkbook(opcPackage);
+            File excelFile = new File(inFile);
+            InputStream inputStream = new FileInputStream(excelFile);
+            XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream);
             sheet = myWorkBook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
 
@@ -69,9 +70,8 @@ public class ExcelParser {
             }
 
             System.out.println("Successfully parsed " + inFile);
-            opcPackage.close();
 
-        } catch (InvalidFormatException | IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException e) {
             System.out.println("File not found, try again");
         }
 
