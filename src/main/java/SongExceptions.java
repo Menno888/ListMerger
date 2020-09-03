@@ -31,13 +31,11 @@ public class SongExceptions {
     }
 
     public static void songExceptionConverter(Record record) {
-        final String songToChange = record.getArtiest() + "|" + record.getNummer();
+        final String songToChange = record.getArtist() + "|" + record.getTitle();
         if (exceptions.containsKey(songToChange)) {
-            String oldSong = record.getArtiest() + " - " + record.getNummer();
             final String[] newSongValues = exceptions.get(songToChange).split("\\|");
-            record.setArtiest(newSongValues[0]);
-            record.setNummer(newSongValues[1]);
-            System.out.println("Changed " + oldSong + " to " + newSongValues[0] + " - " + newSongValues[1]);
+            record.setArtist(newSongValues[0]);
+            record.setTitle(newSongValues[1]);
         }
     }
 }

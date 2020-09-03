@@ -1,37 +1,37 @@
 import java.util.LinkedHashMap;
 
 public class Record {
-    private String artiest;
-    private String nummer;
+    private String artist;
+    private String title;
     private LinkedHashMap<String, Integer> positionMap = new LinkedHashMap<>();
 
     public Record() {
 
     }
 
-    public Record(String artiest, String nummer) {
-        this.artiest = artiest;
-        this.nummer = nummer;
+    public Record(String artist, String title) {
+        this.artist = artist;
+        this.title = title;
     }
 
     public String showSong() {
-        return this.artiest + " - " + this.nummer;
+        return this.artist + " - " + this.title;
     }
 
-    public void setArtiest(String a) {
-        this.artiest = a;
+    public void setArtist(String a) {
+        this.artist = a;
     }
 
-    public String getArtiest() {
-        return this.artiest;
+    public String getArtist() {
+        return this.artist;
     }
 
-    public void setNummer(String n) {
-        this.nummer = n;
+    public void setTitle(String n) {
+        this.title = n;
     }
 
-    public String getNummer() {
-        return this.nummer;
+    public String getTitle() {
+        return this.title;
     }
 
     public void setPositionMap(LinkedHashMap<String, Integer> m) {

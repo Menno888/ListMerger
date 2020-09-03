@@ -17,8 +17,10 @@ class TestExcelParser {
         Record thirdRecord = songList.get(2);
         assertThat(songList.size()).isEqualTo(3);
         assertThat(firstRecord.getPositionMap().size()).isEqualTo(1);
-        assertThat(secondRecord.getArtiest()).isEqualTo("áéíäçèôñ");
-        assertThat(secondRecord.getNummer()).isEqualTo(",.-=/+1234567890");
+        assertThat(secondRecord.getArtist()).isEqualTo("áéíäçèôñ");
+        assertThat(secondRecord.getTitle()).isEqualTo(",.-=/+1234567890");
         assertThat(thirdRecord.getPositionMap().size()).isEqualTo(2);
+        assertThat(firstRecord.getPositionMap().containsKey("R2NLA2019")).isTrue();
+        assertThat(secondRecord.getPositionMap().containsKey("VA2019")).isTrue();
     }
 }

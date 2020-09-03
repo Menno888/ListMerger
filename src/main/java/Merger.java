@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Merger {
 
@@ -21,9 +22,7 @@ public class Merger {
         }
         else {
             String[] files = mergeFile.split(",");
-            for(String fileString : files) {
-                fileList.add(fileString);
-            }
+            fileList.addAll(Arrays.asList(files));
         }
 
         for (String file : fileList) {
