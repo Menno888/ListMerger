@@ -22,7 +22,7 @@ public class StartMerging {
                     Filter.filter(songList, toKeep);
                     break;
                 case "m":
-                    System.out.println("Enter a file or multiple files separated by commas to merge, leave blank for all lists in working dir:");
+                    System.out.println("Enter a file or multiple files separated by commas to merge, leave blank for all lists in working dir (without lists in list.exceptions):");
                     String mergeFile = sc.nextLine();
                     if("".equals(mergeFile)) {
                         System.out.println("Enter a file name to output to:");
