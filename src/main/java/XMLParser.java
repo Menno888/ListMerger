@@ -16,11 +16,6 @@ class XMLParser {
     private SongList songList = new SongList();
     private String elementTag;
 
-    XMLParser()
-    {
-        SongExceptions.loadExceptions();
-    }
-
     SongList parseXML(String file, SongList list) {
 
         songList = list;
@@ -51,7 +46,6 @@ class XMLParser {
 
                     if ("record".equals(qName)) {
                         building = false;
-                        SongExceptions.songExceptionConverter(record);
                         addToArrayList(record);
                     }
 
@@ -61,14 +55,12 @@ class XMLParser {
 
                 public void characters(char[] ch, int start, int length) {
                     if (building) {
-                        String value = new String(ch, start, length).trim();
-                        if (value.length() == 0) return; // ignore white space
+                        String value = new String(ch, start, length);
+                        if (new String(ch, start, length).trim().length() == 0) return; // ignore white space
 
                         if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
-                            RecordCleaner.addCData(xml, value);
-                            String xmlResult = xml.toString();
-                            value = RecordCleaner.removeCData(xmlResult);
-                            value = RecordCleaner.resolveAmpersands(value);
+                            String xmlResult = xml.append(value).toString();
+                            value = xmlResult.replace("&", "&amp;").trim();
                             if("Artiest".equals(elementTag)) {
                                 record.setArtist(value);
                             }

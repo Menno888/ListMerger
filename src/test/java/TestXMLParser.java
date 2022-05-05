@@ -34,19 +34,4 @@ class TestXMLParser {
         assertThat(secondRecord.getPositionMap().size()).isEqualTo(1);
         assertThat(secondRecord.getPositionMap().get("R2NLA2019")).isEqualTo(100);
     }
-
-    @Test
-    void testReadExceptions() {
-        XMLParser parser = new XMLParser();
-        SongList songList = new SongList();
-        File inFile = new File("testsongexceptions.xml");
-        String fileToFeed = inFile.toString();
-        songList = parser.parseXML(fileToFeed, songList);
-
-        Record firstRecord = songList.get(0);
-        Record secondRecord = songList.get(1);
-        assertThat(songList.size()).isEqualTo(2);
-        assertThat(firstRecord.getArtist()).isEqualTo("Y&amp;T");
-        assertThat(secondRecord.getArtist()).isEqualTo("Y &amp; T");
-    }
 }
