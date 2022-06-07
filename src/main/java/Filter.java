@@ -36,7 +36,7 @@ public class Filter {
                     }
                 }
                 if(!containsEntries) {
-                    //currentRecord.cleanPositionMap();
+                    currentRecord.cleanPositionMap();
                 }
             }
             songList.normalize();
