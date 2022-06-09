@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <record>
+        <Artiest>Artist</Artiest>
+        <Nummer>Music &amp; Lights</Nummer>
+        <R2NLA2019>20</R2NLA2019>
+    </record>
+    <record>
+        <Artiest>Artist</Artiest>
+        <Nummer>Music&amp;Lights</Nummer>
+        <R2NLA2019>10</R2NLA2019>
+    </record>
+</top2000database2014>
