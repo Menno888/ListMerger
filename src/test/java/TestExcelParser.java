@@ -8,7 +8,7 @@ class TestExcelParser {
     @Test
     void testRecord() {
         ExcelParser parser = new ExcelParser();
-        File inFile = new File("testexcel.xlsx");
+        File inFile = FileUtil.getFileFromResource("testexcel.xlsx");
         String fileToFeed = inFile.toString();
         SongList songList = parser.parseExcel(fileToFeed);
 

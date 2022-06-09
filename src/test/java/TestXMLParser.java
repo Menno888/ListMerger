@@ -9,7 +9,7 @@ class TestXMLParser {
     void testReadDiacritics() {
         XMLParser parser = new XMLParser();
         SongList songList = new SongList();
-        File inFile = new File("testdiacritics.xml");
+        File inFile = FileUtil.getFileFromResource("testdiacritics.xml");
         String fileToFeed = inFile.toString();
         songList = parser.parseXML(fileToFeed, songList);
 
@@ -22,7 +22,7 @@ class TestXMLParser {
     void testReadOverriding() {
         XMLParser parser = new XMLParser();
         SongList songList = new SongList();
-        File inFile = new File("testoverriding.xml");
+        File inFile = FileUtil.getFileFromResource("testoverriding.xml");
         String fileToFeed = inFile.toString();
         songList = parser.parseXML(fileToFeed, songList);
 
