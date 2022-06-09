@@ -9,7 +9,7 @@ public class StartMerging {
 
     public static void main(String[] args) {
         while (takeInput) {
-            System.out.println("Enter your input ((c)lear, (f)ilter, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools), e(x)cel:");
+            System.out.println("Enter your input ((c)lear, (f)ilter, (m)erge, (n)ormalize, (o)utput, (q)uit, (s)how current list, (t)ools, e(x)cel:");
             String control = sc.nextLine();
             switch (control) {
                 case "c":
@@ -52,7 +52,7 @@ public class StartMerging {
                     songList.outputToScreen();
                     break;
                 case "t":
-                    System.out.println("Soon (TM)");
+                    ToplijstenMergerTools.getTools(songList);
                     break;
                 case "x":
                     System.out.println("Enter an excel file to merge:");
