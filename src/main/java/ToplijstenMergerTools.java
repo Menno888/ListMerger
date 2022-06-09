@@ -1,4 +1,7 @@
 import java.util.*;
+import java.util.regex.Pattern;
+
+import static java.util.Objects.nonNull;
 
 public class ToplijstenMergerTools {
 
@@ -107,9 +110,45 @@ public class ToplijstenMergerTools {
                         double som = (totaal2 / count2) + (totaalV / countV) + (totaalG / (2 * countG)) + (totaalJ / countJ);
                         songAndPoints.put(currentRecord.showSong(), som);
                     }
-                    for(Map.Entry<String, Double> song : songAndPoints.entrySet()) {
+                    for (Map.Entry<String, Double> song : songAndPoints.entrySet()) {
                         System.out.println(song.getKey() + ": " + song.getValue());
                     }
+                case "pl":
+                    System.out.println("Enter the lists to order divided by commas");
+                    String lists2 = sc.nextLine();
+                    String[] listArray = lists2.split(",");
+                    HashMap<String, Integer> listsAndLengths = new HashMap<>();
+                    for (String list2 : listArray) {
+                        listsAndLengths.put(list2, getListLength(list2, list));
+                    }
+                    HashMap<String, Double> songAndPoints2 = new HashMap<>();
+                    for (Record r : list) {
+                        int totalPoints = 0;
+                        for (String list2 : listArray) {
+                            Integer highestListValuePlusOne = listsAndLengths.get(list2) + 1;
+                            Integer position = r.getPositionMap().get(list2);
+                            if (nonNull(position)) {
+                                totalPoints += (highestListValuePlusOne - position);
+                            }
+                        }
+                        double finalPoints = (double) totalPoints / (double) listsAndLengths.size();
+                        songAndPoints2.put(r.getArtist() + "|" + r.getTitle(), finalPoints);
+                    }
+                    SongList newList = new SongList();
+                    for (Map.Entry<String, Double> entry : songAndPoints2.entrySet()) {
+                        String[] artistAndTitle = entry.getKey().split(Pattern.quote("|"));
+                        Record r = new Record();
+                        r.setArtist(artistAndTitle[0]);
+                        r.setTitle(artistAndTitle[1]);
+                        LinkedHashMap<String, Integer> positions = new LinkedHashMap<>();
+                        positions.put("Points", entry.getValue().intValue());
+                        double remainder = (entry.getValue() % 1) * 100;
+                        positions.put("Remainder", (int) remainder);
+                        r.setPositionMap(positions);
+                        newList.add(r);
+                    }
+                    list = newList;
+                    break;
                 case "q":
                     takeInput = false;
                     break;
@@ -118,5 +157,18 @@ public class ToplijstenMergerTools {
                     break;
             }
         }
+    }
+
+    private static int getListLength(String key, SongList list) {
+        int currentMax = -1;
+        for (Record r : list) {
+            Integer position = r.getPositionMap().get(key);
+            if (nonNull(position)) {
+                if (currentMax < position) {
+                    currentMax = position;
+                }
+            }
+        }
+        return currentMax;
     }
 }
