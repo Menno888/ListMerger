@@ -5,7 +5,18 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.lang.System.currentTimeMillis;
+
 public class SongList extends ArrayList<Record> {
+
+    public void outputToFile() {
+        String outFile = "out" + currentTimeMillis();
+        outputToFile(outFile, "y,n,n");
+    }
+
+    public void outputToFile(String outFile) {
+        outputToFile(outFile, "y,n,n");
+    }
 
     public void outputToFile(String outFile, String options) {
         String[] optionsArray = options.split(",");
@@ -24,7 +35,7 @@ public class SongList extends ArrayList<Record> {
             outFile = outFile + ".xml";
         }
         if (".xml".equals(outFile)) {
-            outFile = System.currentTimeMillis() + ".xml";
+            outFile = currentTimeMillis() + ".xml";
         }
         File file = new File(outFile);
 
