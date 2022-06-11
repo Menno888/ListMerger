@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.LinkedHashMap;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,10 +9,8 @@ class TestWriter {
     void testWriteDiacritics() throws IOException {
         SongList songList = new SongList();
         Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
-        LinkedHashMap<String, Integer> recordMap = new LinkedHashMap<>();
-        recordMap.put("List1", 1);
-        recordMap.put("List2", 2000);
-        record.setPositionMap(recordMap);
+        record.addPositionToMap("List1", 1);
+        record.addPositionToMap("List2", 2000);
         songList.add(record);
 
         songList.outputToFile( "testwritediacritics.xml", "y,y,y");

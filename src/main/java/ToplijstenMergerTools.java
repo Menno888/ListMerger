@@ -84,11 +84,9 @@ public class ToplijstenMergerTools {
                     Record r = new Record();
                     r.setArtist(artistAndTitle[0]);
                     r.setTitle(artistAndTitle[1]);
-                    LinkedHashMap<String, Integer> positions = new LinkedHashMap<>();
-                    positions.put("Points", entry.getValue().intValue());
+                    r.addPositionToMap("Points", entry.getValue().intValue());
                     double remainder = (entry.getValue() % 1) * 100;
-                    positions.put("Remainder", (int) remainder);
-                    r.setPositionMap(positions);
+                    r.addPositionToMap("Remainder", (int) remainder);
                     newList.add(r);
                 }
                 newList.outputToFile();

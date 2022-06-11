@@ -7,7 +7,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 class XMLParser {
 
@@ -97,9 +97,9 @@ class XMLParser {
         boolean merged = false;
         for (Record song : songList) {
             if (record.getArtist().equals(song.getArtist()) && record.getTitle().equals(song.getTitle())) {
-                LinkedHashMap<String, Integer> temp = song.getPositionMap();
-                temp.putAll(record.getPositionMap());
-                song.setPositionMap(temp);
+                for (Map.Entry<String, Integer> entry : record.getPositionMap().entrySet()) {
+                    song.addPositionToMap(entry.getKey(), entry.getValue());
+                }
                 merged = true;
             }
         }

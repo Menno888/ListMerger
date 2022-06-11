@@ -1,5 +1,3 @@
-import java.util.LinkedHashMap;
-
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,9 +6,7 @@ class TestRecord {
     @Test
     void testRecord() {
         Record myRecord = new Record("Menno888", "The Life Of A Speedrunner");
-        LinkedHashMap<String, Integer> recordMap = new LinkedHashMap<>();
-        recordMap.put("GTATR100", 2742);
-        myRecord.setPositionMap(recordMap);
+        myRecord.addPositionToMap("GTATR100", 2742);
 
         assertThat(myRecord.getArtist()).isEqualTo("Menno888");
         assertThat(myRecord.getTitle()).isEqualTo("The Life Of A Speedrunner");
