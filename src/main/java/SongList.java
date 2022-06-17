@@ -2,10 +2,20 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.lang.System.currentTimeMillis;
+
 public class SongList extends ArrayList<Record> {
+
+    public void outputToFile() {
+        String outFile = "out" + currentTimeMillis();
+        outputToFile(outFile, "y,n,n");
+    }
+
+    public void outputToFile(String outFile) {
+        outputToFile(outFile, "y,n,n");
+    }
 
     public void outputToFile(String outFile, String options) {
         String[] optionsArray = options.split(",");
@@ -24,7 +34,7 @@ public class SongList extends ArrayList<Record> {
             outFile = outFile + ".xml";
         }
         if (".xml".equals(outFile)) {
-            outFile = System.currentTimeMillis() + ".xml";
+            outFile = currentTimeMillis() + ".xml";
         }
         File file = new File(outFile);
 
@@ -91,13 +101,12 @@ public class SongList extends ArrayList<Record> {
     }
 
     private long getPositionsCount(Record record, String positions) {
-        LinkedHashMap<String, Integer> copySongList = record.getPositionMap();
         long numberOfPositions;
         if(!"n".equals(positions) && !"y".equals(positions)) {
-            numberOfPositions = copySongList.entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
+            numberOfPositions = record.getPositionMap().entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
         }
         else {
-            numberOfPositions = copySongList.entrySet().size();
+            numberOfPositions = record.getPositionMap().entrySet().size();
         }
 
         return numberOfPositions;
