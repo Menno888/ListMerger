@@ -10,7 +10,7 @@ public class ToplijstenMergerTools {
     public static void getTools(SongList list) {
         boolean takeInput = true;
         while(takeInput) {
-            System.out.println("Stuff for tools");
+            System.out.println("Tools: (h)ighest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit");
             String control = sc.nextLine();
             if ("hp".equals(control)) {
                 SongList newList = new SongList();
@@ -25,6 +25,7 @@ public class ToplijstenMergerTools {
                     newList.add(r);
                 }
                 newList.outputToFile();
+                System.out.println("Wrote current SongList with highest positions");
             }
             else if ("wp".equals(control)) {
                 for (Record r : list) {
@@ -56,6 +57,7 @@ public class ToplijstenMergerTools {
                     newList.add(r);
                 }
                 newList.outputToFile();
+                System.out.println("Wrote current SongList with number of reentries");
             }
             else if ("pl".equals(control)) {
                 System.out.println("Enter the lists to order divided by commas");
@@ -90,6 +92,7 @@ public class ToplijstenMergerTools {
                     newList.add(r);
                 }
                 newList.outputToFile();
+                System.out.println("Wrote current SongList calculated with number of points and remainder");
             }
             else if ("q".equals(control)) {
                 takeInput = false;
