@@ -94,9 +94,6 @@ public class ToplijstenMergerTools {
                 newList.outputToFile();
                 System.out.println("Wrote current SongList calculated with number of points and remainder");
             }
-            else if ("q".equals(control)) {
-                takeInput = false;
-            }
             else if ("ye".equals(control)) {
                 SongList newList = new SongList();
                 System.out.println("Enter two year numbers separated by a comma for which you want to generate the diff list (Warning! Can take ~10m)");
@@ -122,6 +119,9 @@ public class ToplijstenMergerTools {
                 }
                 newList.outputToFile();
                 System.out.println("Wrote current SongList calculated with average climb/drop and remainder");
+            }
+            else if ("q".equals(control)) {
+                takeInput = false;
             }
             else {
                 System.out.println("Invalid input, try again");
