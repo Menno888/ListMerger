@@ -79,14 +79,12 @@ public class ExcelParser {
     }
 
     private String getListAbbreviation(String headerValue) {
-        String originalValue = headerValue;
         try {
             String[] headerValues = headerValue.split("\\(");
-            headerValue = headerValues[headerValues.length - 1];
-            headerValue = headerValue.substring(0, headerValue.length() - 1);
-            return headerValue;
+            String partAfterParentheses = headerValues[headerValues.length - 1];
+            return partAfterParentheses.substring(0, partAfterParentheses.length() - 1);
         } catch (Exception e) {
-            return originalValue;
+            return headerValue;
         }
     }
 
