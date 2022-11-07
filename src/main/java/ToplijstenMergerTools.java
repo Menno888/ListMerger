@@ -94,6 +94,32 @@ public class ToplijstenMergerTools {
                 newList.outputToFile();
                 System.out.println("Wrote current SongList calculated with number of points and remainder");
             }
+            else if ("ye".equals(control)) {
+                SongList newList = new SongList();
+                System.out.println("Enter two year numbers separated by a comma for which you want to generate the diff list (Warning! Can take ~10m)");
+                String yearString = sc.nextLine();
+                String[] yearStringArray = yearString.split(",");
+                int yearTo = Math.max(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
+                int yearFrom = Math.min(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
+                Set<String> allListsAbbreviations = getAllListAbbreviations(list);
+                for (Record r : list) {
+                    Record copy = new Record(r.getArtist(), r.getTitle());
+                    if (inAnyListThisOrPreviousYear(r, yearTo, yearFrom)) {
+                        double averageClimb = getAverageClimbForRecordComparedToYear(r, allListsAbbreviations, yearTo, yearFrom, list);
+                        copy.addPositionToMap("Percentage", (int) averageClimb);
+                        double remainder = (averageClimb % 1) * 1000;
+                        copy.addPositionToMap("Remainder", (int) remainder);
+                        System.out.println("ADD - SongName: " + r.showSong());
+                    } else {
+                        copy.addPositionToMap("Percentage", 0);
+                        copy.addPositionToMap("Remainder", 0);
+                        System.out.println("SKIP - SongName: " + r.showSong());
+                    }
+                    newList.add(copy);
+                }
+                newList.outputToFile();
+                System.out.println("Wrote current SongList calculated with average climb/drop and remainder");
+            }
             else if ("q".equals(control)) {
                 takeInput = false;
             }
