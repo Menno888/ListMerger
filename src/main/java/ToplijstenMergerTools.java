@@ -10,22 +10,67 @@ public class ToplijstenMergerTools {
     public static void getTools(SongList list) {
         boolean takeInput = true;
         while(takeInput) {
-            System.out.println("Tools: (h)ighest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes");
+            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes");
             String control = sc.nextLine();
             if ("hp".equals(control)) {
                 SongList newList = new SongList();
                 for (Record song : list) {
                     Record r = new Record();
-                    r.setArtist(song.getArtist());
-                    r.setTitle(song.getTitle());
-                    if (song.getPositionMap().size() > 0) {
-                        int max = song.getPositionMap().values().stream().min(Comparator.naturalOrder()).get();
-                        r.addPositionToMap("MAX", max);
+                    r.setArtist(song.getArtist() + " - " + song.getTitle());
+                    int numberOfEntries = song.getPositionMap().size();
+                    if (numberOfEntries > 0) {
+                        int currentMax = 100000;
+                        StringBuilder listStringWithCommas = new StringBuilder();
+                        for (Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
+                            if (keyAndValue.getValue() < currentMax) {
+                                currentMax = keyAndValue.getValue();
+                                listStringWithCommas = new StringBuilder(keyAndValue.getKey());
+                            } else if (keyAndValue.getValue() == currentMax) {
+                                listStringWithCommas.append(",").append(keyAndValue.getKey());
+                            }
+                        }
+                        r.setTitle(listStringWithCommas.toString());
+                        r.addPositionToMap("MAX", currentMax);
                     }
+                    else {
+                        r.setTitle("NONE");
+                        r.addPositionToMap("MAX", 0);
+                    }
+                    r.addPositionToMap("POS", numberOfEntries);
                     newList.add(r);
                 }
                 newList.outputToFile();
                 System.out.println("Wrote current SongList with highest positions");
+            }
+            else if ("lp".equals(control)) {
+                SongList newList = new SongList();
+                for (Record song : list) {
+                    Record r = new Record();
+                    r.setArtist(song.getArtist() + " - " + song.getTitle());
+                    int numberOfEntries = song.getPositionMap().size();
+                    if (numberOfEntries > 0) {
+                        int currentMin = 0;
+                        StringBuilder listStringWithCommas = new StringBuilder();
+                        for (Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
+                            if (keyAndValue.getValue() > currentMin) {
+                                currentMin = keyAndValue.getValue();
+                                listStringWithCommas = new StringBuilder(keyAndValue.getKey());
+                            } else if (keyAndValue.getValue() == currentMin) {
+                                listStringWithCommas.append(",").append(keyAndValue.getKey());
+                            }
+                        }
+                        r.setTitle(listStringWithCommas.toString());
+                        r.addPositionToMap("MIN", currentMin);
+                    }
+                    else {
+                        r.setTitle("NONE");
+                        r.addPositionToMap("MIN", 0);
+                    }
+                    r.addPositionToMap("POS", numberOfEntries);
+                    newList.add(r);
+                }
+                newList.outputToFile();
+                System.out.println("Wrote current SongList with lowest positions");
             }
             else if ("wp".equals(control)) {
                 for (Record r : list) {
@@ -122,32 +167,6 @@ public class ToplijstenMergerTools {
             }
             else if ("q".equals(control)) {
                 takeInput = false;
-            }
-            else if ("ye".equals(control)) {
-                SongList newList = new SongList();
-                System.out.println("Enter two year numbers separated by a comma for which you want to generate the diff list (Warning! Can take ~10m)");
-                String yearString = sc.nextLine();
-                String[] yearStringArray = yearString.split(",");
-                int yearTo = Math.max(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
-                int yearFrom = Math.min(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
-                Set<String> allListsAbbreviations = getAllListAbbreviations(list);
-                for (Record r : list) {
-                    Record copy = new Record(r.getArtist(), r.getTitle());
-                    if (inAnyListThisOrPreviousYear(r, yearTo, yearFrom)) {
-                        double averageClimb = getAverageClimbForRecordComparedToYear(r, allListsAbbreviations, yearTo, yearFrom, list);
-                        copy.addPositionToMap("Percentage", (int) averageClimb);
-                        double remainder = (averageClimb % 1) * 1000;
-                        copy.addPositionToMap("Remainder", (int) remainder);
-                        System.out.println("ADD - SongName: " + r.showSong());
-                    } else {
-                        copy.addPositionToMap("Percentage", 0);
-                        copy.addPositionToMap("Remainder", 0);
-                        System.out.println("SKIP - SongName: " + r.showSong());
-                    }
-                    newList.add(copy);
-                }
-                newList.outputToFile();
-                System.out.println("Wrote current SongList calculated with average climb/drop and remainder");
             }
             else {
                 System.out.println("Invalid input, try again");
