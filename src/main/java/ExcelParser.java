@@ -19,6 +19,7 @@ public class ExcelParser {
     private XSSFSheet sheet;
 
     public SongList parseExcel(String inFile) {
+        XSSFWorkbook myWorkBook = null;
         ArrayList<String> listAbbreviations = new ArrayList<>();
 
         try {
@@ -27,7 +28,7 @@ public class ExcelParser {
             }
             File excelFile = new File(inFile);
             InputStream inputStream = new FileInputStream(excelFile);
-            XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream);
+            myWorkBook = new XSSFWorkbook(inputStream);
             sheet = myWorkBook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
 
@@ -73,20 +74,24 @@ public class ExcelParser {
 
         } catch (IOException | IllegalStateException e) {
             System.out.println("File not found, try again");
+        } finally {
+            try {
+                myWorkBook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return songList;
     }
 
     private String getListAbbreviation(String headerValue) {
-        String originalValue = headerValue;
         try {
             String[] headerValues = headerValue.split("\\(");
-            headerValue = headerValues[headerValues.length - 1];
-            headerValue = headerValue.substring(0, headerValue.length() - 1);
-            return headerValue;
+            String partAfterParentheses = headerValues[headerValues.length - 1];
+            return partAfterParentheses.substring(0, partAfterParentheses.length() - 1);
         } catch (Exception e) {
-            return originalValue;
+            return headerValue;
         }
     }
 
