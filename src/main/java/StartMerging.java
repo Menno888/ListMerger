@@ -56,10 +56,14 @@ public class StartMerging {
             else if ("x".equals(control)) {
                 System.out.println("Enter an excel file to merge:");
                 String inExcel = sc.nextLine();
-                System.out.println("Enter a file name to output xml to:");
+                System.out.println("Enter a file name to output xml to (leave blank for original file name):");
                 String outXml = sc.nextLine();
                 songList = excelParser.parseExcel(inExcel);
-                songList.outputToFile(outXml, "y,y,n");
+                if("".equals(outXml)) {
+                    songList.outputToFile(inExcel, "y,y,n");
+                } else {
+                    songList.outputToFile(outXml, "y,y,n");
+                }
                 songList.clear();
             }
             else {
