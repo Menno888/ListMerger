@@ -105,12 +105,26 @@ public class ToplijstenMergerTools {
                 System.out.println("Wrote current SongList with number of reentries");
             }
             else if ("pl".equals(control)) {
-                System.out.println("Enter the lists to order divided by commas");
+                System.out.println("Enter the lists to order divided by commas (or leave blank for all lists in selection)");
                 String lists2 = sc.nextLine();
-                String[] listArray = lists2.split(",");
+                String[] listArray = new String[2000];
                 HashMap<String, Integer> listsAndLengths = new HashMap<>();
-                for (String list2 : listArray) {
-                    listsAndLengths.put(list2, getListLength(list2, list));
+                if (!"".equals(lists2)) {
+                    listArray = lists2.split(",");
+                    for (String list2 : listArray) {
+                        listsAndLengths.put(list2, getListLength(list2, list));
+                    }
+                }
+                else {
+                    Set<String> abbrSet = getAllListAbbreviations(list);
+                    int arrayIndex = 0;
+                    for (String l : abbrSet) {
+                        listArray[arrayIndex] = l;
+                        arrayIndex++;
+                    }
+                    for (String list2 : listArray) {
+                        listsAndLengths.put(list2, getListLength(list2, list));
+                    }
                 }
                 HashMap<String, Double> songAndPoints2 = new HashMap<>();
                 for (Record r : list) {
