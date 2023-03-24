@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -10,7 +11,7 @@ public class ToplijstenMergerTools {
     public static void getTools(SongList list) {
         boolean takeInput = true;
         while(takeInput) {
-            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes");
+            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle");
             String control = sc.nextLine();
             if ("hp".equals(control)) {
                 SongList newList = new SongList();
@@ -178,6 +179,26 @@ public class ToplijstenMergerTools {
                 }
                 newList.outputToFile();
                 System.out.println("Wrote current SongList calculated with average climb/drop and remainder");
+            }
+            else if ("fa".equals(control)) {
+                System.out.println("Enter the words to filter on");
+                String filterString = sc.nextLine();
+                SongList newList = list
+                        .stream()
+                        .filter(e -> e.getArtist().toLowerCase().contains(filterString.toLowerCase()))
+                        .collect(Collectors.toCollection(SongList::new));
+                newList.outputToFile();
+                System.out.println("Wrote current SongList filtered on artist");
+            }
+            else if ("ft".equals(control)) {
+                System.out.println("Enter the words to filter on");
+                String filterString = sc.nextLine();
+                SongList newList = list
+                        .stream()
+                        .filter(e -> e.getTitle().toLowerCase().contains(filterString.toLowerCase()))
+                        .collect(Collectors.toCollection(SongList::new));
+                newList.outputToFile();
+                System.out.println("Wrote current SongList filtered on title");
             }
             else if ("q".equals(control)) {
                 takeInput = false;
