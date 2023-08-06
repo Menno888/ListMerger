@@ -4,7 +4,7 @@ public class FileUtil {
 
     //Try the root and if this fails, try the root + test/resources
     public static File getFileFromResource(final String fileName) {
-        File toReturn = new File(fileName);
+        final File toReturn = new File(fileName);
         if (toReturn.length() != 0) {
             return toReturn;
         }

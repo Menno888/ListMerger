@@ -7,18 +7,18 @@ class TestWriter {
 
     @Test
     void testWriteDiacritics() throws IOException {
-        SongList songList = new SongList();
-        Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
+        final SongList songList = new SongList();
+        final Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
         record.addPositionToMap("List1", 1);
         record.addPositionToMap("List2", 2000);
         songList.add(record);
 
         songList.outputToFile( "testwritediacritics.xml", "y,y,y");
 
-        BufferedReader reader = new BufferedReader(new FileReader("testwritediacritics.xml"));
-        StringBuilder stringBuilder = new StringBuilder();
+        final BufferedReader reader = new BufferedReader(new FileReader("testwritediacritics.xml"));
+        final StringBuilder stringBuilder = new StringBuilder();
         String line;
-        String ls = System.getProperty("line.separator");
+        final String ls = System.getProperty("line.separator");
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
             stringBuilder.append(ls);
@@ -27,7 +27,7 @@ class TestWriter {
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         reader.close();
 
-        String content = stringBuilder.toString();
+        final String content = stringBuilder.toString();
         assertThat(content).contains("áéí");
         assertThat(content).contains(",.-=/+");
         assertThat(content).contains("äçèôñ");
@@ -35,7 +35,7 @@ class TestWriter {
         assertThat(content).contains("<appearances>2</appearances>");
         assertThat(content).contains("    ");
 
-        File toRemove = new File("testwritediacritics.xml");
+        final File toRemove = new File("testwritediacritics.xml");
         toRemove.delete();
     }
 }

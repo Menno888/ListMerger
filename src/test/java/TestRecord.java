@@ -5,7 +5,7 @@ class TestRecord {
 
     @Test
     void testRecord() {
-        Record myRecord = new Record("Menno888", "The Life Of A Speedrunner");
+        final Record myRecord = new Record("Menno888", "The Life Of A Speedrunner");
         myRecord.addPositionToMap("GTATR100", 2742);
 
         assertThat(myRecord.getArtist()).isEqualTo("Menno888");

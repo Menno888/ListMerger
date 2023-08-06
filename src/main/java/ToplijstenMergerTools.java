@@ -8,21 +8,21 @@ public class ToplijstenMergerTools {
 
     private static final Scanner sc = new Scanner(System.in);
 
-    public static void getTools(SongList list) {
+    public static void getTools(final SongList list) {
         boolean takeInput = true;
-        while(takeInput) {
+        while (takeInput) {
             System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle");
-            String control = sc.nextLine();
+            final String control = sc.nextLine();
             if ("hp".equals(control)) {
-                SongList newList = new SongList();
-                for (Record song : list) {
-                    Record r = new Record();
+                final SongList newList = new SongList();
+                for (final Record song : list) {
+                    final Record r = new Record();
                     r.setArtist(song.getArtist() + " - " + song.getTitle());
-                    int numberOfEntries = song.getPositionMap().size();
+                    final int numberOfEntries = song.getPositionMap().size();
                     if (numberOfEntries > 0) {
                         int currentMax = 100000;
                         StringBuilder listStringWithCommas = new StringBuilder();
-                        for (Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
+                        for (final Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
                             if (keyAndValue.getValue() < currentMax) {
                                 currentMax = keyAndValue.getValue();
                                 listStringWithCommas = new StringBuilder(keyAndValue.getKey());
@@ -44,15 +44,15 @@ public class ToplijstenMergerTools {
                 System.out.println("Wrote current SongList with highest positions");
             }
             else if ("lp".equals(control)) {
-                SongList newList = new SongList();
-                for (Record song : list) {
-                    Record r = new Record();
+                final SongList newList = new SongList();
+                for (final Record song : list) {
+                    final Record r = new Record();
                     r.setArtist(song.getArtist() + " - " + song.getTitle());
-                    int numberOfEntries = song.getPositionMap().size();
+                    final int numberOfEntries = song.getPositionMap().size();
                     if (numberOfEntries > 0) {
                         int currentMin = 0;
                         StringBuilder listStringWithCommas = new StringBuilder();
-                        for (Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
+                        for (final Map.Entry<String, Integer> keyAndValue : song.getPositionMap().entrySet()) {
                             if (keyAndValue.getValue() > currentMin) {
                                 currentMin = keyAndValue.getValue();
                                 listStringWithCommas = new StringBuilder(keyAndValue.getKey());
@@ -74,24 +74,24 @@ public class ToplijstenMergerTools {
                 System.out.println("Wrote current SongList with lowest positions");
             }
             else if ("wp".equals(control)) {
-                for (Record r : list) {
+                for (final Record r : list) {
                     r.cleanPositionMap();
                 }
                 System.out.println("Done cleaning positions");
             }
             else if ("re".equals(control)) {
                 System.out.println("Give the lists separated by commas:");
-                String lists = sc.nextLine();
-                SongList newList = new SongList();
-                String[] reentryList = lists.split(",");
-                for (Record record : list) {
-                    Record r = new Record();
+                final String lists = sc.nextLine();
+                final SongList newList = new SongList();
+                final String[] reentryList = lists.split(",");
+                for (final Record record : list) {
+                    final Record r = new Record();
                     r.setArtist(record.getArtist());
                     r.setTitle(record.getTitle());
                     int total = 0;
                     for (int j = 0; j < reentryList.length - 1; j++) {
-                        Integer p1 = record.getPositionMap().get(reentryList[j]);
-                        Integer p2 = record.getPositionMap().get(reentryList[j + 1]);
+                        final Integer p1 = record.getPositionMap().get(reentryList[j]);
+                        final Integer p2 = record.getPositionMap().get(reentryList[j + 1]);
                         if (!(p1 == null) && (p2 == null || p2 == 0)) {
                             total++;
                         }
@@ -107,32 +107,32 @@ public class ToplijstenMergerTools {
             }
             else if ("pl".equals(control)) {
                 System.out.println("Enter the lists to order divided by commas (or leave blank for all lists in selection)");
-                String lists2 = sc.nextLine();
+                final String lists2 = sc.nextLine();
                 String[] listArray = new String[2000];
-                HashMap<String, Integer> listsAndLengths = new HashMap<>();
+                final HashMap<String, Integer> listsAndLengths = new HashMap<>();
                 if (!"".equals(lists2)) {
                     listArray = lists2.split(",");
-                    for (String list2 : listArray) {
+                    for (final String list2 : listArray) {
                         listsAndLengths.put(list2, getListLength(list2, list));
                     }
                 }
                 else {
-                    Set<String> abbrSet = getAllListAbbreviations(list);
+                    final Set<String> abbrSet = getAllListAbbreviations(list);
                     int arrayIndex = 0;
-                    for (String l : abbrSet) {
+                    for (final String l : abbrSet) {
                         listArray[arrayIndex] = l;
                         arrayIndex++;
                     }
-                    for (String list2 : listArray) {
+                    for (final String list2 : listArray) {
                         listsAndLengths.put(list2, getListLength(list2, list));
                     }
                 }
-                HashMap<String, Double> songAndPoints2 = new HashMap<>();
-                for (Record r : list) {
+                final HashMap<String, Double> songAndPoints2 = new HashMap<>();
+                for (final Record r : list) {
                     int totalPoints = 0;
-                    for (String list2 : listArray) {
-                        Integer highestListValuePlusOne = listsAndLengths.get(list2) + 1;
-                        Integer position = r.getPositionMap().get(list2);
+                    for (final String list2 : listArray) {
+                        final Integer highestListValuePlusOne = listsAndLengths.get(list2) + 1;
+                        final Integer position = r.getPositionMap().get(list2);
                         if (nonNull(position)) {
                             totalPoints += (highestListValuePlusOne - position);
                         }
@@ -140,14 +140,14 @@ public class ToplijstenMergerTools {
                     double finalPoints = (double) totalPoints / (double) listsAndLengths.size();
                     songAndPoints2.put(r.getArtist() + "|" + r.getTitle(), finalPoints);
                 }
-                SongList newList = new SongList();
-                for (Map.Entry<String, Double> entry : songAndPoints2.entrySet()) {
-                    String[] artistAndTitle = entry.getKey().split(Pattern.quote("|"));
-                    Record r = new Record();
+                final SongList newList = new SongList();
+                for (final Map.Entry<String, Double> entry : songAndPoints2.entrySet()) {
+                    final String[] artistAndTitle = entry.getKey().split(Pattern.quote("|"));
+                    final Record r = new Record();
                     r.setArtist(artistAndTitle[0]);
                     r.setTitle(artistAndTitle[1]);
                     r.addPositionToMap("Points", entry.getValue().intValue());
-                    double remainder = (entry.getValue() % 1) * 100;
+                    final double remainder = (entry.getValue() % 1) * 100;
                     r.addPositionToMap("Remainder", (int) remainder);
                     newList.add(r);
                 }
@@ -155,19 +155,19 @@ public class ToplijstenMergerTools {
                 System.out.println("Wrote current SongList calculated with number of points and remainder");
             }
             else if ("ye".equals(control)) {
-                SongList newList = new SongList();
+                final SongList newList = new SongList();
                 System.out.println("Enter two year numbers separated by a comma for which you want to generate the diff list (Warning! Can take ~10m)");
-                String yearString = sc.nextLine();
-                String[] yearStringArray = yearString.split(",");
-                int yearTo = Math.max(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
-                int yearFrom = Math.min(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
-                Set<String> allListsAbbreviations = getAllListAbbreviations(list);
-                for (Record r : list) {
-                    Record copy = new Record(r.getArtist(), r.getTitle());
+                final String yearString = sc.nextLine();
+                final String[] yearStringArray = yearString.split(",");
+                final int yearTo = Math.max(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
+                final int yearFrom = Math.min(Integer.parseInt(yearStringArray[0]), Integer.parseInt(yearStringArray[1]));
+                final Set<String> allListsAbbreviations = getAllListAbbreviations(list);
+                for (final Record r : list) {
+                    final Record copy = new Record(r.getArtist(), r.getTitle());
                     if (inAnyListThisOrPreviousYear(r, yearTo, yearFrom)) {
-                        double averageClimb = getAverageClimbForRecordComparedToYear(r, allListsAbbreviations, yearTo, yearFrom, list);
+                        final double averageClimb = getAverageClimbForRecordComparedToYear(r, allListsAbbreviations, yearTo, yearFrom, list);
                         copy.addPositionToMap("Percentage", (int) averageClimb);
-                        double remainder = (averageClimb % 1) * 1000;
+                        final double remainder = (averageClimb % 1) * 1000;
                         copy.addPositionToMap("Remainder", (int) remainder);
                         System.out.println("ADD - SongName: " + r.showSong());
                     } else {
@@ -182,7 +182,7 @@ public class ToplijstenMergerTools {
             }
             else if ("fa".equals(control)) {
                 System.out.println("Enter the words to filter on");
-                String filterString = sc.nextLine();
+                final String filterString = sc.nextLine();
                 SongList newList = list
                         .stream()
                         .filter(e -> e.getArtist().toLowerCase().contains(filterString.toLowerCase()))
@@ -192,7 +192,7 @@ public class ToplijstenMergerTools {
             }
             else if ("ft".equals(control)) {
                 System.out.println("Enter the words to filter on");
-                String filterString = sc.nextLine();
+                final String filterString = sc.nextLine();
                 SongList newList = list
                         .stream()
                         .filter(e -> e.getTitle().toLowerCase().contains(filterString.toLowerCase()))
@@ -209,19 +209,19 @@ public class ToplijstenMergerTools {
         }
     }
 
-    private static double getAverageClimbForRecordComparedToYear(Record record, Set<String> allListAbbreviations, int yearTo, int yearFrom, SongList list) {
-        List<Double> climbsAndDrops = new ArrayList<>();
-        for (String abbr : allListAbbreviations) {
-            String abbrFirstPart = abbr.substring(0, abbr.length() - 4);
-            String abbrSecondPart = abbr.substring(abbr.length() - 4);
+    private static double getAverageClimbForRecordComparedToYear(final Record record, final Set<String> allListAbbreviations, final int yearTo, final int yearFrom, final SongList list) {
+        final List<Double> climbsAndDrops = new ArrayList<>();
+        for (final String abbr : allListAbbreviations) {
+            final String abbrFirstPart = abbr.substring(0, abbr.length() - 4);
+            final String abbrSecondPart = abbr.substring(abbr.length() - 4);
             if (String.valueOf(yearTo).equals(abbrSecondPart) && allListAbbreviations.contains(abbrFirstPart + yearFrom)) {
 
-                String currentYear = abbrFirstPart + yearTo;
-                String prevYear = abbrFirstPart + yearFrom;
-                int currentYearLength = getListLength(currentYear, list);
-                int prevYearLength = getListLength(prevYear, list);
+                final String currentYear = abbrFirstPart + yearTo;
+                final String prevYear = abbrFirstPart + yearFrom;
+                final int currentYearLength = getListLength(currentYear, list);
+                final int prevYearLength = getListLength(prevYear, list);
 
-                HashMap<String, Integer> positionMap = record.getPositionMap();
+                final HashMap<String, Integer> positionMap = record.getPositionMap();
                 double climbOrDrop;
                 if (positionMap.containsKey(currentYear) && positionMap.containsKey(prevYear)) {
                     climbOrDrop = ((double) positionMap.get(prevYear) - (double) positionMap.get(currentYear)) / (double) Math.max(currentYearLength + 1, prevYearLength + 1);
@@ -243,10 +243,10 @@ public class ToplijstenMergerTools {
                 .orElse(0.0);
     }
 
-    private static int getListLength(String key, SongList list) {
+    private static int getListLength(final String key, final SongList list) {
         int currentMax = -1;
-        for (Record r : list) {
-            Integer position = r.getPositionMap().get(key);
+        for (final Record r : list) {
+            final Integer position = r.getPositionMap().get(key);
             if (nonNull(position)) {
                 if (currentMax < position) {
                     currentMax = position;
@@ -256,19 +256,19 @@ public class ToplijstenMergerTools {
         return currentMax;
     }
 
-    private static Set<String> getAllListAbbreviations(SongList list) {
-        Set<String> lists = new HashSet<>();
-        for (Record r : list) {
+    private static Set<String> getAllListAbbreviations(final SongList list) {
+        final Set<String> lists = new HashSet<>();
+        for (final Record r : list) {
             lists.addAll(r.getPositionMap().keySet());
         }
         return lists;
     }
 
-    private static boolean inAnyListThisOrPreviousYear(Record record, int yearTo, int yearFrom) {
-        LinkedHashMap<String, Integer> positionMap = record.getPositionMap();
+    private static boolean inAnyListThisOrPreviousYear(final Record record, final int yearTo, final int yearFrom) {
+        final LinkedHashMap<String, Integer> positionMap = record.getPositionMap();
         boolean wasInAList = false;
-        for (String key : positionMap.keySet()) {
-            String listAbbrYearPart = key.substring(key.length() - 4);
+        for (final String key : positionMap.keySet()) {
+            final String listAbbrYearPart = key.substring(key.length() - 4);
             if (String.valueOf(yearTo).equals(listAbbrYearPart) || String.valueOf(yearFrom).equals(listAbbrYearPart)) {
                 wasInAList = true;
                 break;

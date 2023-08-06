@@ -9,14 +9,14 @@ public class ListExceptions {
 
     public ListExceptions() {}
 
-    public static boolean checkList(String listName) {
+    public static boolean checkList(final String listName) {
         try {
-            Scanner scanner = new Scanner(new File("list.exceptions"));
+            final Scanner scanner = new Scanner(new File("list.exceptions"));
             while (scanner.hasNext()) {
                 list.add(scanner.next());
             }
             scanner.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
         return list.contains(listName);

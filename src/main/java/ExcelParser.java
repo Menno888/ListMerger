@@ -16,36 +16,34 @@ public class ExcelParser {
     private final SongList songList = new SongList();
     private static final int HEADER_ROW_NUM = 0;
     private static final int COLUMN_START_NUM = 0;
+    private static final String INFO_COLUMN_MARKER = "ADD:";
     private XSSFSheet sheet;
 
     public SongList parseExcel(String inFile) {
+        final ArrayList<String> listAbbreviations = new ArrayList<>();
         XSSFWorkbook myWorkBook = null;
-        ArrayList<String> listAbbreviations = new ArrayList<>();
 
         try {
             if (!inFile.endsWith(".xlsx")) {
                 inFile = inFile + ".xlsx";
             }
-            File excelFile = new File(inFile);
-            InputStream inputStream = new FileInputStream(excelFile);
+            final File excelFile = new File(inFile);
+            final InputStream inputStream = new FileInputStream(excelFile);
             myWorkBook = new XSSFWorkbook(inputStream);
             sheet = myWorkBook.getSheetAt(0);
-            DataFormatter formatter = new DataFormatter();
+            final DataFormatter formatter = new DataFormatter();
 
-            int numOfRows = getActualNumberOfRows();
-            int numOfCols = getActualNumberOfColumns();
+            final int numOfRows = getActualNumberOfRows();
+            final int numOfCols = getActualNumberOfColumns();
 
             for (int rowNum = 0; rowNum < numOfCols; rowNum++) {
-                Row row = sheet.getRow(rowNum);
-                Record record = new Record();
+                final Row row = sheet.getRow(rowNum);
+                final Record record = new Record();
                 for (int cellNum = 0; cellNum < numOfRows; cellNum++) {
-                    Cell cell = row.getCell(cellNum);
+                    final Cell cell = row.getCell(cellNum);
                     if (rowNum == HEADER_ROW_NUM) {
-                        String headerValue = cell.getStringCellValue();
-                        if (cellNum >= COLUMN_START_NUM + 2) {
-                            headerValue = getListAbbreviation(headerValue);
-                        }
-                        listAbbreviations.add(headerValue);
+                        final String headerValue = cell.getStringCellValue();
+                        listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
                     }
                     else {
                         if (cellNum == COLUMN_START_NUM) {
@@ -55,12 +53,11 @@ public class ExcelParser {
                             record.setTitle(formatter.formatCellValue(cell).replace("&", "&amp;"));
                         }
                         else {
-                            if (cell != null) {
-                                if (cell.getCellType() == CellType.NUMERIC) {
-                                    if ((int) cell.getNumericCellValue() != 0) {
-                                        record.addPositionToMap(listAbbreviations.get(cellNum), (int) cell.getNumericCellValue());
-                                    }
-                                }
+                            String abbreviation = listAbbreviations.get(cellNum);
+                            if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
+                                addInfoDataToAdditionalInformationMap(cell, record, abbreviation);
+                            } else {
+                                addNumericDataToPositionMap(cell, record, abbreviation);
                             }
                         }
                     }
@@ -85,12 +82,16 @@ public class ExcelParser {
         return songList;
     }
 
-    private String getListAbbreviation(String headerValue) {
-        try {
-            String[] headerValues = headerValue.split("\\(");
-            String partAfterParentheses = headerValues[headerValues.length - 1];
-            return partAfterParentheses.substring(0, partAfterParentheses.length() - 1);
-        } catch (Exception e) {
+    private String getListAbbreviationIfParenthesesElseFullName(final String headerValue) {
+        if (headerValue.contains("(") && headerValue.contains(")")) {
+            try {
+                final String[] headerValues = headerValue.split("\\(");
+                final String partAfterParentheses = headerValues[headerValues.length - 1];
+                return partAfterParentheses.substring(0, partAfterParentheses.length() - 1);
+            } catch (Exception e) {
+                return headerValue;
+            }
+        } else {
             return headerValue;
         }
     }
@@ -111,12 +112,40 @@ public class ExcelParser {
         return cellNum;
     }
 
-    private boolean checkIfCellNonEmpty(int row, int col) {
+    private boolean checkIfCellNonEmpty(final int row, final int col) {
         try {
-            Cell cell = sheet.getRow(row).getCell(col);
+            final Cell cell = sheet.getRow(row).getCell(col);
             return cell != null && cell.getCellType() != CellType.BLANK;
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             return false;
+        }
+    }
+
+    private void addNumericDataToPositionMap(final Cell cell, final Record record, final String abbreviation) {
+        if (cell != null) {
+            if (cell.getCellType() == CellType.NUMERIC) {
+                if ((int) cell.getNumericCellValue() != 0) {
+                    record.addPositionToMap(abbreviation, (int) cell.getNumericCellValue());
+                }
+            }
+        }
+    }
+
+    private void addInfoDataToAdditionalInformationMap(final Cell cell, final Record record, final String abbreviation) {
+        if (cell != null) {
+            if (cell.getCellType() == CellType.NUMERIC) {
+                if ((int) cell.getNumericCellValue() != 0) {
+                    record.addInfoToMap(abbreviation, cell.getNumericCellValue());
+                }
+            } else if (cell.getCellType() == CellType.STRING) {
+                if (cell.getStringCellValue() != null) {
+                    record.addInfoToMap(abbreviation, cell.getStringCellValue());
+                }
+            } else if (cell.getCellType() == CellType.FORMULA) {
+                if (cell.getCellFormula() != null) {
+                    record.addInfoToMap(abbreviation, cell.getCellFormula());
+                }
+            }
         }
     }
 }

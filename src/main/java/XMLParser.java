@@ -16,55 +16,49 @@ class XMLParser {
     private SongList songList = new SongList();
     private String elementTag;
 
-    SongList parseXML(String file, SongList list) {
+    SongList parseXML(String file, final SongList list) {
 
         songList = list;
 
         try {
 
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
+            final SAXParserFactory factory = SAXParserFactory.newInstance();
+            final SAXParser saxParser = factory.newSAXParser();
 
-            DefaultHandler handler = new DefaultHandler() {
+            final DefaultHandler handler = new DefaultHandler() {
 
                 private Record record;
 
-                public void startElement(String uri, String localName,
-                                         String qName, Attributes attributes) {
-
+                public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
                     elementTag = qName;
 
                     if ("record".equals(qName)) {
-
                         building = true;
                         record = new Record();
                     }
                 }
 
-                public void endElement(String uri, String localName,
-                                       String qName) {
-
+                public void endElement(final String uri, final String localName, final String qName) {
                     if ("record".equals(qName)) {
                         building = false;
                         addToArrayList(record);
                     }
 
                     xml.setLength(0);
-
                 }
 
-                public void characters(char[] ch, int start, int length) {
+                public void characters(final char[] ch, final int start, final int length) {
                     if (building) {
                         String value = new String(ch, start, length);
                         if (new String(ch, start, length).trim().length() == 0) return; // ignore white space
 
-                        if("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
-                            String xmlResult = xml.append(value).toString();
+                        if ("Artiest".equals(elementTag) || "Nummer".equals(elementTag)) {
+                            final String xmlResult = xml.append(value).toString();
                             value = xmlResult.replace("&", "&amp;").trim();
-                            if("Artiest".equals(elementTag)) {
+                            if ("Artiest".equals(elementTag)) {
                                 record.setArtist(value);
                             }
-                            if("Nummer".equals(elementTag)) {
+                            if ("Nummer".equals(elementTag)) {
                                 record.setTitle(value);
                             }
                         }
@@ -83,9 +77,9 @@ class XMLParser {
 
             System.out.println("Succesfully merged/initialized " + file);
 
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             System.out.println("File not found, try again");
-        } catch (ParserConfigurationException | IOException | SAXException e) {
+        } catch (final ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
 
@@ -93,17 +87,20 @@ class XMLParser {
 
     }
 
-    private void addToArrayList(Record record) {
+    private void addToArrayList(final Record record) {
         boolean merged = false;
-        for (Record song : songList) {
+        for (final Record song : songList) {
             if (record.getArtist().equals(song.getArtist()) && record.getTitle().equals(song.getTitle())) {
-                for (Map.Entry<String, Integer> entry : record.getPositionMap().entrySet()) {
+                for (final Map.Entry<String, Integer> entry : record.getPositionMap().entrySet()) {
                     song.addPositionToMap(entry.getKey(), entry.getValue());
+                }
+                for (final Map.Entry<String, Object> entry : record.getAdditionalInformationMap().entrySet()) {
+                    song.addInfoToMap(entry.getKey(), entry.getValue());
                 }
                 merged = true;
             }
         }
-        if(!merged) {
+        if (!merged) {
             songList.add(record);
         }
     }

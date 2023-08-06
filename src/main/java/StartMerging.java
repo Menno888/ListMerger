@@ -23,7 +23,7 @@ public class StartMerging {
             else if ("m".equals(control)) {
                 System.out.println("Enter a file or multiple files separated by commas to merge, leave blank for all lists in working dir (without lists in list.exceptions):");
                 String mergeFile = sc.nextLine();
-                if("".equals(mergeFile)) {
+                if ("".equals(mergeFile)) {
                     System.out.println("Enter a file name to output to:");
                     String outFileMerge = sc.nextLine();
                     Merger.merge(songList, mergeFile);
@@ -59,7 +59,7 @@ public class StartMerging {
                 System.out.println("Enter a file name to output xml to (leave blank for original file name):");
                 String outXml = sc.nextLine();
                 songList = excelParser.parseExcel(inExcel);
-                if("".equals(outXml)) {
+                if ("".equals(outXml)) {
                     songList.outputToFile(inExcel, "y,y,n");
                 } else {
                     songList.outputToFile(outXml, "y,y,n");
