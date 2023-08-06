@@ -11,6 +11,7 @@ import java.util.Map;
 
 class XMLParser {
 
+    private static final String INFO_COLUMN_MARKER = "ADD-";
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
     private SongList songList = new SongList();
@@ -61,6 +62,9 @@ class XMLParser {
                             if ("Nummer".equals(elementTag)) {
                                 record.setTitle(value);
                             }
+                        }
+                        else if (elementTag.startsWith(INFO_COLUMN_MARKER)) {
+                            record.addInfoToMap(elementTag, value);
                         }
                         else {
                             record.addPositionToMap(elementTag, Integer.parseInt(value));
