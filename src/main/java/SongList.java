@@ -2,6 +2,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
@@ -123,7 +124,7 @@ public class SongList extends ArrayList<Record> {
         return sb.toString();
     }
 
-    public ArrayList<String> tagCheckup() {
+    public List<String> tagCheckup() {
 
         final ArrayList<String> tagList = new ArrayList<>();
         for (final Record currentRecord : this) {

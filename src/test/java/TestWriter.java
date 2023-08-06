@@ -28,12 +28,12 @@ class TestWriter {
         reader.close();
 
         final String content = stringBuilder.toString();
-        assertThat(content).contains("áéí");
-        assertThat(content).contains(",.-=/+");
-        assertThat(content).contains("äçèôñ");
-        assertThat(content).contains("1234567890");
-        assertThat(content).contains("<appearances>2</appearances>");
-        assertThat(content).contains("    ");
+        assertThat(content).contains("áéí")
+                .contains(",.-=/+")
+                .contains("äçèôñ")
+                .contains("1234567890")
+                .contains("<appearances>2</appearances>")
+                .contains("    ");
 
         final File toRemove = new File("testwritediacritics.xml");
         toRemove.delete();

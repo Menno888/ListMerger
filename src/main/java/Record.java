@@ -1,10 +1,11 @@
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Record {
     private String artist;
     private String title;
-    private LinkedHashMap<String, Integer> positionMap = new LinkedHashMap<>();
-    private LinkedHashMap<String, Object> additionalInformationMap = new LinkedHashMap<>();
+    private Map<String, Integer> positionMap = new LinkedHashMap<>();
+    private Map<String, Object> additionalInformationMap = new LinkedHashMap<>();
 
     public Record() {
 
@@ -35,19 +36,19 @@ public class Record {
         return this.title;
     }
 
-    public void setPositionMap(LinkedHashMap<String, Integer> positionMap) {
+    public void setPositionMap(Map<String, Integer> positionMap) {
         this.positionMap = positionMap;
     }
 
-    public LinkedHashMap<String, Integer> getPositionMap() {
+    public Map<String, Integer> getPositionMap() {
         return this.positionMap;
     }
 
-    public void setAdditionalInformationMap(LinkedHashMap<String, Object> additionalInformationMap) {
+    public void setAdditionalInformationMap(Map<String, Object> additionalInformationMap) {
         this.additionalInformationMap = additionalInformationMap;
     }
 
-    public LinkedHashMap<String, Object> getAdditionalInformationMap() {
+    public Map<String, Object> getAdditionalInformationMap() {
         return this.additionalInformationMap;
     }
 

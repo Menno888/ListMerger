@@ -10,8 +10,8 @@ class TestRecord {
 
         assertThat(myRecord.getArtist()).isEqualTo("Menno888");
         assertThat(myRecord.getTitle()).isEqualTo("The Life Of A Speedrunner");
-        assertThat(myRecord.getPositionMap().size()).isEqualTo(1);
-        assertThat(myRecord.getPositionMap().get("GTATR100")).isEqualTo(2742);
+        assertThat(myRecord.getPositionMap()).hasSize(1);
+        assertThat(myRecord.getPositionMap()).containsEntry("GTATR100", 2742);
 
         myRecord.setArtist("Menno");
         myRecord.setTitle("The Troubled Times Of A Speedrunner");
@@ -19,7 +19,7 @@ class TestRecord {
 
         assertThat(myRecord.getArtist()).isEqualTo("Menno");
         assertThat(myRecord.getTitle()).isEqualTo("The Troubled Times Of A Speedrunner");
-        assertThat(myRecord.getPositionMap().size()).isEqualTo(2);
-        assertThat(myRecord.getPositionMap().get("LCU100")).isEqualTo(1240);
+        assertThat(myRecord.getPositionMap()).hasSize(2);
+        assertThat(myRecord.getPositionMap()).containsEntry("LCU100", 1240);
     }
 }

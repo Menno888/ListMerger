@@ -7,7 +7,7 @@ public class Filter {
     public static void filter(final SongList songList, final String lists) {
         final String[] toKeep = lists.split(",");
         final List<String> toKeepList = Arrays.asList(toKeep);
-        final ArrayList<String> allEditions = songList.tagCheckup();
+        final List<String> allEditions = songList.tagCheckup();
         final List<String> newList = new ArrayList<>();
         for (final String edition : allEditions) {
             if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {

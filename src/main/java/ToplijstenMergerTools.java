@@ -221,7 +221,7 @@ public class ToplijstenMergerTools {
                 final int currentYearLength = getListLength(currentYear, list);
                 final int prevYearLength = getListLength(prevYear, list);
 
-                final HashMap<String, Integer> positionMap = record.getPositionMap();
+                final Map<String, Integer> positionMap = record.getPositionMap();
                 double climbOrDrop;
                 if (positionMap.containsKey(currentYear) && positionMap.containsKey(prevYear)) {
                     climbOrDrop = ((double) positionMap.get(prevYear) - (double) positionMap.get(currentYear)) / (double) Math.max(currentYearLength + 1, prevYearLength + 1);
@@ -265,7 +265,7 @@ public class ToplijstenMergerTools {
     }
 
     private static boolean inAnyListThisOrPreviousYear(final Record record, final int yearTo, final int yearFrom) {
-        final LinkedHashMap<String, Integer> positionMap = record.getPositionMap();
+        final Map<String, Integer> positionMap = record.getPositionMap();
         boolean wasInAList = false;
         for (final String key : positionMap.keySet()) {
             final String listAbbrYearPart = key.substring(key.length() - 4);
