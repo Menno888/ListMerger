@@ -11,7 +11,7 @@ public class ToplijstenMergerTools {
     public static void getTools(final SongList list) {
         boolean takeInput = true;
         while (takeInput) {
-            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle");
+            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle, (a)verage (a)ppearances");
             final String control = sc.nextLine();
             if ("hp".equals(control)) {
                 final SongList newList = new SongList();
@@ -183,7 +183,7 @@ public class ToplijstenMergerTools {
             else if ("fa".equals(control)) {
                 System.out.println("Enter the words to filter on");
                 final String filterString = sc.nextLine();
-                SongList newList = list
+                final SongList newList = list
                         .stream()
                         .filter(e -> e.getArtist().toLowerCase().contains(filterString.toLowerCase()))
                         .collect(Collectors.toCollection(SongList::new));
@@ -193,12 +193,31 @@ public class ToplijstenMergerTools {
             else if ("ft".equals(control)) {
                 System.out.println("Enter the words to filter on");
                 final String filterString = sc.nextLine();
-                SongList newList = list
+                final SongList newList = list
                         .stream()
                         .filter(e -> e.getTitle().toLowerCase().contains(filterString.toLowerCase()))
                         .collect(Collectors.toCollection(SongList::new));
                 newList.outputToFile();
                 System.out.println("Wrote current SongList filtered on title");
+            }
+            else if ("aa".equals(control)) {
+                final SongList newList = new SongList();
+                for (final Record r : list) {
+                    final Record newRecord = new Record();
+                    final int numberOfAppearances = r.getPositionMap().size();
+                    final int sumOfAppearances = r.getPositionMap().values().stream().mapToInt(Integer::intValue).sum();
+                    final double averageDouble = ((double) sumOfAppearances / (double) numberOfAppearances);
+                    final int average = (int) averageDouble;
+                    final int remainder = (int) ((averageDouble % 1) * 100);
+                    newRecord.setArtist(r.getArtist());
+                    newRecord.setTitle(r.getTitle());
+                    newRecord.addPositionToMap("appearances", numberOfAppearances);
+                    newRecord.addPositionToMap("average", average);
+                    newRecord.addPositionToMap("remainder", remainder);
+                    newList.add(newRecord);
+                }
+                newList.outputToFile();
+                System.out.println("Wrote current SongList with number of appearances and average position");
             }
             else if ("q".equals(control)) {
                 takeInput = false;
