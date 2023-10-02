@@ -5,15 +5,8 @@ public class Filter {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void filter(final SongList songList, final String lists) {
-        final String[] toKeep = lists.split(",");
-        final List<String> toKeepList = Arrays.asList(toKeep);
+        final List<String> newList = getListsFromFilterString(songList, lists);
         final List<String> allEditions = songList.tagCheckup();
-        final List<String> newList = new ArrayList<>();
-        for (final String edition : allEditions) {
-            if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {
-                newList.add(edition);
-            }
-        }
         String shouldAppearInAll = "n";
         String retainUnused = "n";
         System.out.println("Should appear [y] or not [n] appear in specified lists?");
@@ -86,5 +79,25 @@ public class Filter {
             }
             songList.normalize();
         }
+    }
+
+    private static List<String> getListsFromFilterString(final SongList songList, final String lists) {
+        final String[] toKeep = lists.split(",");
+        final List<String> toKeepList = Arrays.asList(toKeep);
+        final List<String> allEditions = songList.tagCheckup();
+        final List<String> newList = new ArrayList<>();
+        for (final String edition : allEditions) {
+            if (Character.isDigit(edition.charAt(edition.length() - 1))) {
+                if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {
+                    newList.add(edition);
+                }
+            } else {
+                if (toKeepList.contains(edition.substring(0, edition.length() - 5)) || toKeepList.contains(edition)) {
+                    newList.add(edition);
+                }
+            }
+        }
+
+        return newList;
     }
 }
