@@ -16,9 +16,11 @@ public class StartMerging {
                 System.out.println("Current list cleared");
             }
             else if ("f".equals(control)) {
+                System.out.println("Filter lists (fl) or years (fy)?");
+                String filterOption = sc.nextLine();
                 System.out.println("Type lists or a set of list");
                 String toKeep = sc.nextLine();
-                Filter.filter(songList, toKeep);
+                Filter.filter(songList, toKeep, filterOption);
             }
             else if ("m".equals(control)) {
                 System.out.println("Enter a file or multiple files separated by commas to merge, leave blank for all lists in working dir (without lists in list.exceptions):");

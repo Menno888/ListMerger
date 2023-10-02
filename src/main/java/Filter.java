@@ -4,8 +4,13 @@ public class Filter {
 
     private static final Scanner sc = new Scanner(System.in);
 
-    public static void filter(final SongList songList, final String lists) {
-        final List<String> newList = getListsFromFilterString(songList, lists);
+    public static void filter(final SongList songList, final String lists, final String filterOption) {
+        List<String> newList = new ArrayList<>();
+        if ("fl".equals(filterOption)) {
+            newList = getListsFromFilterStringLists(songList, lists);
+        } else if ("fy".equals(filterOption)) {
+            newList = getListsFromFilterStringYears(songList, lists);
+        }
         final List<String> allEditions = songList.tagCheckup();
         String shouldAppearInAll = "n";
         String retainUnused = "n";
@@ -81,7 +86,7 @@ public class Filter {
         }
     }
 
-    private static List<String> getListsFromFilterString(final SongList songList, final String lists) {
+    private static List<String> getListsFromFilterStringLists(final SongList songList, final String lists) {
         final String[] toKeep = lists.split(",");
         final List<String> toKeepList = Arrays.asList(toKeep);
         final List<String> allEditions = songList.tagCheckup();
@@ -93,6 +98,26 @@ public class Filter {
                 }
             } else {
                 if (toKeepList.contains(edition.substring(0, edition.length() - 5)) || toKeepList.contains(edition)) {
+                    newList.add(edition);
+                }
+            }
+        }
+
+        return newList;
+    }
+
+    private static List<String> getListsFromFilterStringYears(final SongList songList, final String lists) {
+        final String[] toKeep = lists.split(",");
+        final List<String> toKeepList = Arrays.asList(toKeep);
+        final List<String> allEditions = songList.tagCheckup();
+        final List<String> newList = new ArrayList<>();
+        for (final String edition : allEditions) {
+            if (Character.isDigit(edition.charAt(edition.length() - 1))) {
+                if (toKeepList.contains(edition.substring(edition.length() - 4)) || toKeepList.contains(edition)) {
+                    newList.add(edition);
+                }
+            } else {
+                if (toKeepList.contains(edition.substring(edition.length() - 5, edition.length() - 1)) || toKeepList.contains(edition)) {
                     newList.add(edition);
                 }
             }
