@@ -11,7 +11,7 @@ public class ToplijstenMergerTools {
     public static void getTools(final SongList list) {
         boolean takeInput = true;
         while (takeInput) {
-            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle, (a)verage (a)ppearances");
+            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle, (a)verage (a)ppearances, (d)iff (l)ist l/r");
             final String control = sc.nextLine();
             if ("hp".equals(control)) {
                 final SongList newList = new SongList();
@@ -218,6 +218,32 @@ public class ToplijstenMergerTools {
                 }
                 newList.outputToFile();
                 System.out.println("Wrote current SongList with number of appearances and average position");
+            }
+            else if ("dl".equals(control)) {
+                System.out.println("Enter the two lists to find the diff on separated by a comma");
+                final String listString = sc.nextLine();
+                final String[] listArray = listString.split(",");
+                final SongList newListLeft = new SongList();
+                Merger.merge(newListLeft, listArray[0]);
+                final SongList newListRight = new SongList();
+                Merger.merge(newListRight, listArray[1]);
+                final SongList newListLeftResult = new SongList();
+                final SongList newListRightResult = new SongList();
+                for (Record r : newListLeft) {
+                    r.cleanPositionMap();
+                    if (!newListRight.contains(r)) {
+                        newListLeftResult.add(r);
+                    }
+                }
+                for (Record r : newListRight) {
+                    r.cleanPositionMap();
+                    if (!newListLeft.contains(r)) {
+                        newListRightResult.add(r);
+                    }
+                }
+                newListLeftResult.outputToFile(listArray[0] + "leftdiff");
+                newListRightResult.outputToFile(listArray[1] + "rightdiff");
+                System.out.println("Wrote two lists containing diffs");
             }
             else if ("q".equals(control)) {
                 takeInput = false;

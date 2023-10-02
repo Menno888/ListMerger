@@ -10,8 +10,7 @@ import static java.lang.System.currentTimeMillis;
 public class SongList extends ArrayList<Record> {
 
     public void outputToFile() {
-        final String outFile = "out" + currentTimeMillis();
-        outputToFile(outFile, "y,n,n");
+        outputToFile("", "y,n,n");
     }
 
     public void outputToFile(final String outFile) {
@@ -35,7 +34,7 @@ public class SongList extends ArrayList<Record> {
             outFile = outFile + ".xml";
         }
         if (".xml".equals(outFile)) {
-            outFile = currentTimeMillis() + ".xml";
+            outFile = "out" + currentTimeMillis() + ".xml";
         }
         final File file = new File(outFile);
 
@@ -73,6 +72,10 @@ public class SongList extends ArrayList<Record> {
         }
 
         System.out.println("Output to " + outFile);
+    }
+
+    public boolean contains(final Record record) {
+        return this.stream().anyMatch(r -> (r.getArtist()).equals(record.getArtist()) && (r.getTitle()).equals(record.getTitle()));
     }
 
     private String convertRecord(final Record record, final String positions, final String prettyPrint, final String countPositions) {
