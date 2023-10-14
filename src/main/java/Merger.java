@@ -8,21 +8,18 @@ public class Merger {
 
     public static void merge(SongList songList, final String mergeFile) {
         final ArrayList<String> fileList = new ArrayList<>();
-        if ("".equals(mergeFile)) {
-            final File folder = new File(System.getProperty("user.dir"));
-            final File[] listOfFiles = folder.listFiles();
+        final File folder = new File(System.getProperty("user.dir"));
+        final File[] listOfFiles = folder.listFiles();
 
-            if (listOfFiles != null) {
-                for (final File file : listOfFiles) {
-                    if (file.isFile() && file.getName().endsWith(".xml") && !(ListExceptions.checkList(file.getName()))) {
+        if (listOfFiles != null) {
+            final String[] files = mergeFile.split(",");
+            for (final File file : listOfFiles) {
+                for (final String searchFile : files) {
+                    if (file.isFile() && file.getName().endsWith(".xml") && !(ListExceptions.checkList(file.getName())) && file.getName().startsWith(searchFile)) {
                         fileList.add(file.getName());
                     }
                 }
             }
-        }
-        else {
-            final String[] files = mergeFile.split(",");
-            fileList.addAll(Arrays.asList(files));
         }
 
         for (final String file : fileList) {
