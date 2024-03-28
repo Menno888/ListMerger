@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
 
-public class SongList extends ArrayList<Record> {
+public class SongList extends ArrayList<Song> {
 
     public void outputToFile() {
         outputToFile("", "y,n,n");
@@ -58,10 +58,10 @@ public class SongList extends ArrayList<Record> {
         try {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
             writer.newLine();
-            writer.write("<top2000database2014 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
+            writer.write("<top2000database2014>");
             writer.newLine();
-            for (final Record song : this) {
-                final String output = convertRecord(song, positions, prettyPrint, countPositions);
+            for (final Song song : this) {
+                final String output = convertSong(song, positions, prettyPrint, countPositions);
                 writer.write(output);
                 writer.newLine();
             }
@@ -74,11 +74,11 @@ public class SongList extends ArrayList<Record> {
         System.out.println("Output to " + outFile);
     }
 
-    public boolean contains(final Record record) {
-        return this.stream().anyMatch(r -> (r.getArtist()).equals(record.getArtist()) && (r.getTitle()).equals(record.getTitle()));
+    public boolean contains(final Song song) {
+        return this.stream().anyMatch(r -> (r.getArtist()).equals(song.getArtist()) && (r.getTitle()).equals(song.getTitle()));
     }
 
-    private String convertRecord(final Record record, final String positions, final String prettyPrint, final String countPositions) {
+    private String convertSong(final Song song, final String positions, final String prettyPrint, final String countPositions) {
         final StringBuilder stringBuilder = new StringBuilder();
         String indentation;
         String lineBreak;
@@ -86,20 +86,20 @@ public class SongList extends ArrayList<Record> {
         if ("y".equals(prettyPrint)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
 
         stringBuilder.append(indentation + "<record>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + record.getArtist() + "</Artiest>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + record.getTitle() + "</Nummer>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + song.getArtist() + "</Artiest>" + lineBreak);
+        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + song.getTitle() + "</Nummer>" + lineBreak);
         if ("y".equals(countPositions)) {
-            final long numberOfPositions = getPositionsCount(record, positions);
+            final long numberOfPositions = getPositionsCount(song, positions);
             stringBuilder.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
         }
         if (!"n".equals(positions)) {
-            for (final Map.Entry<String, Integer> pair : record.getPositionMap().entrySet()) {
+            for (final Map.Entry<String, Integer> pair : song.getPositionMap().entrySet()) {
                 if ("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
                     stringBuilder.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
                 }
             }
         }
-        for (final Map.Entry<String, Object> pair : record.getAdditionalInformationMap().entrySet()) {
+        for (final Map.Entry<String, Object> pair : song.getAdditionalInformationMap().entrySet()) {
             stringBuilder.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
         }
         stringBuilder.append(indentation + "</record>");
@@ -107,13 +107,13 @@ public class SongList extends ArrayList<Record> {
         return stringBuilder.toString();
     }
 
-    private long getPositionsCount(final Record record, final String positions) {
+    private long getPositionsCount(final Song song, final String positions) {
         final long numberOfPositions;
         if (!"n".equals(positions) && !"y".equals(positions)) {
-            numberOfPositions = record.getPositionMap().entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
+            numberOfPositions = song.getPositionMap().entrySet().stream().filter(e -> positions.equals(e.getKey().substring(e.getKey().length() - 4))).count();
         }
         else {
-            numberOfPositions = record.getPositionMap().entrySet().size();
+            numberOfPositions = song.getPositionMap().entrySet().size();
         }
 
         return numberOfPositions;
@@ -130,8 +130,8 @@ public class SongList extends ArrayList<Record> {
     public List<String> tagCheckup() {
 
         final ArrayList<String> tagList = new ArrayList<>();
-        for (final Record currentRecord : this) {
-            for (final Map.Entry<String, Integer> entry : currentRecord.getPositionMap().entrySet()) {
+        for (final Song currentSong : this) {
+            for (final Map.Entry<String, Integer> entry : currentSong.getPositionMap().entrySet()) {
                 if (!tagList.contains(entry.getKey())) {
                     tagList.add(entry.getKey());
                 }
@@ -141,21 +141,21 @@ public class SongList extends ArrayList<Record> {
     }
 
     public void normalize() {
-        final Iterator<Record> it = this.iterator();
+        final Iterator<Song> it = this.iterator();
         while (it.hasNext()) {
-            final Record item = it.next();
+            final Song item = it.next();
             if (item.getPositionMap().size() == 0) {
                 it.remove();
                 System.out.println("Removed " + item.showSong());
             }
         }
-        System.out.println("There's " + this.size() + " records left");
+        System.out.println("There's " + this.size() + " songs left");
     }
 
     public void outputToScreen() {
-        for (final Record currentRecord : this) {
-            System.out.println(currentRecord.showSong());
+        for (final Song currentSong : this) {
+            System.out.println(currentSong.showSong());
         }
-        System.out.println("There's " + this.size() + " records left");
+        System.out.println("There's " + this.size() + " songs left");
     }
 }

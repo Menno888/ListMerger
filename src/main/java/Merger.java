@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Merger {
 
@@ -26,7 +25,7 @@ public class Merger {
             final File inFile = new File(file);
             final String fileToFeed = inFile.toString();
             songList = xmlParser.parseXML(fileToFeed, songList);
-            System.out.println("There are currently " + songList.size() + " records");
+            System.out.println("There are currently " + songList.size() + " songs");
         }
     }
 }

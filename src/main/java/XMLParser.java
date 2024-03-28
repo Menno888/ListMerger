@@ -28,21 +28,21 @@ class XMLParser {
 
             final DefaultHandler handler = new DefaultHandler() {
 
-                private Record record;
+                private Song song;
 
                 public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) {
                     elementTag = qName;
 
                     if ("record".equals(qName)) {
                         building = true;
-                        record = new Record();
+                        song = new Song();
                     }
                 }
 
                 public void endElement(final String uri, final String localName, final String qName) {
                     if ("record".equals(qName)) {
                         building = false;
-                        addToArrayList(record);
+                        addToArrayList(song);
                     }
 
                     xml.setLength(0);
@@ -57,17 +57,17 @@ class XMLParser {
                             final String xmlResult = xml.append(value).toString();
                             value = xmlResult.replace("&", "&amp;").trim();
                             if ("Artiest".equals(elementTag)) {
-                                record.setArtist(value);
+                                song.setArtist(value);
                             }
                             if ("Nummer".equals(elementTag)) {
-                                record.setTitle(value);
+                                song.setTitle(value);
                             }
                         }
                         else if (elementTag.startsWith(INFO_COLUMN_MARKER)) {
-                            record.addInfoToMap(elementTag, value);
+                            song.addInfoToMap(elementTag, value);
                         }
                         else {
-                            record.addPositionToMap(elementTag, Integer.parseInt(value));
+                            song.addPositionToMap(elementTag, Integer.parseInt(value));
                         }
                     }
                 }
@@ -91,21 +91,21 @@ class XMLParser {
 
     }
 
-    private void addToArrayList(final Record record) {
+    private void addToArrayList(final Song songToAdd) {
         boolean merged = false;
-        for (final Record song : songList) {
-            if (record.getArtist().equals(song.getArtist()) && record.getTitle().equals(song.getTitle())) {
-                for (final Map.Entry<String, Integer> entry : record.getPositionMap().entrySet()) {
+        for (final Song song : songList) {
+            if (songToAdd.getArtist().equals(song.getArtist()) && songToAdd.getTitle().equals(song.getTitle())) {
+                for (final Map.Entry<String, Integer> entry : songToAdd.getPositionMap().entrySet()) {
                     song.addPositionToMap(entry.getKey(), entry.getValue());
                 }
-                for (final Map.Entry<String, Object> entry : record.getAdditionalInformationMap().entrySet()) {
+                for (final Map.Entry<String, Object> entry : songToAdd.getAdditionalInformationMap().entrySet()) {
                     song.addInfoToMap(entry.getKey(), entry.getValue());
                 }
                 merged = true;
             }
         }
         if (!merged) {
-            songList.add(record);
+            songList.add(songToAdd);
         }
     }
 }

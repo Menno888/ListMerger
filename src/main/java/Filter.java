@@ -4,91 +4,72 @@ public class Filter {
 
     private static final Scanner sc = new Scanner(System.in);
 
+    private static final String FILTER_OPTION_LISTS = "fl";
+    private static final String FILTER_OPTION_YEARS = "fy";
+    private static final String FILTER_OPTION_NO = "n";
+    private static final String FILTER_OPTION_YES = "y";
+
+    private static final String SEPARATOR_CHARACTER_COMMA = ",";
+
+    private static List<String> newList = new ArrayList<>();
+
     public static void filter(final SongList songList, final String lists, final String filterOption) {
-        List<String> newList = new ArrayList<>();
-        if ("fl".equals(filterOption)) {
+        if (FILTER_OPTION_LISTS.equals(filterOption)) {
             newList = getListsFromFilterStringLists(songList, lists);
-        } else if ("fy".equals(filterOption)) {
+        } else if (FILTER_OPTION_YEARS.equals(filterOption)) {
             newList = getListsFromFilterStringYears(songList, lists);
         }
         final List<String> allEditions = songList.tagCheckup();
-        String shouldAppearInAll = "n";
-        String retainUnused = "n";
+        String shouldAppearInAll = FILTER_OPTION_NO;
+        String retainUnused = FILTER_OPTION_NO;
         System.out.println("Should appear [y] or not [n] appear in specified lists?");
         final String shouldAppear = sc.nextLine();
-        if (newList.size() > 1 && "y".equals(shouldAppear)) {
-            System.out.println("Should appear in all lists or not? [y/n]");
-            shouldAppearInAll = sc.nextLine();
-        }
-        if ("y".equals(shouldAppear)) {
+        if (FILTER_OPTION_YES.equals(shouldAppear)) {
+            if (newList.size() > 1) {
+                System.out.println("Should appear in all lists or not? [y/n]");
+                shouldAppearInAll = sc.nextLine();
+            }
             System.out.println("Should retain lists that aren't in the selection?");
             retainUnused = sc.nextLine();
         }
-        if ("y".equals(shouldAppear) && "n".equals(shouldAppearInAll)) {
-            for (final Record currentRecord : songList) {
-                boolean containsEntries = false;
-                for (final Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
-                    if (newList.contains(entry2.getKey())) {
-                        containsEntries = true;
-                        break;
-                    }
-                }
-                if (!containsEntries) {
-                    currentRecord.cleanPositionMap();
-                }
-            }
-            songList.normalize();
+        filterShouldAppear(songList, allEditions, shouldAppear, shouldAppearInAll, retainUnused);
+    }
+
+    private static void filterShouldAppear(final SongList songList, final List<String> allEditions, final String shouldAppear, final String shouldAppearInAll, final String retainUnused) {
+        filterBasedOnAppearanceRules(songList, shouldAppear, shouldAppearInAll);
+        if (FILTER_OPTION_YES.equals(shouldAppear)) {
             allEditions.removeAll(newList);
-            if ("n".equals(retainUnused)) {
-                for (final Record currentRecord : songList) {
-                    for (final String edition : allEditions) {
-                        currentRecord.getPositionMap().remove(edition);
-                    }
-                }
+            if (FILTER_OPTION_NO.equals(retainUnused)) {
+                removeAllUnusedListsFromSelection(songList, allEditions);
             }
         }
-        else if ("y".equals(shouldAppear) && "y".equals(shouldAppearInAll)) {
-            for (final Record currentRecord : songList) {
-                int containsEntries = 0;
-                for (final Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
-                    if (newList.contains(entry2.getKey())) {
-                        containsEntries++;
-                    }
-                }
-                if (containsEntries != newList.size()) {
-                    currentRecord.cleanPositionMap();
+    }
+
+    private static void filterBasedOnAppearanceRules(final SongList songList, final String shouldAppear, final String shouldAppearInAll) {
+        for (final Song currentSong : songList) {
+            int containsEntries = 0;
+            for (final Map.Entry<String, Integer> entry2 : currentSong.getPositionMap().entrySet()) {
+                if (newList.contains(entry2.getKey())) {
+                    containsEntries++;
                 }
             }
-            songList.normalize();
-            allEditions.removeAll(newList);
-            if ("n".equals(retainUnused)) {
-                for (final Record currentRecord : songList) {
-                    for (final String edition : allEditions) {
-                        currentRecord.getPositionMap().remove(edition);
-                    }
-                }
+            if (shouldRemoveSongBasedOnNumberOfEntriesAndAppearanceRules(containsEntries, shouldAppear, shouldAppearInAll)) {
+                currentSong.cleanPositionMap();
             }
         }
-        else {
-            for (final Record currentRecord : songList) {
-                boolean containsEntries = false;
-                for (final Map.Entry<String, Integer> entry2 : currentRecord.getPositionMap().entrySet()) {
-                    if (newList.contains(entry2.getKey())) {
-                        containsEntries = true;
-                        break;
-                    }
-                }
-                if (containsEntries) {
-                    currentRecord.cleanPositionMap();
-                }
-            }
-            songList.normalize();
+        songList.normalize();
+    }
+
+    private static boolean shouldRemoveSongBasedOnNumberOfEntriesAndAppearanceRules(final int numberOfEntries, final String shouldAppear, final String shouldAppearInAll) {
+        if (FILTER_OPTION_YES.equals(shouldAppear)) {
+            return FILTER_OPTION_YES.equals(shouldAppearInAll) && numberOfEntries != newList.size() || FILTER_OPTION_NO.equals(shouldAppearInAll) && numberOfEntries == 0;
+        } else {
+            return numberOfEntries > 0;
         }
     }
 
     private static List<String> getListsFromFilterStringLists(final SongList songList, final String lists) {
-        final String[] toKeep = lists.split(",");
-        final List<String> toKeepList = Arrays.asList(toKeep);
+        final List<String> toKeepList = Arrays.asList(lists.split(SEPARATOR_CHARACTER_COMMA));
         final List<String> allEditions = songList.tagCheckup();
         final List<String> newList = new ArrayList<>();
         for (final String edition : allEditions) {
@@ -107,8 +88,7 @@ public class Filter {
     }
 
     private static List<String> getListsFromFilterStringYears(final SongList songList, final String lists) {
-        final String[] toKeep = lists.split(",");
-        final List<String> toKeepList = Arrays.asList(toKeep);
+        final List<String> toKeepList = Arrays.asList(lists.split(SEPARATOR_CHARACTER_COMMA));
         final List<String> allEditions = songList.tagCheckup();
         final List<String> newList = new ArrayList<>();
         for (final String edition : allEditions) {
@@ -124,5 +104,13 @@ public class Filter {
         }
 
         return newList;
+    }
+
+    private static void removeAllUnusedListsFromSelection(final SongList songList, final List<String> allEditions) {
+        for (final Song currentSong : songList) {
+            for (final String edition : allEditions) {
+                currentSong.getPositionMap().remove(edition);
+            }
+        }
     }
 }
