@@ -1,6 +1,12 @@
+package parser;
+
 import java.io.File;
 
+import dto.Song;
+import dto.SongList;
 import org.junit.jupiter.api.Test;
+import util.FileUtil;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TestXMLParser {

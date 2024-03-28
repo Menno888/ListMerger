@@ -1,9 +1,19 @@
+package merger;
+
+import dto.SongList;
+import parser.XMLParser;
+import tools.ListExceptions;
+
 import java.io.File;
 import java.util.ArrayList;
 
 public class Merger {
 
     public static final XMLParser xmlParser = new XMLParser();
+
+    private Merger() {
+        //No-args
+    }
 
     public static void merge(SongList songList, final String mergeFile) {
         final ArrayList<String> fileList = new ArrayList<>();

@@ -1,6 +1,11 @@
+package parser;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import dto.Song;
+import dto.SongList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -9,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
-class XMLParser {
+public class XMLParser {
 
     private static final String INFO_COLUMN_MARKER = "ADD-";
     private final StringBuilder xml = new StringBuilder();
@@ -17,7 +22,7 @@ class XMLParser {
     private SongList songList = new SongList();
     private String elementTag;
 
-    SongList parseXML(String file, final SongList list) {
+    public SongList parseXML(String file, final SongList list) {
 
         songList = list;
 

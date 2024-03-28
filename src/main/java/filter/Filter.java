@@ -1,3 +1,8 @@
+package filter;
+
+import dto.Song;
+import dto.SongList;
+
 import java.util.*;
 
 public class Filter {
@@ -12,6 +17,10 @@ public class Filter {
     private static final String SEPARATOR_CHARACTER_COMMA = ",";
 
     private static List<String> newList = new ArrayList<>();
+
+    private Filter() {
+        //No-args
+    }
 
     public static void filter(final SongList songList, final String lists, final String filterOption) {
         if (FILTER_OPTION_LISTS.equals(filterOption)) {

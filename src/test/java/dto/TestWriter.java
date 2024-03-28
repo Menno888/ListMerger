@@ -1,3 +1,5 @@
+package dto;
+
 import java.io.*;
 
 import org.junit.jupiter.api.Test;
