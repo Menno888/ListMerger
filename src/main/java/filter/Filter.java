@@ -9,8 +9,6 @@ public class Filter {
 
     private static final Scanner sc = new Scanner(System.in);
 
-    private static final String FILTER_OPTION_LISTS = "fl";
-    private static final String FILTER_OPTION_YEARS = "fy";
     private static final String FILTER_OPTION_NO = "n";
     private static final String FILTER_OPTION_YES = "y";
 
@@ -23,11 +21,7 @@ public class Filter {
     }
 
     public static void filter(final SongList songList, final String lists, final String filterOption) {
-        if (FILTER_OPTION_LISTS.equals(filterOption)) {
-            newList = getListsFromFilterStringLists(songList, lists);
-        } else if (FILTER_OPTION_YEARS.equals(filterOption)) {
-            newList = getListsFromFilterStringYears(songList, lists);
-        }
+        newList = getListsFromFilterStringAndFilterOption(songList, lists, filterOption);
         final List<String> allEditions = songList.tagCheckup();
         String shouldAppearInAll = FILTER_OPTION_NO;
         String retainUnused = FILTER_OPTION_NO;
@@ -77,42 +71,37 @@ public class Filter {
         }
     }
 
-    private static List<String> getListsFromFilterStringLists(final SongList songList, final String lists) {
+    private static List<String> getListsFromFilterStringAndFilterOption(final SongList songList, final String lists, final String filterOption) {
         final List<String> toKeepList = Arrays.asList(lists.split(SEPARATOR_CHARACTER_COMMA));
         final List<String> allEditions = songList.tagCheckup();
         final List<String> newList = new ArrayList<>();
         for (final String edition : allEditions) {
-            if (Character.isDigit(edition.charAt(edition.length() - 1))) {
-                if (toKeepList.contains(edition.substring(0, edition.length() - 4)) || toKeepList.contains(edition)) {
-                    newList.add(edition);
-                }
-            } else {
-                if (toKeepList.contains(edition.substring(0, edition.length() - 5)) || toKeepList.contains(edition)) {
-                    newList.add(edition);
-                }
+            if (shouldKeepListStringBasedOnEditionListAndFilterOption(edition, toKeepList, filterOption)) {
+                newList.add(edition);
             }
         }
 
         return newList;
     }
 
-    private static List<String> getListsFromFilterStringYears(final SongList songList, final String lists) {
-        final List<String> toKeepList = Arrays.asList(lists.split(SEPARATOR_CHARACTER_COMMA));
-        final List<String> allEditions = songList.tagCheckup();
-        final List<String> newList = new ArrayList<>();
-        for (final String edition : allEditions) {
-            if (Character.isDigit(edition.charAt(edition.length() - 1))) {
-                if (toKeepList.contains(edition.substring(edition.length() - 4)) || toKeepList.contains(edition)) {
-                    newList.add(edition);
-                }
+    private static boolean shouldKeepListStringBasedOnEditionListAndFilterOption(final String listToCheck, final List<String> filterLists, final String filterOption) {
+        String listSubstring;
+        boolean filterOnLists = "fl".equals(filterOption);
+        boolean listEndsInYear = Character.isDigit(listToCheck.charAt(listToCheck.length() - 1));
+        if (filterOnLists) {
+            if (listEndsInYear) {
+                listSubstring = listToCheck.substring(0, listToCheck.length() - 4);
             } else {
-                if (toKeepList.contains(edition.substring(edition.length() - 5, edition.length() - 1)) || toKeepList.contains(edition)) {
-                    newList.add(edition);
-                }
+                listSubstring = listToCheck.substring(0, listToCheck.length() - 5);
+            }
+        } else {
+            if (listEndsInYear) {
+                listSubstring = listToCheck.substring(listToCheck.length() - 4);
+            } else {
+                listSubstring = listToCheck.substring(listToCheck.length() - 5, listToCheck.length() - 1);
             }
         }
-
-        return newList;
+        return filterLists.contains(listSubstring);
     }
 
     private static void removeAllUnusedListsFromSelection(final SongList songList, final List<String> allEditions) {
