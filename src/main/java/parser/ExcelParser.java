@@ -22,8 +22,6 @@ public class ExcelParser {
     private static final String SEPARATOR_CHARACTER_AMPERSAND = "&";
     private static final String SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE = "&amp;";
 
-    private XSSFSheet sheet;
-
     public SongList parseExcel(String inFile) {
         final ArrayList<String> listAbbreviations = new ArrayList<>();
         InputStream inputStream;
@@ -40,11 +38,11 @@ public class ExcelParser {
         }
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
-            sheet = myWorkBook.getSheetAt(0);
+            final XSSFSheet sheet = myWorkBook.getSheetAt(0);
             final DataFormatter formatter = new DataFormatter();
 
-            final int numOfRows = getActualNumberOfRows();
-            final int numOfCols = getActualNumberOfColumns();
+            final int numOfRows = getActualNumberOfRows(sheet);
+            final int numOfCols = getActualNumberOfColumns(sheet);
 
             for (int rowNum = 0; rowNum < numOfCols; rowNum++) {
                 final Row row = sheet.getRow(rowNum);
@@ -106,23 +104,23 @@ public class ExcelParser {
         }
     }
 
-    private int getActualNumberOfRows() {
+    private int getActualNumberOfRows(final XSSFSheet sheet) {
         int cellNum = 0;
-        while (checkIfCellNonEmpty(0, cellNum)) {
+        while (checkIfCellNonEmpty(sheet, 0, cellNum)) {
             cellNum++;
         }
         return cellNum;
     }
 
-    private int getActualNumberOfColumns() {
+    private int getActualNumberOfColumns(final XSSFSheet sheet) {
         int cellNum = 0;
-        while (checkIfCellNonEmpty(cellNum, 0)) {
+        while (checkIfCellNonEmpty(sheet, cellNum, 0)) {
             cellNum++;
         }
         return cellNum;
     }
 
-    private boolean checkIfCellNonEmpty(final int row, final int col) {
+    private boolean checkIfCellNonEmpty(final XSSFSheet sheet, final int row, final int col) {
         try {
             final Cell cell = sheet.getRow(row).getCell(col);
             return cell != null && cell.getCellType() != CellType.BLANK;
