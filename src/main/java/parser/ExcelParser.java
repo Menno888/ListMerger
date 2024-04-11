@@ -44,10 +44,10 @@ public class ExcelParser {
             final int numOfRows = getActualNumberOfRows(sheet);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
-            for (int rowNum = 0; rowNum < numOfCols; rowNum++) {
+            for (int rowNum = 0; rowNum < numOfRows; rowNum++) {
                 final Row row = sheet.getRow(rowNum);
                 final Song song = new Song();
-                for (int cellNum = 0; cellNum < numOfRows; cellNum++) {
+                for (int cellNum = 0; cellNum < numOfCols; cellNum++) {
                     final Cell cell = row.getCell(cellNum);
                     if (rowNum == HEADER_ROW_NUM) {
                         final String headerValue = cell.getStringCellValue();
@@ -105,19 +105,19 @@ public class ExcelParser {
     }
 
     private int getActualNumberOfRows(final XSSFSheet sheet) {
-        int cellNum = 0;
-        while (checkIfCellNonEmpty(sheet, 0, cellNum)) {
-            cellNum++;
+        int rowNum = 0;
+        while (checkIfCellNonEmpty(sheet, rowNum, 0)) {
+            rowNum++;
         }
-        return cellNum;
+        return rowNum;
     }
 
     private int getActualNumberOfColumns(final XSSFSheet sheet) {
-        int cellNum = 0;
-        while (checkIfCellNonEmpty(sheet, cellNum, 0)) {
-            cellNum++;
+        int colNum = 0;
+        while (checkIfCellNonEmpty(sheet, 0, colNum)) {
+            colNum++;
         }
-        return cellNum;
+        return colNum;
     }
 
     private boolean checkIfCellNonEmpty(final XSSFSheet sheet, final int row, final int col) {
