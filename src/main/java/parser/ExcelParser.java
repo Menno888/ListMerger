@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class ExcelParser {
 
     private static final int HEADER_ROW_NUM = 0;
+    private static final int SONG_DATA_START_ROW_NUM = 1;
     private static final int ARTIST_COLUMN_NUM = 0;
     private static final int TITLE_COLUMN_NUM = 1;
     private static final String INFO_COLUMN_MARKER = "ADD-";
@@ -46,35 +47,33 @@ public class ExcelParser {
             final int numOfRows = getActualNumberOfRows(sheet);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
-            for (int rowNum = 0; rowNum < numOfRows; rowNum++) {
+            for (int cellNum = 0; cellNum < numOfCols; cellNum++) {
+                final Cell cell = sheet.getRow(HEADER_ROW_NUM).getCell(cellNum);
+                final String headerValue = cell.getStringCellValue();
+                listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
+            }
+
+            for (int rowNum = SONG_DATA_START_ROW_NUM; rowNum < numOfRows; rowNum++) {
                 final Row row = sheet.getRow(rowNum);
                 final Song song = new Song();
                 for (int cellNum = 0; cellNum < numOfCols; cellNum++) {
                     final Cell cell = row.getCell(cellNum);
-                    if (rowNum == HEADER_ROW_NUM) {
-                        final String headerValue = cell.getStringCellValue();
-                        listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
+                    if (cellNum == ARTIST_COLUMN_NUM) {
+                        song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
+                    }
+                    else if (cellNum == TITLE_COLUMN_NUM) {
+                        song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
                     }
                     else {
-                        if (cellNum == ARTIST_COLUMN_NUM) {
-                            song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
-                        }
-                        else if (cellNum == TITLE_COLUMN_NUM) {
-                            song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
-                        }
-                        else {
-                            String abbreviation = listAbbreviations.get(cellNum);
-                            if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
-                                addInfoDataToAdditionalInformationMap(cell, song, abbreviation);
-                            } else {
-                                addNumericDataToPositionMap(cell, song, abbreviation);
-                            }
+                        String abbreviation = listAbbreviations.get(cellNum);
+                        if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
+                            addInfoDataToAdditionalInformationMap(cell, song, abbreviation);
+                        } else {
+                            addNumericDataToPositionMap(cell, song, abbreviation);
                         }
                     }
                 }
-                if (rowNum != HEADER_ROW_NUM) {
-                    songList.add(song);
-                }
+                songList.add(song);
             }
 
             System.out.println("Successfully parsed " + inFile);
