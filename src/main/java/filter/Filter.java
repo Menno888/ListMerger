@@ -84,6 +84,13 @@ public class Filter {
         return newList;
     }
 
+    /*
+    Matches a list abbreviations on whether it should, depending on the filter setting, for instance:
+    LIST2020B, [LIST], "fl" -> true
+    LIST1999, [NOPE], "fl" -> false
+    LIST2000B, [1999,2000], "fy" -> true
+    LIST2012, [2011,2013], "fy" -> false
+     */
     private static boolean shouldKeepListStringBasedOnEditionListAndFilterOption(final String listToCheck, final List<String> filterLists, final String filterOption) {
         String listSubstring;
         boolean filterOnLists = "fl".equals(filterOption);

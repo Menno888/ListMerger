@@ -9,10 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ExcelParser {
@@ -21,19 +18,28 @@ public class ExcelParser {
     private static final int HEADER_ROW_NUM = 0;
     private static final int COLUMN_START_NUM = 0;
     private static final String INFO_COLUMN_MARKER = "ADD-";
+
+    private static final String SEPARATOR_CHARACTER_AMPERSAND = "&";
+    private static final String SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE = "&amp;";
+
     private XSSFSheet sheet;
 
     public SongList parseExcel(String inFile) {
         final ArrayList<String> listAbbreviations = new ArrayList<>();
-        XSSFWorkbook myWorkBook = null;
+        InputStream inputStream;
 
         try {
             if (!inFile.endsWith(".xlsx")) {
-                inFile = inFile + ".xlsx";
+                inFile += ".xlsx";
             }
             final File excelFile = new File(inFile);
-            final InputStream inputStream = new FileInputStream(excelFile);
-            myWorkBook = new XSSFWorkbook(inputStream);
+            inputStream = new FileInputStream(excelFile);
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find file: " + inFile + ", returning empty list");
+            return new SongList();
+        }
+
+        try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
             sheet = myWorkBook.getSheetAt(0);
             final DataFormatter formatter = new DataFormatter();
 
@@ -51,10 +57,10 @@ public class ExcelParser {
                     }
                     else {
                         if (cellNum == COLUMN_START_NUM) {
-                            song.setArtist(formatter.formatCellValue(cell).replace("&", "&amp;"));
+                            song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
                         }
                         else if (cellNum == COLUMN_START_NUM + 1) {
-                            song.setTitle(formatter.formatCellValue(cell).replace("&", "&amp;"));
+                            song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
                         }
                         else {
                             String abbreviation = listAbbreviations.get(cellNum);
@@ -77,7 +83,7 @@ public class ExcelParser {
             System.out.println("File not found, try again");
         } finally {
             try {
-                myWorkBook.close();
+                inputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
