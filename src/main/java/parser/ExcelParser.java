@@ -44,39 +44,12 @@ public class ExcelParser {
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
             final XSSFSheet sheet = myWorkBook.getSheetAt(SONG_DATA_START_SHEET);
-            final DataFormatter formatter = new DataFormatter();
 
             final int numOfRows = getActualNumberOfRows(sheet);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
-            for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
-                final Cell cell = sheet.getRow(HEADER_ROW_NUM).getCell(cellNum);
-                final String headerValue = cell.getStringCellValue();
-                listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
-            }
-
-            for (int rowNum = SONG_DATA_START_ROW_NUM; rowNum < numOfRows; rowNum++) {
-                final Row row = sheet.getRow(rowNum);
-                final Song song = new Song();
-                for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
-                    final Cell cell = row.getCell(cellNum);
-                    if (cellNum == ARTIST_COLUMN_NUM) {
-                        song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
-                    }
-                    else if (cellNum == TITLE_COLUMN_NUM) {
-                        song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
-                    }
-                    else {
-                        String abbreviation = listAbbreviations.get(cellNum);
-                        if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
-                            addInfoDataToAdditionalInformationMap(cell, song, abbreviation);
-                        } else {
-                            addNumericDataToPositionMap(cell, song, abbreviation);
-                        }
-                    }
-                }
-                songList.add(song);
-            }
+            loadExcelHeaderData(sheet, numOfCols, listAbbreviations);
+            loadExcelSongData(sheet, numOfRows, numOfCols, listAbbreviations);
 
             System.out.println("Successfully parsed " + inFile);
 
@@ -91,6 +64,40 @@ public class ExcelParser {
         }
 
         return songList;
+    }
+
+    private void loadExcelHeaderData(final XSSFSheet sheet, final int numOfCols, final ArrayList<String> listAbbreviations) {
+        for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
+            final Cell cell = sheet.getRow(HEADER_ROW_NUM).getCell(cellNum);
+            final String headerValue = cell.getStringCellValue();
+            listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
+        }
+    }
+
+    private void loadExcelSongData(final XSSFSheet sheet, final int numOfRows, final int numOfCols, final ArrayList<String> listAbbreviations) {
+        final DataFormatter formatter = new DataFormatter();
+        for (int rowNum = SONG_DATA_START_ROW_NUM; rowNum < numOfRows; rowNum++) {
+            final Row row = sheet.getRow(rowNum);
+            final Song song = new Song();
+            for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
+                final Cell cell = row.getCell(cellNum);
+                if (cellNum == ARTIST_COLUMN_NUM) {
+                    song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
+                }
+                else if (cellNum == TITLE_COLUMN_NUM) {
+                    song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
+                }
+                else {
+                    String abbreviation = listAbbreviations.get(cellNum);
+                    if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
+                        addInfoDataToAdditionalInformationMap(cell, song, abbreviation);
+                    } else {
+                        addNumericDataToPositionMap(cell, song, abbreviation);
+                    }
+                }
+            }
+            songList.add(song);
+        }
     }
 
     private String getListAbbreviationIfParenthesesElseFullName(final String headerValue) {
