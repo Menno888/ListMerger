@@ -9,24 +9,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
+import static tools.FieldUtil.*;
 
 public class ToplijstenMergerTools {
 
     private static final Scanner sc = new Scanner(System.in);
-
-    private static final String COLUMN_HEADER_MINIMUM = "MIN";
-    private static final String COLUMN_HEADER_MAXIMUM = "MAX";
-    private static final String COLUMN_HEADER_POSITION = "POS";
-    private static final String COLUMN_HEADER_COUNT = "NUM";
-    private static final String COLUMN_HEADER_POINTS = "POINTS";
-    private static final String COLUMN_HEADER_AVERAGE = "AVERAGE";
-    private static final String COLUMN_HEADER_PERCENTAGE = "PERCENTAGE";
-    private static final String COLUMN_HEADER_REMAINDER = "REMAINDER";
-    private static final String COLUMN_HEADER_NONE = "NONE";
-
-    private static final String SEPARATOR_CHARACTER_COMMA = ",";
-    private static final String SEPARATOR_CHARACTER_PIPE = "|";
-    private static final String SEPARATOR_CHARACTER_HYPHEN_SPACED = " - ";
 
     private static boolean takeInput = true;
 

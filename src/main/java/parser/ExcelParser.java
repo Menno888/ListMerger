@@ -12,18 +12,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.ArrayList;
 
+import static tools.FieldUtil.*;
+
 public class ExcelParser {
-
-    private static final int SONG_DATA_START_SHEET = 0;
-    private static final int HEADER_ROW_NUM = 0;
-    private static final int SONG_DATA_START_ROW_NUM = 1;
-    private static final int SONG_DATA_START_COL_NUM = 0;
-    private static final int ARTIST_COLUMN_NUM = 0;
-    private static final int TITLE_COLUMN_NUM = 1;
-    private static final String INFO_COLUMN_MARKER = "ADD-";
-
-    private static final String SEPARATOR_CHARACTER_AMPERSAND = "&";
-    private static final String SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE = "&amp;";
 
     private final SongList songList = new SongList();
 

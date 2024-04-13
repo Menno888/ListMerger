@@ -5,14 +5,11 @@ import dto.SongList;
 
 import java.util.*;
 
+import static tools.FieldUtil.*;
+
 public class Filter {
 
     private static final Scanner sc = new Scanner(System.in);
-
-    private static final String FILTER_OPTION_NO = "n";
-    private static final String FILTER_OPTION_YES = "y";
-
-    private static final String SEPARATOR_CHARACTER_COMMA = ",";
 
     private static List<String> newList = new ArrayList<>();
 

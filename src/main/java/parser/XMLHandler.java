@@ -5,15 +5,9 @@ import dto.SongList;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+import static tools.FieldUtil.*;
+
 public class XMLHandler extends DefaultHandler {
-
-    private static final String COLUMN_HEADER_RECORD = "record";
-    private static final String COLUMN_HEADER_ARTIST = "Artiest";
-    private static final String COLUMN_HEADER_SONG = "Nummer";
-    private static final String INFO_COLUMN_MARKER = "ADD-";
-
-    private static final String SEPARATOR_CHARACTER_AMPERSAND = "&";
-    private static final String SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE = "&amp;";
 
     private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
