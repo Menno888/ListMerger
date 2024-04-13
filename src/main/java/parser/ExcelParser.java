@@ -14,8 +14,10 @@ import java.util.ArrayList;
 
 public class ExcelParser {
 
+    private static final int SONG_DATA_START_SHEET = 0;
     private static final int HEADER_ROW_NUM = 0;
     private static final int SONG_DATA_START_ROW_NUM = 1;
+    private static final int SONG_DATA_START_COL_NUM = 0;
     private static final int ARTIST_COLUMN_NUM = 0;
     private static final int TITLE_COLUMN_NUM = 1;
     private static final String INFO_COLUMN_MARKER = "ADD-";
@@ -41,13 +43,13 @@ public class ExcelParser {
         }
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
-            final XSSFSheet sheet = myWorkBook.getSheetAt(0);
+            final XSSFSheet sheet = myWorkBook.getSheetAt(SONG_DATA_START_SHEET);
             final DataFormatter formatter = new DataFormatter();
 
             final int numOfRows = getActualNumberOfRows(sheet);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
-            for (int cellNum = 0; cellNum < numOfCols; cellNum++) {
+            for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
                 final Cell cell = sheet.getRow(HEADER_ROW_NUM).getCell(cellNum);
                 final String headerValue = cell.getStringCellValue();
                 listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
@@ -56,7 +58,7 @@ public class ExcelParser {
             for (int rowNum = SONG_DATA_START_ROW_NUM; rowNum < numOfRows; rowNum++) {
                 final Row row = sheet.getRow(rowNum);
                 final Song song = new Song();
-                for (int cellNum = 0; cellNum < numOfCols; cellNum++) {
+                for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
                     final Cell cell = row.getCell(cellNum);
                     if (cellNum == ARTIST_COLUMN_NUM) {
                         song.setArtist(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
