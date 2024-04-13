@@ -28,7 +28,6 @@ public class ExcelParser {
     private final SongList songList = new SongList();
 
     public SongList parseExcel(String inFile) {
-        final ArrayList<String> listAbbreviations = new ArrayList<>();
         InputStream inputStream;
 
         try {
@@ -46,7 +45,7 @@ public class ExcelParser {
             final XSSFSheet sheet = myWorkBook.getSheetAt(SONG_DATA_START_SHEET);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
-            loadExcelHeaderData(sheet, numOfCols, listAbbreviations);
+            final ArrayList<String> listAbbreviations = loadExcelHeaderData(sheet, numOfCols);
             loadExcelSongData(sheet, numOfCols, listAbbreviations);
 
             System.out.println("Successfully parsed " + inFile);
@@ -64,12 +63,14 @@ public class ExcelParser {
         return songList;
     }
 
-    private void loadExcelHeaderData(final XSSFSheet sheet, final int numOfCols, final ArrayList<String> listAbbreviations) {
+    private ArrayList<String> loadExcelHeaderData(final XSSFSheet sheet, final int numOfCols) {
+        final ArrayList<String> listAbbreviations = new ArrayList<>();
         for (int cellNum = SONG_DATA_START_COL_NUM; cellNum < numOfCols; cellNum++) {
             final Cell cell = sheet.getRow(HEADER_ROW_NUM).getCell(cellNum);
             final String headerValue = cell.getStringCellValue();
             listAbbreviations.add(getListAbbreviationIfParenthesesElseFullName(headerValue));
         }
+        return listAbbreviations;
     }
 
     private void loadExcelSongData(final XSSFSheet sheet, final int numOfCols, final ArrayList<String> listAbbreviations) {
