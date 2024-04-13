@@ -44,12 +44,10 @@ public class ExcelParser {
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
             final XSSFSheet sheet = myWorkBook.getSheetAt(SONG_DATA_START_SHEET);
-
-            final int numOfRows = getActualNumberOfRows(sheet);
             final int numOfCols = getActualNumberOfColumns(sheet);
 
             loadExcelHeaderData(sheet, numOfCols, listAbbreviations);
-            loadExcelSongData(sheet, numOfRows, numOfCols, listAbbreviations);
+            loadExcelSongData(sheet, numOfCols, listAbbreviations);
 
             System.out.println("Successfully parsed " + inFile);
 
@@ -74,8 +72,10 @@ public class ExcelParser {
         }
     }
 
-    private void loadExcelSongData(final XSSFSheet sheet, final int numOfRows, final int numOfCols, final ArrayList<String> listAbbreviations) {
+    private void loadExcelSongData(final XSSFSheet sheet, final int numOfCols, final ArrayList<String> listAbbreviations) {
         final DataFormatter formatter = new DataFormatter();
+        final int numOfRows = getActualNumberOfRows(sheet);
+
         for (int rowNum = SONG_DATA_START_ROW_NUM; rowNum < numOfRows; rowNum++) {
             final Row row = sheet.getRow(rowNum);
             final Song song = new Song();
