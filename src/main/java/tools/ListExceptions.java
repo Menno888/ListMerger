@@ -1,3 +1,5 @@
+package tools;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,7 +9,9 @@ public class ListExceptions {
 
     private static final ArrayList<String> list = new ArrayList<>();
 
-    public ListExceptions() {}
+    private ListExceptions() {
+        //No-args
+    }
 
     public static boolean checkList(final String listName) {
         try {

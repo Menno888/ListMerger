@@ -1,17 +1,19 @@
+package dto;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Record {
+public class Song {
     private String artist;
     private String title;
     private Map<String, Integer> positionMap = new LinkedHashMap<>();
     private Map<String, Object> additionalInformationMap = new LinkedHashMap<>();
 
-    public Record() {
-
+    public Song() {
+        //No-args
     }
 
-    public Record(String artist, String title) {
+    public Song(String artist, String title) {
         this.artist = artist;
         this.title = title;
     }

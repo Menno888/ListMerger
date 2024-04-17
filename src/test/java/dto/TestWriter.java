@@ -1,3 +1,5 @@
+package dto;
+
 import java.io.*;
 
 import org.junit.jupiter.api.Test;
@@ -8,10 +10,10 @@ class TestWriter {
     @Test
     void testWriteDiacritics() throws IOException {
         final SongList songList = new SongList();
-        final Record record = new Record("áéíäçèôñ", ",.-=/+1234567890");
-        record.addPositionToMap("List1", 1);
-        record.addPositionToMap("List2", 2000);
-        songList.add(record);
+        final Song song = new Song("áéíäçèôñ", ",.-=/+1234567890");
+        song.addPositionToMap("List1", 1);
+        song.addPositionToMap("List2", 2000);
+        songList.add(song);
 
         songList.outputToFile( "testwritediacritics.xml", "y,y,y");
 
