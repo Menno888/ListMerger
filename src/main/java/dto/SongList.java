@@ -42,7 +42,8 @@ public class SongList extends ArrayList<Song> {
 
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                final boolean fileCreated = file.createNewFile();
+                System.out.println("Created file with success status: " + fileCreated);
             } catch (final IOException e) {
                 e.printStackTrace();
             }
@@ -58,6 +59,7 @@ public class SongList extends ArrayList<Song> {
         }
 
         try {
+            assert writer != null;
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
             writer.newLine();
             writer.write("<top2000database2014>");
@@ -69,8 +71,15 @@ public class SongList extends ArrayList<Song> {
             }
             writer.write("</top2000database2014>");
             writer.close();
-        } catch (final IOException e) {
+        } catch (final IOException | NullPointerException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                assert writer != null;
+                writer.close();
+            } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println("Output to " + outFile);
@@ -87,24 +96,24 @@ public class SongList extends ArrayList<Song> {
 
         if ("y".equals(prettyPrint)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
 
-        stringBuilder.append(indentation + "<record>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Artiest>" + song.getArtist() + "</Artiest>" + lineBreak);
-        stringBuilder.append(repeat(indentation, 2) + "<Nummer>" + song.getTitle() + "</Nummer>" + lineBreak);
+        stringBuilder.append(indentation).append("<record>").append(lineBreak);
+        stringBuilder.append(indentation.repeat(2)).append("<Artiest>").append(song.getArtist()).append("</Artiest>").append(lineBreak);
+        stringBuilder.append(indentation.repeat(2)).append("<Nummer>").append(song.getTitle()).append("</Nummer>").append(lineBreak);
         if ("y".equals(countPositions)) {
             final long numberOfPositions = getPositionsCount(song, positions);
-            stringBuilder.append(repeat(indentation, 2) + "<appearances>" + numberOfPositions + "</appearances>" + lineBreak);
+            stringBuilder.append(indentation.repeat(2)).append("<appearances>").append(numberOfPositions).append("</appearances>").append(lineBreak);
         }
         if (!"n".equals(positions)) {
             for (final Map.Entry<String, Integer> pair : song.getPositionMap().entrySet()) {
                 if ("y".equals(positions) || pair.getKey().substring(pair.getKey().length() - 4).equals(positions)) {
-                    stringBuilder.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
+                    stringBuilder.append(indentation.repeat(2)).append("<").append(pair.getKey()).append(">").append(pair.getValue()).append("</").append(pair.getKey()).append(">").append(lineBreak);
                 }
             }
         }
         for (final Map.Entry<String, Object> pair : song.getAdditionalInformationMap().entrySet()) {
-            stringBuilder.append(repeat(indentation, 2) + "<" + pair.getKey() + ">" + pair.getValue() + "</" + pair.getKey() + ">" + lineBreak);
+            stringBuilder.append(indentation.repeat(2)).append("<").append(pair.getKey()).append(">").append(pair.getValue()).append("</").append(pair.getKey()).append(">").append(lineBreak);
         }
-        stringBuilder.append(indentation + "</record>");
+        stringBuilder.append(indentation).append("</record>");
 
         return stringBuilder.toString();
     }
@@ -119,14 +128,6 @@ public class SongList extends ArrayList<Song> {
         }
 
         return numberOfPositions;
-    }
-
-    private String repeat(final String str, final int times) {
-        final StringBuilder sb = new StringBuilder(str.length() * times);
-        for (int i = 0; i < times; i++) {
-            sb.append(str);
-        }
-        return sb.toString();
     }
 
     public List<String> tagCheckup() {
