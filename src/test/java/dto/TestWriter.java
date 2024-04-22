@@ -38,6 +38,7 @@ class TestWriter {
                 .contains("    ");
 
         final File toRemove = new File("testwritediacritics.xml");
-        toRemove.delete();
+        final boolean removedFile = toRemove.delete();
+        System.out.println("Removed file with success value: " + removedFile);
     }
 }
