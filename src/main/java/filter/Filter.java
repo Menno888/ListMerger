@@ -105,7 +105,7 @@ public class Filter {
                 listSubstring = listToCheck.substring(listToCheck.length() - 5, listToCheck.length() - 1);
             }
         }
-        return filterLists.contains(listSubstring);
+        return filterLists.contains(listSubstring) || filterLists.contains(listToCheck);
     }
 
     private static void removeAllUnusedListsFromSelection(final SongList songList, final List<String> allEditions) {
