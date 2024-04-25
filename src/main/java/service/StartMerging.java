@@ -42,7 +42,7 @@ public class StartMerging {
     private static void filterSongList() {
         System.out.println("Filter lists (fl) or years (fy)?");
         String filterOption = sc.nextLine();
-        System.out.println("Type lists or a set of list");
+        System.out.println("Type list abbreviation/year or set of list abbreviations/years separated by commas to filter on");
         String toKeep = sc.nextLine();
         Filter.filter(songList, toKeep, filterOption);
     }

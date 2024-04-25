@@ -69,11 +69,18 @@ public class Filter {
     }
 
     private static List<String> getListsFromFilterStringAndFilterOption(final SongList songList, final String lists, final String filterOption) {
-        final List<String> toKeepList = Arrays.asList(lists.split(SEPARATOR_CHARACTER_COMMA));
+        final String[] toKeepList = lists.split(SEPARATOR_CHARACTER_COMMA);
         final List<String> allEditions = songList.tagCheckup();
         final List<String> newList = new ArrayList<>();
         for (final String edition : allEditions) {
-            if (shouldKeepListStringBasedOnEditionListAndFilterOption(edition, toKeepList, filterOption)) {
+            boolean hasMatch = false;
+            for (final String filterSingleList : toKeepList) {
+                if (listAbbreviationIsSubstringOfFullListAbbreviation(edition, filterSingleList, filterOption)) {
+                    hasMatch = true;
+                    break;
+                }
+            }
+            if (hasMatch) {
                 newList.add(edition);
             }
         }
@@ -82,30 +89,26 @@ public class Filter {
     }
 
     /*
-    Matches a list abbreviations on whether it should, depending on the filter setting, for instance:
-    LIST2020B, [LIST], "fl" -> true
-    LIST1999, [NOPE], "fl" -> false
-    LIST2000B, [1999,2000], "fy" -> true
-    LIST2012, [2011,2013], "fy" -> false
+    Matches a list abbreviations on whether it should be added (ignores appendix when filtering on lists), depending on the filter setting, for instance:
+    VA2003, VA, "fl" -> true
+    VA2003B, VA, "fl" -> false
+    JA2003, VA, "fl" -> false
+    R2NLA1999, 1999, "fy" -> true
+    VA2003B, 2003, "fy" -> true
+    R2NLA1999, 2000, "fy" -> false
      */
-    private static boolean shouldKeepListStringBasedOnEditionListAndFilterOption(final String listToCheck, final List<String> filterLists, final String filterOption) {
-        String listSubstring;
+    private static boolean listAbbreviationIsSubstringOfFullListAbbreviation(final String listToCheck, final String filterSingleList, final String filterOption) {
         boolean filterOnLists = "fl".equals(filterOption);
-        boolean listEndsInYear = Character.isDigit(listToCheck.charAt(listToCheck.length() - 1));
-        if (filterOnLists) {
-            if (listEndsInYear) {
-                listSubstring = listToCheck.substring(0, listToCheck.length() - 4);
-            } else {
-                listSubstring = listToCheck.substring(0, listToCheck.length() - 5);
-            }
-        } else {
-            if (listEndsInYear) {
-                listSubstring = listToCheck.substring(listToCheck.length() - 4);
-            } else {
-                listSubstring = listToCheck.substring(listToCheck.length() - 5, listToCheck.length() - 1);
-            }
+        final boolean abbreviationEndsWithAppendix = !Character.isDigit(listToCheck.charAt(listToCheck.length() - 1));
+        final int offset = abbreviationEndsWithAppendix ? 1 : 0;
+        if (abbreviationEndsWithAppendix && filterOnLists) {
+            return listToCheck.equals(filterSingleList);
         }
-        return filterLists.contains(listSubstring) || filterLists.contains(listToCheck);
+        if (filterOnLists) {
+            return listToCheck.startsWith(filterSingleList);
+        } else {
+            return listToCheck.substring(listToCheck.length() - (4 + offset), listToCheck.length() - offset).equals(filterSingleList);
+        }
     }
 
     private static void removeAllUnusedListsFromSelection(final SongList songList, final List<String> allEditions) {
