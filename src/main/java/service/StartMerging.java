@@ -75,7 +75,7 @@ public class StartMerging {
     }
 
     private static void parseExcelFile() {
-        System.out.println("Enter an excel file to merge:");
+        System.out.println("Enter an xlsx file to merge:");
         String inExcel = sc.nextLine();
         System.out.println("Enter a file name to output xml to (leave blank for original file name):");
         String outXml = sc.nextLine();

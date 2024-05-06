@@ -3,6 +3,8 @@ package dto;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static tools.FieldUtil.SEPARATOR_CHARACTER_HYPHEN_SPACED;
+
 public class Song {
     private String artist;
     private String title;
@@ -19,7 +21,7 @@ public class Song {
     }
 
     public String showSong() {
-        return this.artist + " - " + this.title;
+        return this.artist + SEPARATOR_CHARACTER_HYPHEN_SPACED + this.title;
     }
 
     public void setArtist(String artist) {
@@ -46,15 +48,15 @@ public class Song {
         return this.additionalInformationMap;
     }
 
-    public void cleanPositionMap() {
+    public void clearPositionMap() {
         this.positionMap.clear();
     }
 
-    public void addPositionToMap(String key, int value) {
+    public void addPositionToMap(final String key, final int value) {
         this.positionMap.put(key, value);
     }
 
-    public void addInfoToMap(String key, Object value) {
+    public void addInfoToMap(final String key, final Object value) {
         this.additionalInformationMap.put(key, value);
     }
 }

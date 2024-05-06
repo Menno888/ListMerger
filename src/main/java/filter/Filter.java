@@ -54,7 +54,7 @@ public class Filter {
                 }
             }
             if (shouldRemoveSongBasedOnNumberOfEntriesAndAppearanceRules(containsEntries, shouldAppear, shouldAppearInAll)) {
-                currentSong.cleanPositionMap();
+                currentSong.clearPositionMap();
             }
         }
         songList.normalize();
@@ -89,26 +89,36 @@ public class Filter {
     }
 
     /*
-    Matches a list abbreviations on whether it should be added (ignores appendix when filtering on lists), depending on the filter setting, for instance:
-    VA2003, VA, "fl" -> true
-    VA2003B, VA, "fl" -> false
-    JA2003, VA, "fl" -> false
-    R2NLA1999, 1999, "fy" -> true
-    VA2003B, 2003, "fy" -> true
-    R2NLA1999, 2000, "fy" -> false
+    Matches a list abbreviations on whether it should be added, counting lists with appendices only when searching for one source or a year
+    VRNCA2003, VRNCA, "fl" -> true (matches source and category)
+    VRNCA2003B, VRNCA, "fl" -> false (matches source and category, but isn't considered part of the series)
+    VRNCA2003B, VRNC, "fl" -> true (matches source, every abbreviation starting with the filter counts)
+    JOBEA2003, VRNCA, "fl" -> false (doesn't match source and category)
+    R2NLA1999, 1999, "fy" -> true (matches year)
+    VRNCA2003B, 2003, "fy" -> true (matches year, every abbreviation containing it at the end counts)
+    R2NLA1999, 2000, "fy" -> false (doesn't match year)
      */
     private static boolean listAbbreviationIsSubstringOfFullListAbbreviation(final String listToCheck, final String filterSingleList, final String filterOption) {
         boolean filterOnLists = "fl".equals(filterOption);
-        final boolean abbreviationEndsWithAppendix = !Character.isDigit(listToCheck.charAt(listToCheck.length() - 1));
-        final int offset = abbreviationEndsWithAppendix ? 1 : 0;
-        if (abbreviationEndsWithAppendix && filterOnLists) {
-            return listToCheck.equals(filterSingleList);
+        final boolean abbreviationEndsInAppendix = listAbbreviationEndsInLetter(listToCheck);
+        final int offset = abbreviationEndsInAppendix ? 1 : 0;
+        if (abbreviationEndsInAppendix && filterOnLists) {
+            return listToCheck.equals(filterSingleList) || filterSingleList.length() == 4;
         }
         if (filterOnLists) {
-            return listToCheck.startsWith(filterSingleList);
+            final String listToCheckWithoutYear = listToCheck.substring(0, listToCheck.length() - 4);
+            if (!listAbbreviationEndsInLetter(filterSingleList) || filterSingleList.length() == 4) {
+                return listToCheck.startsWith(filterSingleList);
+            } else {
+                return listToCheckWithoutYear.equals(filterSingleList);
+            }
         } else {
             return listToCheck.substring(listToCheck.length() - (4 + offset), listToCheck.length() - offset).equals(filterSingleList);
         }
+    }
+
+    private static boolean listAbbreviationEndsInLetter(final String listAbbreviation) {
+        return !Character.isDigit(listAbbreviation.charAt(listAbbreviation.length() - 1));
     }
 
     private static void removeAllUnusedListsFromSelection(final SongList songList, final List<String> allEditions) {

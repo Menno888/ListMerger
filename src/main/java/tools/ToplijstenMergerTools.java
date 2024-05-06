@@ -28,13 +28,13 @@ public class ToplijstenMergerTools {
             switch (control) {
                 case "hp" -> outputHighestPositionsForSongs(list);
                 case "lp" -> outputLowestPositionsForSongs(list);
-                case "wp" -> cleanPositionMap(list);
+                case "wp" -> clearPositionMap(list);
                 case "re" -> outputReentriesForSongs(list);
                 case "pl" -> outputPointListForSongs(list);
                 case "ye" -> outputDiffListPerYearForSongs(list);
                 case "fa" -> filterOnArtist(list);
                 case "ft" -> filterOnTitle(list);
-                case "aa" -> outputAveragesAndNumberOfAppearancesForSongs(list);
+                case "aa" -> outputNumberOfAppearancesAndAveragesForSongs(list);
                 case "dl" -> outputTwoDiffListsForSongs();
                 case "q" -> takeInput = false;
                 default -> System.out.println("Invalid input, try again");
@@ -70,7 +70,7 @@ public class ToplijstenMergerTools {
             newList.add(r);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList with highest positions");
+        System.out.println("Wrote current SongList with highest positions");
     }
 
     private static void outputLowestPositionsForSongs(final SongList list) {
@@ -101,18 +101,18 @@ public class ToplijstenMergerTools {
             newList.add(r);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList with lowest positions");
+        System.out.println("Wrote current SongList with lowest positions");
     }
 
-    private static void cleanPositionMap(final SongList list) {
+    private static void clearPositionMap(final SongList list) {
         for (final Song r : list) {
-            r.cleanPositionMap();
+            r.clearPositionMap();
         }
         System.out.println("Done cleaning positions");
     }
 
     private static void outputReentriesForSongs(final SongList list) {
-        System.out.println("Give the lists separated by commas:");
+        System.out.println("Give the exact lists separated by commas:");
         final String lists = sc.nextLine();
         final SongList newList = new SongList();
         final String[] reentryList = lists.split(SEPARATOR_CHARACTER_COMMA);
@@ -135,7 +135,7 @@ public class ToplijstenMergerTools {
             newList.add(r);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList with number of reentries");
+        System.out.println("Wrote current SongList with number of reentries");
     }
 
     private static void outputPointListForSongs(final SongList list) {
@@ -184,7 +184,7 @@ public class ToplijstenMergerTools {
             newList.add(r);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList calculated with number of points and remainder");
+        System.out.println("Wrote current SongList calculated with number of points and remainder");
     }
 
     private static void outputDiffListPerYearForSongs(final SongList list) {
@@ -210,7 +210,7 @@ public class ToplijstenMergerTools {
             newList.add(copy);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList calculated with average climb/drop and remainder");
+        System.out.println("Wrote current SongList calculated with average climb/drop and remainder");
     }
 
     private static void filterOnArtist(final SongList list) {
@@ -221,7 +221,7 @@ public class ToplijstenMergerTools {
                 .filter(e -> e.getArtist().toLowerCase().contains(filterString.toLowerCase()))
                 .collect(Collectors.toCollection(SongList::new));
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList filtered on artist");
+        System.out.println("Wrote current SongList filtered on artist");
     }
 
     private static void filterOnTitle(final SongList list) {
@@ -232,10 +232,10 @@ public class ToplijstenMergerTools {
                 .filter(e -> e.getTitle().toLowerCase().contains(filterString.toLowerCase()))
                 .collect(Collectors.toCollection(SongList::new));
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList filtered on title");
+        System.out.println("Wrote current SongList filtered on title");
     }
 
-    private static void outputAveragesAndNumberOfAppearancesForSongs(final SongList list) {
+    private static void outputNumberOfAppearancesAndAveragesForSongs(final SongList list) {
         final SongList newList = new SongList();
         for (final Song r : list) {
             final Song newSong = new Song();
@@ -251,7 +251,7 @@ public class ToplijstenMergerTools {
             newList.add(newSong);
         }
         newList.outputToFile();
-        System.out.println("Wrote current dto.SongList with number of appearances and average position");
+        System.out.println("Wrote current SongList with number of appearances and average position");
     }
 
     private static void outputTwoDiffListsForSongs() {
@@ -265,13 +265,13 @@ public class ToplijstenMergerTools {
         final SongList newListLeftResult = new SongList();
         final SongList newListRightResult = new SongList();
         for (Song r : newListLeft) {
-            r.cleanPositionMap();
+            r.clearPositionMap();
             if (!newListRight.contains(r)) {
                 newListLeftResult.add(r);
             }
         }
         for (Song r : newListRight) {
-            r.cleanPositionMap();
+            r.clearPositionMap();
             if (!newListLeft.contains(r)) {
                 newListRightResult.add(r);
             }

@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 
-class TestSpecialCharacters {
+class SpecialCharactersTest {
 
     @Test
     void testReadAmpersands() {

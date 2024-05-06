@@ -5,7 +5,7 @@ import java.io.*;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestWriter {
+class WriterTest {
 
     @Test
     void testWriteDiacritics() throws IOException {

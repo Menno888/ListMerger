@@ -9,7 +9,7 @@ import util.FileUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestXMLParser {
+class XMLParserTest {
 
     @Test
     void testReadDiacritics() {

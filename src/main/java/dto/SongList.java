@@ -65,7 +65,7 @@ public class SongList extends ArrayList<Song> {
             writer.write("<top2000database2014>");
             writer.newLine();
             for (final Song song : this) {
-                final String output = convertSong(song, positions, prettyPrint, countPositions);
+                final String output = convertSongToXML(song, positions, prettyPrint, countPositions);
                 writer.write(output);
                 writer.newLine();
             }
@@ -89,12 +89,10 @@ public class SongList extends ArrayList<Song> {
         return this.stream().anyMatch(r -> (r.getArtist()).equals(song.getArtist()) && (r.getTitle()).equals(song.getTitle()));
     }
 
-    private String convertSong(final Song song, final String positions, final String prettyPrint, final String countPositions) {
+    private String convertSongToXML(final Song song, final String positions, final String prettyPrint, final String countPositions) {
         final StringBuilder stringBuilder = new StringBuilder();
-        String indentation;
-        String lineBreak;
-
-        if ("y".equals(prettyPrint)) {indentation = "    "; lineBreak = "\n";} else {indentation = ""; lineBreak = "";}
+        final String indentation = "y".equals(prettyPrint) ? "    " : "";
+        final String lineBreak = "y".equals(prettyPrint) ? "\n" : "";
 
         stringBuilder.append(indentation).append("<record>").append(lineBreak);
         stringBuilder.append(indentation.repeat(2)).append("<Artiest>").append(song.getArtist()).append("</Artiest>").append(lineBreak);
