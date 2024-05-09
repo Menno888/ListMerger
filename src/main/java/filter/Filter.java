@@ -90,6 +90,7 @@ public class Filter {
 
     /*
     Matches a list abbreviations on whether it should be added, counting lists with appendices only when searching for one source or a year
+    Abbreviations consist of a four letter source, one/two alphanumeric character category, a four digit year and a possible letter appendix
     VRNCA2003, VRNCA, "fl" -> true (matches source and category)
     VRNCA2003B, VRNCA, "fl" -> false (matches source and category, but isn't considered part of the series)
     VRNCA2003B, VRNC, "fl" -> true (matches source, every abbreviation starting with the filter counts)
