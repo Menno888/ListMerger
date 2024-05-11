@@ -70,7 +70,7 @@ class FilterTest {
     //Input: y,n,n
     @Test
     void testFilterFOneYear() {
-        Filter.filter(songList, "1999", "fy");
+        Filter.filter(songList, "199", "fy");
         assertThat(songList.tagCheckup()).containsExactlyInAnyOrder("LISTA1999", "LISTA1999B", "LISTAB1999", "LIST01999", "NOPEA1999");
     }
 

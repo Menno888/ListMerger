@@ -99,6 +99,7 @@ public class Filter {
     R2NLA1999, 1999, "fy" -> true (matches year)
     VRNCA2003B, 2003, "fy" -> true (matches year, every abbreviation containing it at the end counts)
     R2NLA1999, 2000, "fy" -> false (doesn't match year)
+    R2NLA2002B, 200, "fy" -> true (matches with start of year)
      */
     private static boolean listAbbreviationIsSubstringOfFullListAbbreviation(final String listToCheck, final String filterSingleList, final String filterOption) {
         boolean filterOnLists = "fl".equals(filterOption);
@@ -115,7 +116,7 @@ public class Filter {
                 return listToCheckWithoutYear.equals(filterSingleList);
             }
         } else {
-            return listToCheck.substring(listToCheck.length() - (4 + offset), listToCheck.length() - offset).equals(filterSingleList);
+            return listToCheck.substring(listToCheck.length() - (4 + offset), listToCheck.length() - offset).startsWith(filterSingleList);
         }
     }
 
