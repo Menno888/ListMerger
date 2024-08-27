@@ -6,7 +6,7 @@ For instance merging
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<top2000database2014>
 <record>
     <Artiest>AC/DC</Artiest>
     <Nummer>Highway To Hell</Nummer>
@@ -24,7 +24,7 @@ with
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<top2000database2014>
 <record>
     <Artiest>Rolling Stones</Artiest>
     <Nummer>Angie</Nummer>
@@ -42,7 +42,7 @@ would yield:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<top2000database2014 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<top2000database2014>
 <record>
     <Artiest>AC/DC</Artiest>
     <Nummer>Highway To Hell</Nummer>
@@ -71,4 +71,6 @@ would yield:
 2.1     CLEANED UP STARTMERGING.JAVA  
 2.2     ADDED LIST.EXCEPTIONS TO IGNORE XML FILES  
 2.3     MADE SYSTEM OUTS NICER, IMPROVED EXCEL HANDLING  
-3.1     NO LONGER USING RECORDCLEANER/SONGEXCEPTIONS
+3.1     NO LONGER USING RECORDCLEANER/SONGEXCEPTIONS  
+3.2     ADDED ADDITIONAL INFO COLUMNS, MAJOR CODE IMPROVEMENTS  
+3.3     MADE MODULE SONARLINT COMPLIANT, ADVANCED FILTERING
