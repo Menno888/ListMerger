@@ -33,11 +33,13 @@ public class ExcelParser {
         }
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
-            final XSSFSheet sheet = myWorkBook.getSheetAt(SONG_DATA_START_SHEET);
-            final int numOfCols = getActualNumberOfColumns(sheet);
-
-            final ArrayList<String> listAbbreviations = loadExcelHeaderData(sheet, numOfCols);
-            loadExcelSongData(sheet, numOfCols, listAbbreviations);
+            final int numOfSheets = myWorkBook.getNumberOfSheets();
+            for (int i = SONG_DATA_START_SHEET; i < numOfSheets; i++) {
+                final String sheetName = myWorkBook.getSheetAt(i).getSheetName();
+                if (sheetName.toLowerCase().startsWith(SHEET_DATA_MARKER_LOWER_CASE) || numOfSheets == 1) {
+                    loadExcelSheetData(myWorkBook.getSheetAt(i));
+                }
+            }
 
             System.out.println("Successfully parsed " + inFile);
 
@@ -52,6 +54,13 @@ public class ExcelParser {
         }
 
         return songList;
+    }
+
+    private void loadExcelSheetData(final XSSFSheet sheet) {
+        final int numOfCols = getActualNumberOfColumns(sheet);
+
+        final ArrayList<String> listAbbreviations = loadExcelHeaderData(sheet, numOfCols);
+        loadExcelSongData(sheet, numOfCols, listAbbreviations);
     }
 
     private ArrayList<String> loadExcelHeaderData(final XSSFSheet sheet, final int numOfCols) {

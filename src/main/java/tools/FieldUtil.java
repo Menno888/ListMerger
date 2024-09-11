@@ -20,6 +20,7 @@ public final class FieldUtil {
     public static final int SONG_DATA_START_COL_NUM = 0;
     public static final int ARTIST_COLUMN_NUM = 0;
     public static final int TITLE_COLUMN_NUM = 1;
+    public static final String SHEET_DATA_MARKER_LOWER_CASE = "totaal";
 
     //XML
     public static final String COLUMN_HEADER_RECORD = "record";
