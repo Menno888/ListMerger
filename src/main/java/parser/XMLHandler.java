@@ -44,7 +44,7 @@ public class XMLHandler extends DefaultHandler {
     public void characters(final char[] ch, final int start, final int length) {
         if (building) {
             String value = new String(ch, start, length);
-            if (new String(ch, start, length).trim().length() == 0) {
+            if (new String(ch, start, length).trim().isEmpty()) {
                 return;
             }
 

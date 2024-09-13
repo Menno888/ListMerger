@@ -266,13 +266,13 @@ public class ToplijstenMergerTools {
         final SongList newListRightResult = new SongList();
         for (Song r : newListLeft) {
             r.clearPositionMap();
-            if (!newListRight.contains(r)) {
+            if (newListRight.containsNo(r)) {
                 newListLeftResult.add(r);
             }
         }
         for (Song r : newListRight) {
             r.clearPositionMap();
-            if (!newListLeft.contains(r)) {
+            if (newListLeft.containsNo(r)) {
                 newListRightResult.add(r);
             }
         }

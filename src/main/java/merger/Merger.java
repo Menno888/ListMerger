@@ -3,7 +3,6 @@ package merger;
 import dto.SongList;
 import org.apache.commons.io.FileUtils;
 import parser.XMLParser;
-import tools.ListExceptions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,9 +44,7 @@ public class Merger {
     private static boolean shouldListBeAdded(final File fileInDir, final String[] filesToMerge) {
         boolean existsAndStartsWith = false;
         for (final String fileToMerge : filesToMerge) {
-            if (fileInDir.isFile() &&
-                    !(ListExceptions.isListToBeExcluded(fileInDir.getName())) &&
-                    fileInDir.getName().startsWith(fileToMerge)) {
+            if (fileInDir.isFile() && fileInDir.getName().startsWith(fileToMerge)) {
                 existsAndStartsWith = true;
             }
         }

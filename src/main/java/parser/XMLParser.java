@@ -37,7 +37,7 @@ public class XMLParser {
         } catch (final FileNotFoundException e) {
             System.out.println("File not found, try again");
         } catch (final ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
+            System.out.println("Couldn't parse file, exception: " + e);
         }
 
         return list;

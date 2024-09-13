@@ -53,7 +53,7 @@ public class ExcelParser {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Couldn't close input stream, exception: " + e);
             }
         }
 

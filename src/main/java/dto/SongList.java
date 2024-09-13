@@ -45,7 +45,7 @@ public class SongList extends ArrayList<Song> {
                 final boolean fileCreated = file.createNewFile();
                 System.out.println("Created file with success status: " + fileCreated);
             } catch (final IOException e) {
-                e.printStackTrace();
+                System.out.println("Couldn't create output file, exception: " + e);
             }
         }
 
@@ -55,7 +55,7 @@ public class SongList extends ArrayList<Song> {
             fileStream = new FileOutputStream(file.getAbsoluteFile());
             writer = new BufferedWriter(new OutputStreamWriter(fileStream, StandardCharsets.UTF_8));
         } catch (final IOException e) {
-            e.printStackTrace();
+            System.out.println("Couldn't write to file, exception: " + e);
         }
 
         try {
@@ -72,21 +72,21 @@ public class SongList extends ArrayList<Song> {
             writer.write("</top2000database2014>");
             writer.close();
         } catch (final IOException | NullPointerException e) {
-            e.printStackTrace();
+            System.out.println("Couldn't write to file, exception: " + e);
         } finally {
             try {
                 assert writer != null;
                 writer.close();
             } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
+                System.out.println("Issue closing the writer, exception: " + e);
             }
         }
 
         System.out.println("Output to " + outFile);
     }
 
-    public boolean contains(final Song song) {
-        return this.stream().anyMatch(r -> (r.getArtist()).equals(song.getArtist()) && (r.getTitle()).equals(song.getTitle()));
+    public boolean containsNo(final Song song) {
+        return this.stream().noneMatch(r -> (r.getArtist()).equals(song.getArtist()) && (r.getTitle()).equals(song.getTitle()));
     }
 
     private String convertSongToXML(final Song song, final String positions, final String prettyPrint, final String countPositions) {
@@ -145,7 +145,7 @@ public class SongList extends ArrayList<Song> {
         final Iterator<Song> it = this.iterator();
         while (it.hasNext()) {
             final Song item = it.next();
-            if (item.getPositionMap().size() == 0) {
+            if (item.getPositionMap().isEmpty()) {
                 it.remove();
                 System.out.println("Removed " + item.showSong());
             }
