@@ -13,7 +13,7 @@ public class ListExceptions {
         //No-args
     }
 
-    public static boolean checkList(final String listName) {
+    public static boolean isListToBeExcluded(final String listName) {
         try {
             final Scanner scanner = new Scanner(new File("list.exceptions"));
             while (scanner.hasNext()) {
@@ -21,7 +21,7 @@ public class ListExceptions {
             }
             scanner.close();
         } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            return false;
         }
         return list.contains(listName);
     }

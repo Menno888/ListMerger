@@ -6,5 +6,4 @@ target/
 src/main/java/*.xml
 src/main/resources/*.xml
 src/main/java/*.xlsx
-src/main/resources/*.xlsx
-src/main/resources/list.exceptions
+src/main/resources
