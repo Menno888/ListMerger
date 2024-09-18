@@ -11,7 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static tools.FieldUtil.*;
 
@@ -34,18 +33,14 @@ public class ExcelParser {
         }
 
         try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
-            final List<String> sheetNames = new ArrayList<>();
             final int numOfSheets = myWorkBook.getNumberOfSheets();
             for (int i = SONG_DATA_START_SHEET; i < numOfSheets; i++) {
                 final String sheetName = myWorkBook.getSheetAt(i).getSheetName();
                 if (sheetName.toLowerCase().startsWith(SHEET_DATA_MARKER_LOWER_CASE) || numOfSheets == 1) {
                     loadExcelSheetData(myWorkBook.getSheetAt(i));
-                    sheetNames.add(sheetName);
+                    System.out.println("Successfully parsed sheet: " + sheetName);
                 }
             }
-
-            final String parsedSheetNames = String.join(", ", sheetNames);
-            System.out.println("Successfully parsed " + inFile + ", sheet names: " + parsedSheetNames);
 
         } catch (IOException | IllegalStateException e) {
             System.out.println("File not found, try again");
