@@ -23,7 +23,7 @@ public class ToplijstenMergerTools {
 
     public static void getTools(final SongList list) {
         while (takeInput) {
-            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (t)itle, (a)verage (a)ppearances, (d)iff (l)ist l/r");
+            System.out.println("Tools: (h)ighest (p)ositions, (l)owest (p)ositions, (w)ithout (p)ositions, count (re)entries, (p)oint (l)ist, (q)uit, (y)early (e)xtremes, (f)ilter (a)rtist, (f)ilter (p)ositions, (f)ilter (t)itle, (a)verage (a)ppearances, (d)iff (l)ist l/r");
             final String control = sc.nextLine();
             switch (control) {
                 case "hp" -> outputHighestPositionsForSongs(list);
@@ -33,6 +33,7 @@ public class ToplijstenMergerTools {
                 case "pl" -> outputPointListForSongs(list);
                 case "ye" -> outputDiffListPerYearForSongs(list);
                 case "fa" -> filterOnArtist(list);
+                case "fp" -> filterOnArtistAndInRange(list);
                 case "ft" -> filterOnTitle(list);
                 case "aa" -> outputNumberOfAppearancesAndAveragesForSongs(list);
                 case "dl" -> outputTwoDiffListsForSongs();
@@ -170,7 +171,7 @@ public class ToplijstenMergerTools {
                     totalPoints += (highestListValuePlusOne - position);
                 }
             }
-            double finalPoints = (double) totalPoints / (double) listsAndLengths.size();
+            final double finalPoints = (double) totalPoints / (double) listsAndLengths.size();
             songAndPoints2.put(r.getArtist() + SEPARATOR_CHARACTER_PIPE + r.getTitle(), finalPoints);
         }
         final SongList newList = new SongList();
@@ -235,6 +236,50 @@ public class ToplijstenMergerTools {
         System.out.println("Wrote current SongList filtered on title");
     }
 
+    private static void filterOnArtistAndInRange(final SongList list) {
+        System.out.println("Enter the words to filter on");
+        final String filterString = sc.nextLine();
+        System.out.println("Enter a minimum value (including)");
+        final int minValue = sc.nextInt();
+        System.out.println("Enter a maximum value (including)");
+        final int maxValue = sc.nextInt();
+        final SongList newListFiltered = new SongList();
+        for (final Song r : list) {
+            if (r.getArtist().toLowerCase().contains(filterString.toLowerCase())) {
+                final Song newSong = new Song();
+                newSong.setArtist(r.getArtist());
+                newSong.setTitle(r.getTitle());
+                for (final Map.Entry<String, Integer> keyAndValue : r.getPositionMap().entrySet()) {
+                    if (keyAndValue.getValue() >= minValue && keyAndValue.getValue() <= maxValue) {
+                        newSong.addPositionToMap(keyAndValue.getKey(), keyAndValue.getValue());
+                    }
+                }
+                newListFiltered.add(newSong);
+            }
+        }
+
+        final Map<String, Integer> abbreviationAndNumber = new HashMap<>();
+        for (final Song r : newListFiltered) {
+            for (final Map.Entry<String, Integer> keyAndValue : r.getPositionMap().entrySet()) {
+                if (!abbreviationAndNumber.containsKey(keyAndValue.getKey())) {
+                    abbreviationAndNumber.put(keyAndValue.getKey(), 1);
+                } else {
+                    abbreviationAndNumber.put(keyAndValue.getKey(), abbreviationAndNumber.get(keyAndValue.getKey()) + 1);
+                }
+            }
+        }
+
+        final int maxValueMap = Collections.max(abbreviationAndNumber.values());
+        for (Map.Entry<String, Integer> entry : abbreviationAndNumber.entrySet()) {
+            if (entry.getValue() == maxValueMap) {
+                System.out.println(entry.getKey());
+            }
+        }
+
+        newListFiltered.outputToFile();
+        System.out.println("Wrote current SongList filtered on artist and only keeping position within bounds");
+    }
+
     private static void outputNumberOfAppearancesAndAveragesForSongs(final SongList list) {
         final SongList newList = new SongList();
         for (final Song r : list) {
@@ -264,13 +309,13 @@ public class ToplijstenMergerTools {
         Merger.merge(newListRight, listArray[1]);
         final SongList newListLeftResult = new SongList();
         final SongList newListRightResult = new SongList();
-        for (Song r : newListLeft) {
+        for (final Song r : newListLeft) {
             r.clearPositionMap();
             if (newListRight.containsNo(r)) {
                 newListLeftResult.add(r);
             }
         }
-        for (Song r : newListRight) {
+        for (final Song r : newListRight) {
             r.clearPositionMap();
             if (newListLeft.containsNo(r)) {
                 newListRightResult.add(r);
@@ -291,7 +336,6 @@ public class ToplijstenMergerTools {
             final String abbrFirstPart = abbr.substring(0, abbr.length() - 4);
             final String abbrSecondPart = abbr.substring(abbr.length() - 4);
             if (String.valueOf(yearTo).equals(abbrSecondPart) && allListAbbreviations.contains(abbrFirstPart + yearFrom)) {
-
                 final String currentYear = abbrFirstPart + yearTo;
                 final String prevYear = abbrFirstPart + yearFrom;
                 final int currentYearLength = getListLength(currentYear, list);

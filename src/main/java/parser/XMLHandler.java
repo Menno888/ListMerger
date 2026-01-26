@@ -9,10 +9,10 @@ import static tools.FieldUtil.*;
 
 public class XMLHandler extends DefaultHandler {
 
-    private final StringBuilder xml = new StringBuilder();
     private boolean building = false;
-    private final SongList songList = new SongList();
     private String elementTag;
+    private final StringBuilder xml = new StringBuilder();
+    private final SongList songList = new SongList();
 
     public SongList getSongList() {
         return songList;

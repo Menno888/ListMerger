@@ -18,21 +18,22 @@ public class ExcelParser {
 
     private final SongList songList = new SongList();
 
-    public SongList parseExcel(String inFile) {
-        InputStream inputStream;
+    public SongList parseExcel(final String inFile) {
+        final InputStream inputStream;
 
+        String fileToParse = inFile;
         try {
             if (!inFile.endsWith(".xlsx")) {
-                inFile += ".xlsx";
+                fileToParse += ".xlsx";
             }
-            final File excelFile = new File(inFile);
+            final File excelFile = new File(fileToParse);
             inputStream = new FileInputStream(excelFile);
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't find file: " + inFile + ", returning empty list");
+        } catch (final FileNotFoundException e) {
+            System.out.println("Couldn't find file: " + fileToParse + ", returning empty list");
             return new SongList();
         }
 
-        try (XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
+        try (final XSSFWorkbook myWorkBook = new XSSFWorkbook(inputStream)) {
             final int numOfSheets = myWorkBook.getNumberOfSheets();
             for (int i = SONG_DATA_START_SHEET; i < numOfSheets; i++) {
                 final String sheetName = myWorkBook.getSheetAt(i).getSheetName();
@@ -42,12 +43,12 @@ public class ExcelParser {
                 }
             }
 
-        } catch (IOException | IllegalStateException e) {
+        } catch (final IOException | IllegalStateException e) {
             System.out.println("File not found, try again");
         } finally {
             try {
                 inputStream.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 System.out.println("Couldn't close input stream, exception: " + e);
             }
         }
@@ -93,7 +94,7 @@ public class ExcelParser {
                 song.setTitle(formatter.formatCellValue(cell).replace(SEPARATOR_CHARACTER_AMPERSAND, SEPARATOR_CHARACTER_AMPERSAND_XML_SAFE));
             }
             else {
-                String abbreviation = listAbbreviations.get(cellNum);
+                final String abbreviation = listAbbreviations.get(cellNum);
                 if (abbreviation.startsWith(INFO_COLUMN_MARKER)) {
                     addInfoDataToAdditionalInformationMap(cell, song, abbreviation);
                 } else {
@@ -110,7 +111,7 @@ public class ExcelParser {
                 final String[] headerValues = headerValue.split("\\(");
                 final String partAfterParentheses = headerValues[headerValues.length - 1];
                 return partAfterParentheses.substring(0, partAfterParentheses.length() - 1);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return headerValue;
             }
         } else {

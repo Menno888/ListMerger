@@ -19,7 +19,7 @@ public class SongList extends ArrayList<Song> {
         outputToFile(outFile, "y,n,n");
     }
 
-    public void outputToFile(String outFile, final String options) {
+    public void outputToFile(final String outFile, final String options) {
         final String[] optionsArray = options.split(",");
 
         String positions = "y";
@@ -32,13 +32,14 @@ public class SongList extends ArrayList<Song> {
             countPositions = optionsArray[2];
         }
 
-        if (!outFile.endsWith(".xml")) {
-            outFile = outFile + ".xml";
+        String fileToParse = outFile;
+        if (!fileToParse.endsWith(".xml")) {
+            fileToParse = fileToParse + ".xml";
         }
-        if (".xml".equals(outFile)) {
-            outFile = "out" + currentTimeMillis() + ".xml";
+        if (".xml".equals(fileToParse)) {
+            fileToParse = "out" + currentTimeMillis() + ".xml";
         }
-        final File file = new File(outFile);
+        final File file = new File(fileToParse);
 
         if (!file.exists()) {
             try {
@@ -49,7 +50,7 @@ public class SongList extends ArrayList<Song> {
             }
         }
 
-        FileOutputStream fileStream;
+        final FileOutputStream fileStream;
         BufferedWriter writer = null;
         try {
             fileStream = new FileOutputStream(file.getAbsoluteFile());
@@ -65,7 +66,7 @@ public class SongList extends ArrayList<Song> {
             writer.write("<top2000database2014>");
             writer.newLine();
             for (final Song song : this) {
-                final String output = convertSongToXML(song, positions, prettyPrint, countPositions);
+                final String output = convertSongToXml(song, positions, prettyPrint, countPositions);
                 writer.write(output);
                 writer.newLine();
             }
@@ -77,19 +78,19 @@ public class SongList extends ArrayList<Song> {
             try {
                 assert writer != null;
                 writer.close();
-            } catch (IOException | NullPointerException e) {
+            } catch (final IOException | NullPointerException e) {
                 System.out.println("Issue closing the writer, exception: " + e);
             }
         }
 
-        System.out.println("Output to " + outFile);
+        System.out.println("Output to " + fileToParse);
     }
 
     public boolean containsNo(final Song song) {
         return this.stream().noneMatch(r -> (r.getArtist()).equals(song.getArtist()) && (r.getTitle()).equals(song.getTitle()));
     }
 
-    private String convertSongToXML(final Song song, final String positions, final String prettyPrint, final String countPositions) {
+    private String convertSongToXml(final Song song, final String positions, final String prettyPrint, final String countPositions) {
         final StringBuilder stringBuilder = new StringBuilder();
         final String indentation = "y".equals(prettyPrint) ? "    " : "";
         final String lineBreak = "y".equals(prettyPrint) ? "\n" : "";
@@ -129,7 +130,6 @@ public class SongList extends ArrayList<Song> {
     }
 
     public List<String> tagCheckup() {
-
         final ArrayList<String> tagList = new ArrayList<>();
         for (final Song currentSong : this) {
             for (final Map.Entry<String, Integer> entry : currentSong.getPositionMap().entrySet()) {

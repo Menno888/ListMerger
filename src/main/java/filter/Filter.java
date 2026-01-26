@@ -94,7 +94,7 @@ public class Filter {
     VRNCA2003, VRNCA, "fl" -> true (matches source and category)
     VRNCA2003B, VRNCA, "fl" -> false (matches source and category, but isn't considered part of the series)
     VRNCA2003B, VRNC, "fl" -> true (matches source, every abbreviation starting with the filter counts)
-    JOBEA2003, VRNCA, "fl" -> false (doesn't match source and category)
+    JOBEA2003, VRNCA, "fl" -> false (doesn't match both source and category)
     VRNCAX2003, VRNCA, "fl" -> false (doesn't exactly match category)
     R2NLA1999, 1999, "fy" -> true (matches year)
     VRNCA2003B, 2003, "fy" -> true (matches year, every abbreviation containing it at the end counts)

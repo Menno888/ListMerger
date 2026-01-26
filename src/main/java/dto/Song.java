@@ -15,7 +15,7 @@ public class Song {
         //No-args
     }
 
-    public Song(String artist, String title) {
+    public Song(final String artist, final String title) {
         this.artist = artist;
         this.title = title;
     }
@@ -24,7 +24,7 @@ public class Song {
         return this.artist + SEPARATOR_CHARACTER_HYPHEN_SPACED + this.title;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(final String artist) {
         this.artist = artist;
     }
 
@@ -32,7 +32,7 @@ public class Song {
         return this.artist;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 

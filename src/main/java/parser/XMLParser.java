@@ -15,7 +15,7 @@ public class XMLParser {
 
     private SongList songList = new SongList();
 
-    public SongList parseXML(String file, final SongList list) {
+    public SongList parseXML(final String file, final SongList list) {
 
         songList = list;
 
@@ -24,16 +24,17 @@ public class XMLParser {
             final SAXParser saxParser = factory.newSAXParser();
             final XMLHandler handler = new XMLHandler();
 
+            String fileToParse = file;
             if (!file.endsWith(".xml")) {
-                file = file + ".xml";
+                fileToParse += ".xml";
             }
-            saxParser.parse(file, handler);
+            saxParser.parse(fileToParse, handler);
 
             final SongList listFromParse = handler.getSongList();
             for (final Song songFromList : listFromParse) {
                 addToArrayList(songFromList);
             }
-            System.out.println("Succesfully merged/initialized " + file);
+            System.out.println("Succesfully merged/initialized " + fileToParse);
         } catch (final FileNotFoundException e) {
             System.out.println("File not found, try again");
         } catch (final ParserConfigurationException | IOException | SAXException e) {
